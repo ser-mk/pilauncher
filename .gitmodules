@@ -1,0 +1,3 @@
+[submodule "UVC"]
+	path = UVC
+	url = https://github.com/ARM-MK/UVC_library.git
