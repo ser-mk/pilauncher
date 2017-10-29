@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Game.iml" filepath="$PROJECT_DIR$/Game.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UVC/libuvccamera/libuvccamera.iml" filepath="$PROJECT_DIR$/UVC/libuvccamera/libuvccamera.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UVC/usbCameraCommon/usbCameraCommon.iml" filepath="$PROJECT_DIR$/UVC/usbCameraCommon/usbCameraCommon.iml" />
     </modules>
   </component>
 </project>
