@@ -34,7 +34,7 @@ allprojects {
 
 ext {
     supportLibVersion = '25.4.0'  // variable that can be referenced to keep support libs consistent
-    commonLibVersion = '1.6.1'
+    commonLibVersion = '1.9.1'
     versionBuildTool = '26.0.2'
     versionCompiler = 25
     versionTarget = 25
