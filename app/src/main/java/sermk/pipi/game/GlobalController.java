@@ -3,6 +3,9 @@ package sermk.pipi.game;
 import android.app.Application;
 import android.content.res.Configuration;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
+
 /**
  * Created by echormonov on 30.10.17.
  */
@@ -14,6 +17,7 @@ public final class GlobalController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogOptions.SetupLog();
         // Required initialization logic here!
     }
 
