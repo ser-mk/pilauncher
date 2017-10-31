@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion versionCompiler
+    buildToolsVersion versionBuildTool
+
     defaultConfig {
         applicationId "sermk.pipi.game"
-        minSdkVersion 25
-        targetSdkVersion 26
+        minSdkVersion versionMinSdkTarget
+        targetSdkVersion versionTarget
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
