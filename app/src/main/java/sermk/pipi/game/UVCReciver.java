@@ -129,7 +129,7 @@ public class UVCReciver extends Thread {
         }
     }
 
-    private boolean openUVC(final UVCBaseSettings settings){
+    private boolean openUVC(final CVResolver.Settings settings){
         if (!mUSBMonitor.isRegistered())
             return false;
         final List<UsbDevice> list = mUSBMonitor.getDeviceList();
@@ -174,13 +174,6 @@ public class UVCReciver extends Thread {
 
         return true;
     }
-
-    private final IFrameCallback mIFrameCallback = new IFrameCallback() {
-        @Override
-        public void onFrame(final ByteBuffer frame) {
-            Log.v(TAG,"captue frame");
-        }
-    };
 
     private final class HandlerControl extends Handler {
 

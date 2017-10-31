@@ -2,12 +2,14 @@ package sermk.pipi.game;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 
@@ -25,6 +27,7 @@ class TestCV_Fragment extends Fragment {
     }
 
     private ToggleButton mPreviewButton;
+    private ImageView mImageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +38,8 @@ class TestCV_Fragment extends Fragment {
         mPreviewButton = (ToggleButton)rootView.findViewById(R.id.start_test);
         setPreviewButton(false);
         mPreviewButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
+
+        mImageView = (ImageView)rootView.findViewById(R.id.capture_view);
 
         // Inflate the layout for this fragment
         return rootView;
@@ -55,12 +60,11 @@ class TestCV_Fragment extends Fragment {
         @Override
         public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
             Log.v(TAG, "Test CV enable " + isChecked);
+            GlobalController app = (GlobalController)getActivity().getApplication();
             if (isChecked) {
-                GlobalController app = (GlobalController)getActivity().getApplication();
-                app.getgUVCReciver().startCapture(null);
+                app.getUVCReciver().startCapture(null);
             } else {
-                GlobalController app = (GlobalController)getActivity().getApplication();
-                app.getgUVCReciver().getHandler().sendEmptyMessage(UVCReciver.MSG_RELEASE);
+                app.getUVCReciver().getHandler().sendEmptyMessage(UVCReciver.MSG_RELEASE);
             }
         }
     };

@@ -37,7 +37,7 @@ public final class GlobalController extends Application {
         super.onLowMemory();
     }
 
-    public UVCReciver getgUVCReciver(){
+    public UVCReciver getUVCReciver(){
         return mUVCReciver;
     }
 }
