@@ -6,11 +6,14 @@ import android.content.res.Configuration;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
+
 /**
  * Created by echormonov on 30.10.17.
  */
 
 public final class GlobalController extends Application {
+
+    UVCReciver mUVCReciver;
 
     // Called when the application is starting, before any other application objects have been created.
     // Overriding this method is totally optional!
@@ -19,6 +22,7 @@ public final class GlobalController extends Application {
         super.onCreate();
         LogOptions.SetupLog();
         // Required initialization logic here!
+        mUVCReciver = new UVCReciver(this);
     }
 
     // Called by the system when the device configuration changes while your component is running.
