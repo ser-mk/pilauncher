@@ -3,9 +3,6 @@ package sermk.pipi.game;
 import android.app.Application;
 import android.content.res.Configuration;
 
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
-
 
 /**
  * Created by echormonov on 30.10.17.
@@ -13,7 +10,7 @@ import com.orhanobut.logger.Logger;
 
 public final class GlobalController extends Application {
 
-    UVCReciver mUVCReciver;
+    private UVCReciver mUVCReciver;
 
     // Called when the application is starting, before any other application objects have been created.
     // Overriding this method is totally optional!
@@ -38,5 +35,9 @@ public final class GlobalController extends Application {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+    }
+
+    public UVCReciver getgUVCReciver(){
+        return mUVCReciver;
     }
 }

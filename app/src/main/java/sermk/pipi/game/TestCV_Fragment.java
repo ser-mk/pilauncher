@@ -56,9 +56,11 @@ class TestCV_Fragment extends Fragment {
         public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
             Log.v(TAG, "Test CV enable " + isChecked);
             if (isChecked) {
-
+                GlobalController app = (GlobalController)getActivity().getApplication();
+                app.getgUVCReciver().startCapture(null);
             } else {
-
+                GlobalController app = (GlobalController)getActivity().getApplication();
+                app.getgUVCReciver().getHandler().sendEmptyMessage(UVCReciver.MSG_RELEASE);
             }
         }
     };
