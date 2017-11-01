@@ -2,7 +2,6 @@ package sermk.pipi.game;
 
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.serenegiant.usb.IFrameCallback;
 import com.serenegiant.usb.UVCCamera;
@@ -16,12 +15,14 @@ import java.nio.ByteBuffer;
 final class CVResolver {
 
     static public class Settings{
-        ImageView captureView = null;
+        CVMaskView captureView = null;
     }
 
     private Settings currentSettings;
 
     private final String TAG = "CVResolver";
+
+    final Bitmap previewBitmap;// = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
 
     public CVResolver(final Settings settings) {
         currentSettings = new Settings();
@@ -30,13 +31,14 @@ final class CVResolver {
         if(settings.captureView != null ){
             currentSettings.captureView = settings.captureView;
         }
+        previewBitmap = Bitmap.createBitmap();
     }
 
-    final Bitmap previewBitmap = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
+
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
         @Override
         public void onFrame(final ByteBuffer frame) {
-            Log.v(TAG,"captue frame");
+            Log.v(TAG,"capture frame");
             if(currentSettings.captureView == null)
                 return;
             frame.clear();
@@ -61,4 +63,5 @@ final class CVResolver {
     public IFrameCallback getIFrameCallback() {
         return mIFrameCallback;
     }
+
 }

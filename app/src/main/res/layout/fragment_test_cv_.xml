@@ -7,7 +7,7 @@
     android:orientation="horizontal"
     tools:context="sermk.pipi.game.TestCV_Fragment">
 
-    <ImageView
+    <sermk.pipi.game.CVMaskView
         android:id="@+id/capture_view"
         android:layout_width="640px"
         android:layout_height="480px"
@@ -25,6 +25,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
 
 </LinearLayout>
