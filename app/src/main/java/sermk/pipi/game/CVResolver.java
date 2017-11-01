@@ -25,6 +25,8 @@ final class CVResolver {
 
     public CVResolver(final Settings settings) {
         currentSettings = new Settings();
+        if (settings == null)
+            return;
         if(settings.captureView != null ){
             currentSettings.captureView = settings.captureView;
         }
@@ -35,6 +37,8 @@ final class CVResolver {
         @Override
         public void onFrame(final ByteBuffer frame) {
             Log.v(TAG,"captue frame");
+            if(currentSettings.captureView == null)
+                return;
             frame.clear();
             synchronized (previewBitmap) {
                 previewBitmap.copyPixelsFromBuffer(frame);

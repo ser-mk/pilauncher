@@ -66,7 +66,7 @@ class TestCV_Fragment extends Fragment {
                 settings.captureView = mImageView;
                 app.getUVCReciver().startCapture(settings);
             } else {
-                app.getUVCReciver().getHandler().sendEmptyMessage(UVCReciver.MSG_RELEASE);
+                app.getUVCReciver().exitRun();
             }
         }
     };

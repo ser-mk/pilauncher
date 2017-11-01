@@ -3,14 +3,12 @@ package sermk.pipi.game;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
-import com.serenegiant.usb.IFrameCallback;
 import com.serenegiant.usb.IStatusCallback;
 import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.USBMonitor.OnDeviceConnectListener;
@@ -30,9 +28,8 @@ public class UVCReciver extends Thread {
 
     private Context gContext;
 
-    private Handler mHandler;
-
     private final Object mSync = new Object();
+    private final Object mSyncExit = new Object();
 
     public static final int MSG_OPEN = 0;
     public static final int MSG_CLOSE = 1;
@@ -93,46 +90,30 @@ public class UVCReciver extends Thread {
 
     };
 
-    public Handler startCapture(final CVResolver.Settings settings){
+    public void startCapture(final CVResolver.Settings settings){
         cvrSettings = settings;
-        start();
-        Logger.v("start UVC thread");
+        this.start();
+        /*
         synchronized (mSync) {
-            if (mHandler == null)
                 try {
                     mSync.wait();
                 } catch (final InterruptedException e) {
                     Logger.e(e,"exc",null);
                 }
         }
-        Logger.v("getHandler");
-        return mHandler;
-    }
-
-    public Handler getHandler(){
-        return mHandler;
+        */
+        Logger.v("start UVC thread");
     }
 
     void exitRun(){
-        Looper.myLooper().quit();
+        synchronized(mSyncExit) {
+            mSyncExit.notifyAll();
+        }
     }
 
     @Override
     public void run() {
-        if (Looper.myLooper() == null)
-        {
-            Looper.prepare();
-        }
-        synchronized (mSync) {
-            mHandler = new HandlerControl(this);
-            Logger.v("new handler and notify all");
-            mSync.notifyAll();
-        }
         openUVC(cvrSettings);
-        synchronized (mSync) {
-            mHandler = null;
-            mSync.notifyAll();
-        }
         Logger.v("exit run");
     }
 
@@ -177,14 +158,22 @@ public class UVCReciver extends Thread {
         camera.setPreviewSize(640,480, 25,30, 0, 1.0f);
         camera.setFrameCallback(cvr.getIFrameCallback(), UVCCamera.PIXEL_FORMAT_RGB565/*UVCCamera.PIXEL_FORMAT_NV21*/);
         camera.startPreview();
+        Log.v("!!","1");
 
-        Looper.loop();
+        synchronized (mSyncExit) {
+            try {
+                mSyncExit.wait();
+            } catch (final InterruptedException e) {
+                Logger.e(e,"exc",null);
+            }
+        }
 
         if (camera != null) {
             Log.v("!!","2");
             camera.stopPreview();
             camera.setStatusCallback(null);
             camera.setButtonCallback(null);
+            camera.setFrameCallback(null, UVCCamera.PIXEL_FORMAT_RAW);
             camera.close();
             camera.destroy();
         }
