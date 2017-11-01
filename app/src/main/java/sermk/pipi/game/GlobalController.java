@@ -11,6 +11,8 @@ import android.content.res.Configuration;
 public final class GlobalController extends Application {
 
     private UVCReciver mUVCReciver;
+    private GlobalSettings globalSettings;
+    private static GlobalController app = null;
 
     // Called when the application is starting, before any other application objects have been created.
     // Overriding this method is totally optional!
@@ -20,7 +22,13 @@ public final class GlobalController extends Application {
         LogOptions.SetupLog();
         // Required initialization logic here!
         mUVCReciver = new UVCReciver(this);
+        globalSettings = new GlobalSettings(this);
     }
+
+    public static GlobalController getInstance(final String sObject){
+        return app;
+    }
+
 
     // Called by the system when the device configuration changes while your component is running.
     // Overriding this method is totally optional!
@@ -40,4 +48,6 @@ public final class GlobalController extends Application {
     public UVCReciver getUVCReciver(){
         return mUVCReciver;
     }
+
+    public GlobalSettings getGlobalSettings() { return globalSettings; }
 }

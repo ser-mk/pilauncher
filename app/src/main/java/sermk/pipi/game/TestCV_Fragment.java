@@ -62,6 +62,7 @@ class TestCV_Fragment extends Fragment {
             if (isChecked) {
                 CVResolver.Settings settings = new CVResolver.Settings();
                 settings.captureView = mImageView;
+                app.getGlobalSettings().setUVCSettings(settings);
                 app.getUVCReciver().startCapture(settings);
             } else {
                 app.getUVCReciver().exitRun();

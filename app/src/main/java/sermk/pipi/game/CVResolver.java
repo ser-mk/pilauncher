@@ -16,13 +16,20 @@ final class CVResolver {
 
     static public class Settings{
         CVMaskView captureView = null;
+        int width = 0; //.getCaptureWitgh();
+        int height = 0; //.getCaptureHeight();
+        int minFps = 0; //.getMinFps();
+        int maxFps = 0; //.getMaxFps();
+        int frameformat = 0; //.getFrameFormat();
+        float bandwightFactor = 0; //.getBandwightFactor();
+        Bitmap.Config bitmapConfig = Bitmap.Config.RGB_565;
     }
 
     private Settings currentSettings;
 
     private final String TAG = "CVResolver";
 
-    final Bitmap previewBitmap;// = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
+    Bitmap previewBitmap;// = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
 
     public CVResolver(final Settings settings) {
         currentSettings = new Settings();
@@ -31,7 +38,8 @@ final class CVResolver {
         if(settings.captureView != null ){
             currentSettings.captureView = settings.captureView;
         }
-        previewBitmap = Bitmap.createBitmap();
+        previewBitmap = Bitmap.createBitmap(settings.width,
+                settings.height, settings.bitmapConfig);
     }
 
 

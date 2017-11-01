@@ -1,5 +1,6 @@
 package sermk.pipi.game;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.os.Handler;
@@ -93,15 +94,6 @@ public class UVCReciver extends Thread {
     public void startCapture(final CVResolver.Settings settings){
         cvrSettings = settings;
         this.start();
-        /*
-        synchronized (mSync) {
-                try {
-                    mSync.wait();
-                } catch (final InterruptedException e) {
-                    Logger.e(e,"exc",null);
-                }
-        }
-        */
         Logger.v("start UVC thread");
     }
 
@@ -154,8 +146,11 @@ public class UVCReciver extends Thread {
             return false;
         }
 
+        if (settings == null) return false;
+
         camera.setPreviewDisplay((Surface)null);
-        camera.setPreviewSize(640,480, 25,30, 0, 1.0f);
+        camera.setPreviewSize(settings.width,settings.height, settings.minFps,
+                settings.maxFps, settings.frameformat, settings.bandwightFactor);
         camera.setFrameCallback(cvr.getIFrameCallback(), UVCCamera.PIXEL_FORMAT_RGB565/*UVCCamera.PIXEL_FORMAT_NV21*/);
         camera.startPreview();
         Log.v("!!","1");
