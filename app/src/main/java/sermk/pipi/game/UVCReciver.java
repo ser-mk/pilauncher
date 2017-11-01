@@ -44,6 +44,8 @@ public class UVCReciver extends Thread {
     public static final int MSG_MEDIA_UPDATE = 7;
     public static final int MSG_RELEASE = 9;
 
+    CVResolver.Settings cvrSettings;
+
 
 
     /**
@@ -91,7 +93,8 @@ public class UVCReciver extends Thread {
 
     };
 
-    public Handler startCapture(final UVCBaseSettings settings){
+    public Handler startCapture(final CVResolver.Settings settings){
+        cvrSettings = settings;
         start();
         Logger.v("start UVC thread");
         synchronized (mSync) {
@@ -116,17 +119,21 @@ public class UVCReciver extends Thread {
 
     @Override
     public void run() {
-        Looper.prepare();
+        if (Looper.myLooper() == null)
+        {
+            Looper.prepare();
+        }
         synchronized (mSync) {
             mHandler = new HandlerControl(this);
             Logger.v("new handler and notify all");
             mSync.notifyAll();
         }
-        openUVC(null);
+        openUVC(cvrSettings);
         synchronized (mSync) {
             mHandler = null;
             mSync.notifyAll();
         }
+        Logger.v("exit run");
     }
 
     private boolean openUVC(final CVResolver.Settings settings){
@@ -138,7 +145,13 @@ public class UVCReciver extends Thread {
             return false;
         }
 
-        final UsbControlBlock ublock = mUSBMonitor.openDevice(list.get(0));
+        UsbDevice device =  list.get(0);
+
+        mUSBMonitor.requestPermission(device);
+
+        CVResolver cvr = new CVResolver(settings);
+
+        final UsbControlBlock ublock = mUSBMonitor.openDevice(device);
         final UVCCamera camera = new UVCCamera();
         camera.open(ublock);
         camera.setStatusCallback(new IStatusCallback() {
@@ -162,13 +175,17 @@ public class UVCReciver extends Thread {
 
         camera.setPreviewDisplay((Surface)null);
         camera.setPreviewSize(640,480, 25,30, 0, 1.0f);
-        camera.setFrameCallback(mIFrameCallback, UVCCamera.PIXEL_FORMAT_RGB565/*UVCCamera.PIXEL_FORMAT_NV21*/);
+        camera.setFrameCallback(cvr.getIFrameCallback(), UVCCamera.PIXEL_FORMAT_RGB565/*UVCCamera.PIXEL_FORMAT_NV21*/);
         camera.startPreview();
 
         Looper.loop();
 
         if (camera != null) {
+            Log.v("!!","2");
             camera.stopPreview();
+            camera.setStatusCallback(null);
+            camera.setButtonCallback(null);
+            camera.close();
             camera.destroy();
         }
 

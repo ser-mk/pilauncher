@@ -1,9 +1,11 @@
 package sermk.pipi.game;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.serenegiant.usb.IFrameCallback;
+import com.serenegiant.usb.UVCCamera;
 
 import java.nio.ByteBuffer;
 
@@ -13,20 +15,46 @@ import java.nio.ByteBuffer;
 
 final class CVResolver {
 
-    public class Settings{
-        public ImageView captureView;
+    static public class Settings{
+        ImageView captureView = null;
     }
 
-    private final String TAG = CVResolver;
+    private Settings currentSettings;
 
-    public CVResolver(Settings settings) {
+    private final String TAG = "CVResolver";
 
+    public CVResolver(final Settings settings) {
+        currentSettings = new Settings();
+        if(settings.captureView != null ){
+            currentSettings.captureView = settings.captureView;
+        }
     }
 
+    final Bitmap previewBitmap = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
         @Override
         public void onFrame(final ByteBuffer frame) {
             Log.v(TAG,"captue frame");
+            frame.clear();
+            synchronized (previewBitmap) {
+                previewBitmap.copyPixelsFromBuffer(frame);
+            }
+            //mFpsCounter.count();
+
+            currentSettings.captureView.post(mUpdateImageTask);
         }
     };
+
+    private final Runnable mUpdateImageTask = new Runnable() {
+        @Override
+        public void run() {
+            synchronized (previewBitmap) {
+                currentSettings.captureView.setImageBitmap(previewBitmap);
+            }
+        }
+    };
+
+    public IFrameCallback getIFrameCallback() {
+        return mIFrameCallback;
+    }
 }

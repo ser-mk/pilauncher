@@ -62,7 +62,9 @@ class TestCV_Fragment extends Fragment {
             Log.v(TAG, "Test CV enable " + isChecked);
             GlobalController app = (GlobalController)getActivity().getApplication();
             if (isChecked) {
-                app.getUVCReciver().startCapture(null);
+                CVResolver.Settings settings = new CVResolver.Settings();
+                settings.captureView = mImageView;
+                app.getUVCReciver().startCapture(settings);
             } else {
                 app.getUVCReciver().getHandler().sendEmptyMessage(UVCReciver.MSG_RELEASE);
             }

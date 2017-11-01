@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/capture_view"
-        android:layout_width="640dp"
-        android:layout_height="480dp"
+        android:layout_width="640px"
+        android:layout_height="480px"
         android:src="@color/BLUE_A020" />
 
     <!-- TODO: Update blank fragment layout -->
