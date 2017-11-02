@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 
@@ -26,6 +28,8 @@ class TestCV_Fragment extends Fragment {
 
     private ToggleButton mPreviewButton;
     private CVMaskView mImageView;
+    private SeekText alphaSeek;
+    private SeekText hDiagSeek;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +42,27 @@ class TestCV_Fragment extends Fragment {
         mPreviewButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
 
         mImageView = (CVMaskView)rootView.findViewById(R.id.capture_view);
+
+        alphaSeek = (SeekText)rootView.findViewById(R.id.alpha_seek);
+        hDiagSeek = (SeekText)rootView.findViewById(R.id.hdiag_seek);
+
+        TextView text_alpha_seek = (TextView)rootView.findViewById(R.id.text_alpha_seek);
+        TextView text_hdiag_seek = (TextView)rootView.findViewById(R.id.text_hdiag_seek);
+
+        alphaSeek.setTv(text_alpha_seek);
+
+        hDiagSeek.setTv(text_hdiag_seek);
+
+        mImageView.setAlphaTV(text_alpha_seek);
+        mImageView.sethDiagTV(text_hdiag_seek);
+
+        Button clear = (Button)rootView.findViewById(R.id.clear_button);
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mImageView.clearMask();
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;

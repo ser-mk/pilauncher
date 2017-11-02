@@ -23,6 +23,7 @@ final class CVResolver {
         int frameformat = 0; //.getFrameFormat();
         float bandwightFactor = 0; //.getBandwightFactor();
         Bitmap.Config bitmapConfig = Bitmap.Config.RGB_565;
+        int pixelFormatCallback = UVCCamera.PIXEL_FORMAT_RGBX;
     }
 
     private Settings currentSettings;

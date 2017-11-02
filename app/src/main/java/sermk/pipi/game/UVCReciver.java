@@ -1,6 +1,5 @@
 package sermk.pipi.game;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.os.Handler;
@@ -151,7 +150,8 @@ public class UVCReciver extends Thread {
         camera.setPreviewDisplay((Surface)null);
         camera.setPreviewSize(settings.width,settings.height, settings.minFps,
                 settings.maxFps, settings.frameformat, settings.bandwightFactor);
-        camera.setFrameCallback(cvr.getIFrameCallback(), UVCCamera.PIXEL_FORMAT_RGB565/*UVCCamera.PIXEL_FORMAT_NV21*/);
+        camera.setFrameCallback(cvr.getIFrameCallback(),
+                settings.pixelFormatCallback/*UVCCamera.PIXEL_FORMAT_NV21*/);
         camera.startPreview();
         Log.v("!!","1");
 

@@ -29,7 +29,8 @@ public final class GlobalSettings {
         settings.maxFps = getMaxFps();
         settings.frameformat = getFrameFormat();
         settings.bandwightFactor = getBandwightFactor();
-        settings.bitmapConfig = Bitmap.Config.RGB_565;
+        settings.bitmapConfig = Bitmap.Config.ARGB_8888;
+        settings.pixelFormatCallback = UVCCamera.PIXEL_FORMAT_RGBX;
     }
 
 }

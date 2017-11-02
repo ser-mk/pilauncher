@@ -1,29 +1,81 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="top|left"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context="sermk.pipi.game.TestCV_Fragment">
-
-    <sermk.pipi.game.CVMaskView
-        android:id="@+id/capture_view"
-        android:layout_width="640px"
-        android:layout_height="480px"
-        android:src="@color/BLUE_A020" />
-
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <ToggleButton
-            android:id="@+id/start_test"
+        <sermk.pipi.game.CVMaskView
+            android:id="@+id/capture_view"
+            android:layout_width="640px"
+            android:layout_height="480px"
+            android:src="@color/BLUE_A020" />
+
+        <!-- TODO: Update blank fragment layout -->
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ToggleButton
+                android:id="@+id/start_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/clear_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear Mask" />
+
+        </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <sermk.pipi.game.SeekText
+            android:id="@+id/alpha_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="@integer/max_alpha" />
+
+        <TextView
+            android:id="@+id/text_alpha_seek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <sermk.pipi.game.SeekText
+            android:id="@+id/hdiag_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="@integer/max_halfDiag" />
+
+        <TextView
+            android:id="@+id/text_hdiag_seek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="111" />
+    </LinearLayout>
+
 
 </LinearLayout>
