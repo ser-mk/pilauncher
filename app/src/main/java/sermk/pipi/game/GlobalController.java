@@ -3,6 +3,10 @@ package sermk.pipi.game;
 import android.app.Application;
 import android.content.res.Configuration;
 
+import com.orhanobut.logger.Logger;
+
+import org.opencv.android.OpenCVLoader;
+
 
 /**
  * Created by echormonov on 30.10.17.
@@ -50,4 +54,15 @@ public final class GlobalController extends Application {
     }
 
     public GlobalSettings getGlobalSettings() { return globalSettings; }
+
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+        if(!(OpenCVLoader.initDebug())){
+            Logger.w("Fail opencv load!");
+        } else {
+            Logger.v("succes opencv load library");
+        }
+    }
+
 }

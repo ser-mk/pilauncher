@@ -3,6 +3,8 @@ package sermk.pipi.game;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.orhanobut.logger.Logger;
+
 public class Standalone extends Activity {
 
 
@@ -17,9 +19,10 @@ public class Standalone extends Activity {
 
     }
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback);
     }
 
     /**

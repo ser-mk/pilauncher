@@ -29,7 +29,7 @@ android {
         }
     }
 
-    sourceSets { main { jni.srcDirs = ['src/main/jni', '../UVC/opencv_sdk/native/libs/'] } }
+    sourceSets { main { jni.srcDirs = ['src/main/jni'] } }
 
 }
 
