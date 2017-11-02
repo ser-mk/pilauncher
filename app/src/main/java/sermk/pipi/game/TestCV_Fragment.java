@@ -12,6 +12,15 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.serenegiant.utils.CpuMonitor;
+import com.serenegiant.utils.FpsCounter;
+
+import com.orhanobut.logger.Logger;
+
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +39,11 @@ class TestCV_Fragment extends Fragment {
     private CVMaskView mImageView;
     private SeekText alphaSeek;
     private SeekText hDiagSeek;
+
+    private final CpuMonitor mCpuMonitor = new CpuMonitor();
+    private FpsCounter mFpsCounter;
+    private Timer mTimer;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +78,36 @@ class TestCV_Fragment extends Fragment {
             }
         });
 
+        final TextView cpuView = (TextView)rootView.findViewById(R.id.cpu_view);
+        final TextView fpsView = (TextView)rootView.findViewById(R.id.fps_view);
+
+        mTimer = new Timer("cpu_fps_timer");
+        mFpsCounter = new FpsCounter();
+        mFpsCounter.reset();
+
+        mTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                cpuView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        cpuView.setText(String.format(Locale.US, "CPU:%3d/%3d/%3d",
+                                mCpuMonitor.getCpuCurrent(),
+                                mCpuMonitor.getCpuAvg3(),
+                                mCpuMonitor.getCpuAvgAll()));
+                    }
+                });
+                fpsView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFpsCounter.update();
+                        fpsView.setText(String.format(Locale.US, "FPS:%4.1f", mFpsCounter.getFps()));
+                    }
+                });
+            }
+        }, 1111L,
+                getResources().getInteger(R.integer.cpu_timer_period)); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -72,6 +116,13 @@ class TestCV_Fragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
+    }
+
+    @Override
+    public void onStop() {
+        mTimer.cancel();
+        mTimer.purge();
+        super.onStop();
     }
 
     @Override
@@ -87,6 +138,7 @@ class TestCV_Fragment extends Fragment {
             if (isChecked) {
                 CVResolver.Settings settings = new CVResolver.Settings();
                 settings.captureView = mImageView;
+                settings.fpsCounter = mFpsCounter;
                 app.getGlobalSettings().setUVCSettings(settings);
                 app.getUVCReciver().startCapture(settings);
             } else {

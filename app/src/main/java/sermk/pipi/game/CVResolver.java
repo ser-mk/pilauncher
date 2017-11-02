@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.serenegiant.usb.IFrameCallback;
 import com.serenegiant.usb.UVCCamera;
+import com.serenegiant.utils.FpsCounter;
 
 import java.nio.ByteBuffer;
 
@@ -16,6 +17,7 @@ final class CVResolver {
 
     static public class Settings{
         CVMaskView captureView = null;
+        FpsCounter fpsCounter;
         int width = 0; //.getCaptureWitgh();
         int height = 0; //.getCaptureHeight();
         int minFps = 0; //.getMinFps();
@@ -36,9 +38,7 @@ final class CVResolver {
         currentSettings = new Settings();
         if (settings == null)
             return;
-        if(settings.captureView != null ){
-            currentSettings.captureView = settings.captureView;
-        }
+        currentSettings = settings;
         previewBitmap = Bitmap.createBitmap(settings.width,
                 settings.height, settings.bitmapConfig);
     }
@@ -48,6 +48,10 @@ final class CVResolver {
         @Override
         public void onFrame(final ByteBuffer frame) {
             Log.v(TAG,"capture frame");
+            if(currentSettings.fpsCounter != null){
+                currentSettings.fpsCounter.count();
+            }
+
             if(currentSettings.captureView == null)
                 return;
             frame.clear();

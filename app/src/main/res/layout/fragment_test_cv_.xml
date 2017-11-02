@@ -36,6 +36,23 @@
                 android:layout_height="wrap_content"
                 android:text="Clear Mask" />
 
+            <TextView
+                android:id="@+id/cpu_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="8sp"
+                android:text="0 / 0 / 0"
+                android:textColor="@color/CRIMSON"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/fps_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 / 0"
+                android:textColor="@color/BLUEVIOLET"
+                android:textSize="24sp" />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -49,13 +66,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="@integer/max_alpha" />
+            android:max="@integer/max_alpha"
+            android:progress="@integer/progress_alpha"/>
 
         <TextView
             android:id="@+id/text_alpha_seek"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="22" />
+            android:text="@string/progress_alpha" />
     </LinearLayout>
 
     <LinearLayout
@@ -68,14 +86,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="@integer/max_halfDiag" />
+            android:max="@integer/max_halfDiag"
+            android:progress="@integer/progress_halfDiag"/>
 
         <TextView
             android:id="@+id/text_hdiag_seek"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="111" />
+            android:text="@string/progress_halfDiag" />
     </LinearLayout>
-
 
 </LinearLayout>
