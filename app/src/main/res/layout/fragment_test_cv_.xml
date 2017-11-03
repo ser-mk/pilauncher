@@ -14,8 +14,8 @@
 
         <sermk.pipi.game.CVMaskView
             android:id="@+id/capture_view"
-            android:layout_width="640px"
-            android:layout_height="480px"
+            android:layout_width="@dimen/capture_wight"
+            android:layout_height="@dimen/capture_height"
             android:src="@color/BLUE_A020" />
 
         <!-- TODO: Update blank fragment layout -->
@@ -95,5 +95,11 @@
             android:layout_height="wrap_content"
             android:text="@string/progress_halfDiag" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/chart_view"
+        android:layout_width="@dimen/capture_wight"
+        android:layout_height="@dimen/capture_height"
+        android:src="@drawable/border_black" />
 
 </LinearLayout>

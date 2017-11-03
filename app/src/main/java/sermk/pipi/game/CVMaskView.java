@@ -45,12 +45,17 @@ public class CVMaskView extends ImageView {
     private TextView alphaTV = null;
     private TextView hDiagTV = null;
 
+    private ImageView mMaskView = null;
+
     public void setAlphaTV(TextView alphaTV) {
         this.alphaTV = alphaTV;
     }
-
     public void sethDiagTV(TextView hDiagTV) {
         this.hDiagTV = hDiagTV;
+    }
+
+    public void setmMaskView(ImageView mMaskView) {
+        this.mMaskView = mMaskView;
     }
 
     public void clearMask(){
@@ -138,6 +143,9 @@ public class CVMaskView extends ImageView {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.v(TAG,"ACTION_UP " + String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(w) + " " + String.valueOf(h));
+                final Bitmap rectMask = MaskResolver.findCounter(mask);
+                //canvasResult.drawBitmap(rectMask,0,0,null);
+                mMaskView.setImageBitmap(rectMask);
                 break;
         }
 
