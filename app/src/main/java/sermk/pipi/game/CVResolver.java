@@ -58,7 +58,6 @@ final class CVResolver {
             synchronized (previewBitmap) {
                 previewBitmap.copyPixelsFromBuffer(frame);
             }
-            //mFpsCounter.count();
 
             currentSettings.captureView.post(mUpdateImageTask);
         }

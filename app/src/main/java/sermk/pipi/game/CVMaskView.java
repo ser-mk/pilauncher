@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -33,6 +34,8 @@ public class CVMaskView extends ImageView {
     private Paint maskPaint = null;
     private Paint renderPaint = null;
     private float halfDiagonal = 111;
+    private Rect rectOfMask = null;
+    private Paint pRectMask;
 
     private int alfamask = 111;
 
@@ -61,6 +64,7 @@ public class CVMaskView extends ImageView {
     public void clearMask(){
         if(mask == null) return;
         mask.eraseColor(Color.TRANSPARENT);
+        rectOfMask = null;
     }
 
     private void drawRectFrCenter(float x, float y){
@@ -86,6 +90,7 @@ public class CVMaskView extends ImageView {
         float bottom = y + halfDiagonal;
         float left = x - halfDiagonal;
         float right = x + halfDiagonal;
+
         canvasMask.drawRect(left,top,right,bottom,maskPaint);
     }
 
@@ -106,13 +111,19 @@ public class CVMaskView extends ImageView {
             renderPaint = new Paint();
             renderPaint.setAlpha(111);
 
-            drawRectFrCenter(111,111);
+            pRectMask = new Paint();
+            pRectMask.setColor(Color.GREEN);
+            pRectMask.setStyle(Paint.Style.STROKE);
 
             Logger.v("create mask type:" + String.valueOf(result.getConfig()));
         }
 
         canvasResult.drawBitmap(bm,0,0,null);
         canvasResult.drawBitmap(mask,0,0,renderPaint);
+
+        if(rectOfMask != null){
+            canvasResult.drawRect(rectOfMask,pRectMask);
+        }
 
         super.setImageBitmap(result);
     }
@@ -143,9 +154,9 @@ public class CVMaskView extends ImageView {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.v(TAG,"ACTION_UP " + String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(w) + " " + String.valueOf(h));
-                final Bitmap rectMask = MaskResolver.findCounter(mask);
+                rectOfMask = MaskResolver.findMaskCounter(mask);
                 //canvasResult.drawBitmap(rectMask,0,0,null);
-                mMaskView.setImageBitmap(rectMask);
+                //mMaskView.setImageBitmap(rectMask);
                 break;
         }
 
