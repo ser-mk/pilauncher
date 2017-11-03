@@ -48,7 +48,7 @@ final class CVResolver {
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
         @Override
         public void onFrame(final ByteBuffer frame) {
-            Log.v(TAG,"capture frame");
+            //Log.v(TAG,"capture frame");
             if(currentSettings.fpsCounter != null){
                 currentSettings.fpsCounter.count();
             }
@@ -77,5 +77,6 @@ final class CVResolver {
     public IFrameCallback getIFrameCallback() {
         return mIFrameCallback;
     }
+
 
 }
