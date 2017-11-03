@@ -44,6 +44,7 @@ final class CVResolver {
     }
 
 
+    private ByteBuffer tempByteBuffer;
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
         @Override
         public void onFrame(final ByteBuffer frame) {
@@ -51,12 +52,12 @@ final class CVResolver {
             if(currentSettings.fpsCounter != null){
                 currentSettings.fpsCounter.count();
             }
-
             if(currentSettings.captureView == null)
                 return;
             frame.clear();
             synchronized (previewBitmap) {
                 previewBitmap.copyPixelsFromBuffer(frame);
+                tempByteBuffer = frame;
             }
 
             currentSettings.captureView.post(mUpdateImageTask);
@@ -67,7 +68,8 @@ final class CVResolver {
         @Override
         public void run() {
             synchronized (previewBitmap) {
-                currentSettings.captureView.setImageBitmap(previewBitmap);
+                currentSettings.captureView
+                        .setFramePreview(tempByteBuffer, previewBitmap);
             }
         }
     };

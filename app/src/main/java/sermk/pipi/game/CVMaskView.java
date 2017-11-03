@@ -15,11 +15,13 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 
+import java.nio.ByteBuffer;
+
 /**
  * Created by echormonov on 01.11.17.
  */
 
-public class CVMaskView extends ImageView {
+public class CVMaskView extends CVMaskResolver {
 
     private final String TAG = "CVMaskView";
 
@@ -37,8 +39,6 @@ public class CVMaskView extends ImageView {
     private Rect rectOfMask = null;
     private Paint pRectMask;
 
-    private int alfamask = 111;
-
     private boolean checkInit(){
         if (mask == null)
             return false;
@@ -48,7 +48,7 @@ public class CVMaskView extends ImageView {
     private TextView alphaTV = null;
     private TextView hDiagTV = null;
 
-    private ImageView mMaskView = null;
+    private ChartView mMaskView = null;
 
     public void setAlphaTV(TextView alphaTV) {
         this.alphaTV = alphaTV;
@@ -57,7 +57,7 @@ public class CVMaskView extends ImageView {
         this.hDiagTV = hDiagTV;
     }
 
-    public void setmMaskView(ImageView mMaskView) {
+    public void setmMaskView(ChartView mMaskView) {
         this.mMaskView = mMaskView;
     }
 
@@ -94,18 +94,18 @@ public class CVMaskView extends ImageView {
         canvasMask.drawRect(left,top,right,bottom,maskPaint);
     }
 
-    @Override
-    public void setImageBitmap(Bitmap bm)
+    public void setFramePreview(final ByteBuffer byteBuffer, final Bitmap bitmap)
     {
+
         if(mask == null){
-            mask = Bitmap.createBitmap(bm);
+            mask = Bitmap.createBitmap(bitmap);
             //mask.setConfig(Bitmap.Config.RGB_565);
             clearMask();
             canvasMask = new Canvas(mask);
             maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             maskPaint.setColor(Color.RED);
 
-            result = Bitmap.createBitmap(bm);
+            result = Bitmap.createBitmap(bitmap);
             result.eraseColor(Color.TRANSPARENT);
             canvasResult = new Canvas(result);
             renderPaint = new Paint();
@@ -118,7 +118,7 @@ public class CVMaskView extends ImageView {
             Logger.v("create mask type:" + String.valueOf(result.getConfig()));
         }
 
-        canvasResult.drawBitmap(bm,0,0,null);
+        canvasResult.drawBitmap(bitmap,0,0,null);
         canvasResult.drawBitmap(mask,0,0,renderPaint);
 
         if(rectOfMask != null){
@@ -148,26 +148,17 @@ public class CVMaskView extends ImageView {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.v(TAG,"ACTION_DOWN " + String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(w) + " " + String.valueOf(h));
+                //Log.v(TAG,"ACTION_DOWN " + String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(w) + " " + String.valueOf(h));
             case MotionEvent.ACTION_MOVE:
                 drawRectFrCenter(x,y);
                 break;
             case MotionEvent.ACTION_UP:
                 Log.v(TAG,"ACTION_UP " + String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(w) + " " + String.valueOf(h));
-                rectOfMask = MaskResolver.findMaskCounter(mask);
-                //canvasResult.drawBitmap(rectMask,0,0,null);
-                //mMaskView.setImageBitmap(rectMask);
+                rectOfMask = super.findMaskCounter(mask);
                 break;
         }
 
         return true;
     }
 
-    public void setHalfDiagonal(final float halfDiagonal) {
-        this.halfDiagonal = halfDiagonal;
-    }
-
-    public void setAlfamask(final int alfamask) {
-        this.alfamask = alfamask;
-    }
 }

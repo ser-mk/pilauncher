@@ -66,10 +66,10 @@ public class TestCV_Fragment extends Fragment {
 
         mImageView.setAlphaTV(text_alpha_seek);
         mImageView.sethDiagTV(text_hdiag_seek);
-/*
-        ImageView chartView = (ImageView) rootView.findViewById(R.id.chart_view);
+
+        ChartView chartView = (ChartView) rootView.findViewById(R.id.chart_view);
         mImageView.setmMaskView(chartView);
-*/
+
         Button clear = (Button)rootView.findViewById(R.id.clear_button);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override

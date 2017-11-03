@@ -97,7 +97,7 @@
     </LinearLayout>
 
     <sermk.pipi.game.ChartView
-        android:id="@+id/surfaceView"
+        android:id="@+id/chart_view"
         android:layout_width="match_parent"
         android:layout_height="480px"
         android:src="@drawable/border_black"/>

@@ -1,6 +1,10 @@
 package sermk.pipi.game;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
+import android.widget.ImageView;
 
 import com.orhanobut.logger.Logger;
 
@@ -18,14 +22,16 @@ import java.util.List;
  * Created by ser on 02.11.17.
  */
 
-final class MaskResolver {
+class CVMaskResolver extends ImageView {
 
-    static public Bitmap maskVeiw = null;
-    static public Rect rectMaskByte = null;
-    static public Mat roiMask = null;
+    protected Rect rectMaskByte = null;
+    protected Mat roiMask = null;
 
+    public CVMaskResolver(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-    static android.graphics.Rect findMaskCounter(final Bitmap inMask){
+    protected android.graphics.Rect findMaskCounter(final Bitmap inMask){
         Mat color = new Mat();
         Mat bw = new Mat();
         Utils.bitmapToMat(inMask,color);
