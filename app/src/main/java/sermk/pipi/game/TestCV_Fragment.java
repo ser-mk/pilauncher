@@ -16,8 +16,6 @@ import android.widget.ToggleButton;
 import com.serenegiant.utils.CpuMonitor;
 import com.serenegiant.utils.FpsCounter;
 
-import com.orhanobut.logger.Logger;
-
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,7 +25,7 @@ import java.util.TimerTask;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  */
-class TestCV_Fragment extends Fragment {
+public class TestCV_Fragment extends Fragment {
 
     private final String TAG  = "TestCV_Fragment";
 
@@ -44,7 +42,6 @@ class TestCV_Fragment extends Fragment {
     private final CpuMonitor mCpuMonitor = new CpuMonitor();
     private FpsCounter mFpsCounter;
     private Timer mTimer;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
