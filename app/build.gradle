@@ -22,6 +22,17 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            splits {
+                abi {
+                    enable true
+                    reset()
+                    include 'arm64-v8a'
+                    universalApk false
+                }
+            }
+        }
     }
     externalNativeBuild {
         cmake {
