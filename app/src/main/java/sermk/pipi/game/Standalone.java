@@ -3,6 +3,7 @@ package sermk.pipi.game;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
 
 public class Standalone extends Activity {
 
@@ -17,6 +18,11 @@ public class Standalone extends Activity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
         getFragmentManager().beginTransaction()
                 .add(R.id.container, new TestCV_Fragment()).commit();
 
@@ -25,7 +31,6 @@ public class Standalone extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        //OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback);
     }
 
     /**
