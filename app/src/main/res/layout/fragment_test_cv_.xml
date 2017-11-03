@@ -43,7 +43,7 @@
                 android:lineSpacingExtra="8sp"
                 android:text="0 / 0 / 0"
                 android:textColor="@color/CRIMSON"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/fps_view"
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:max="@integer/max_alpha"
-            android:progress="@integer/progress_alpha"/>
+            android:progress="@integer/progress_alpha" />
 
         <TextView
             android:id="@+id/text_alpha_seek"
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:max="@integer/max_halfDiag"
-            android:progress="@integer/progress_halfDiag"/>
+            android:progress="@integer/progress_halfDiag" />
 
         <TextView
             android:id="@+id/text_hdiag_seek"
@@ -96,10 +96,11 @@
             android:text="@string/progress_halfDiag" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/chart_view"
-        android:layout_width="@dimen/capture_wight"
-        android:layout_height="@dimen/capture_height"
-        android:src="@drawable/border_black" />
+    <sermk.pipi.game.ChartView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="480px"
+        android:src="@drawable/border_black"/>
+
 
 </LinearLayout>

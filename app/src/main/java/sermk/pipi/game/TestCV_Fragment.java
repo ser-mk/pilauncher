@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -67,10 +66,10 @@ public class TestCV_Fragment extends Fragment {
 
         mImageView.setAlphaTV(text_alpha_seek);
         mImageView.sethDiagTV(text_hdiag_seek);
-
+/*
         ImageView chartView = (ImageView) rootView.findViewById(R.id.chart_view);
         mImageView.setmMaskView(chartView);
-
+*/
         Button clear = (Button)rootView.findViewById(R.id.clear_button);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
