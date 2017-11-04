@@ -11,6 +11,10 @@ add_library( lib_opencv SHARED IMPORTED )
 set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../UVC/opencv_sdk/native/libs/${ANDROID_ABI}/libopencv_java3.so)
 
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/libuvc/include/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/libusb/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
