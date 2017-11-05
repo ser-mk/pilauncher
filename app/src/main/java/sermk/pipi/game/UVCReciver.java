@@ -77,6 +77,9 @@ public class UVCReciver extends Thread {
     public void onDettach(final UsbDevice device) {
         Toast.makeText(gContext, "USB_DEVICE_DETACHED", Toast.LENGTH_SHORT).show();
         Logger.v("onDettach");
+        synchronized(mSyncExit) {
+            mSyncExit.notifyAll();
+        }
     }
 
     @Override
