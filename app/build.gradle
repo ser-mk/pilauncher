@@ -13,7 +13,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags "-fexceptions"
+                cppFlags "-fexceptions -std=c++11"
                 abiFilters 'arm64-v8a'
             }
         }

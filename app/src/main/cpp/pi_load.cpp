@@ -3,18 +3,33 @@
 #include <unistd.h>
 #include <libgen.h>
 #include <string>
-#include <opencv2/opencv.hpp>
 #include <libuvc/libuvc.h>
+#include "pi_cv.h"
 
-jint nativeCreate(JNIEnv* env,
-                 jobject thiz){
-    LOGI("native create");
-    return 0;
+static jint passFrameToCVPIPI(JNIEnv *env, jobject thiz,
+    ID_TYPE refMatPreview, ID_TYPE refMatChart) {
+
+    jint result = 0;
+    //ENTER();
+    result = pi_cv::calcPipiChart(refMatPreview, refMatChart);
+    //RETURN(result, jint);
+    return result;
+}
+
+static jint passRoiRectToCVPIPI(JNIEnv *env, jobject thiz,
+    jint xsRoi, jint ysRoi, ID_TYPE refMat) {
+
+    jint result = 0;
+    //ENTER();
+    result = pi_cv::setRectMask(xsRoi, ysRoi, refMat);
+    //RETURN(result, jint);
+    return result;
 }
 
 
 static JNINativeMethod methods[] = {
-        { "nativeCreate",					"()I", (void *) nativeCreate },
+        { "passFrameToCVPIPI",					"(JJ)I", (void *) passFrameToCVPIPI },
+        { "passRoiRectToCVPIPI",                  "(IIJ)I", (void *) passRoiRectToCVPIPI },
 };
 
 #define		NUM_ARRAY_ELEMENTS(p)		((int) sizeof(p) / sizeof(p[0]))

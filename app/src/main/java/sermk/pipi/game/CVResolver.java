@@ -90,5 +90,5 @@ final class CVResolver {
     }
 
     private static native int passFrameToCVPIPI(final long refMatPreview, final long  refMatChart);
-    private static native int passRoiRectToCVPIPI(final long refRect, final long refMat);
+    private static native int passRoiRectToCVPIPI(final int xsRoi, final int ysRoi, final long refMat);
 }
