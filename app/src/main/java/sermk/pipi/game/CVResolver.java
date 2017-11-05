@@ -56,7 +56,6 @@ final class CVResolver {
     }
 
 
-    private ByteBuffer tempByteBuffer;
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
         @Override
         public void onFrame(final ByteBuffer frame) {
@@ -66,16 +65,10 @@ final class CVResolver {
             Imgproc.cvtColor(previewRawMat, previewRGBMat,
                     Imgproc.COLOR_YUV2RGB_YUYV,3);
 
-            if(currentSettings.fpsCounter != null){
-                currentSettings.fpsCounter.count();
-            }
-            if(currentSettings.captureView == null)
-                return;
-            frame.clear();
+            currentSettings.fpsCounter.count();
+
             synchronized (previewBitmap) {
-                //previewBitmap.copyPixelsFromBuffer(frame);
                 Utils.matToBitmap(previewRGBMat,previewBitmap);
-                tempByteBuffer = frame;
             }
 
             currentSettings.captureView.post(mUpdateImageTask);
@@ -87,7 +80,7 @@ final class CVResolver {
         public void run() {
             synchronized (previewBitmap) {
                 currentSettings.captureView
-                        .setFramePreview(tempByteBuffer, previewBitmap);
+                        .setImageBitmap(previewBitmap);
             }
         }
     };
@@ -96,6 +89,6 @@ final class CVResolver {
         return mIFrameCallback;
     }
 
-    private static native int passFrameToCVPIPI(final long refMat);
+    private static native int passFrameToCVPIPI(final long refMatPreview, final long  refMatChart);
     private static native int passRoiRectToCVPIPI(final long refRect, final long refMat);
 }

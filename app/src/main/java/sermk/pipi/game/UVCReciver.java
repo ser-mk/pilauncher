@@ -2,9 +2,6 @@ package sermk.pipi.game;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.Surface;
 import android.widget.Toast;
 
@@ -15,7 +12,6 @@ import com.serenegiant.usb.USBMonitor.OnDeviceConnectListener;
 import com.serenegiant.usb.USBMonitor.UsbControlBlock;
 import com.serenegiant.usb.UVCCamera;
 
-import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -153,18 +149,16 @@ public class UVCReciver extends Thread {
         camera.setFrameCallback(cvr.getIFrameCallback(),
                 settings.pixelFormatCallback/*UVCCamera.PIXEL_FORMAT_NV21*/);
         camera.startPreview();
-        Log.v("!!","1");
 
         synchronized (mSyncExit) {
             try {
                 mSyncExit.wait();
             } catch (final InterruptedException e) {
-                Logger.e(e,"exc",null);
+                Logger.e(e,"exc");
             }
         }
 
         if (camera != null) {
-            Log.v("!!","2");
             camera.stopPreview();
             camera.setStatusCallback(null);
             camera.setButtonCallback(null);
@@ -175,29 +169,5 @@ public class UVCReciver extends Thread {
 
         return true;
     }
-
-    private final class HandlerControl extends Handler {
-
-
-        private final WeakReference<UVCReciver> mWeakThread;
-
-        public HandlerControl(UVCReciver reciver) {
-            this.mWeakThread = new WeakReference<UVCReciver>(reciver);
-        }
-
-        @Override
-        public void handleMessage(final Message msg) {
-            final UVCReciver UVCthread = mWeakThread.get();
-            switch (msg.what) {
-                case MSG_RELEASE:
-                    UVCthread.exitRun();
-                    break;
-                default:
-                    Logger.e("unsupported message:what=" + msg.what);
-            }
-        }
-    };
-
-
 
 }

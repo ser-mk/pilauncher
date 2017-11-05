@@ -4,12 +4,7 @@
 #include <libgen.h>
 #include <string>
 #include <opencv2/opencv.hpp>
-#include "UVCinterface.h"
-
-void pass_to_cvpi(uvc_frame_t * in){
-    return;
-}
-
+#include <libuvc/libuvc.h>
 
 jint nativeCreate(JNIEnv* env,
                  jobject thiz){

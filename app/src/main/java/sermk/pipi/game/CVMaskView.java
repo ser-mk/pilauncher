@@ -10,12 +10,9 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
-
-import java.nio.ByteBuffer;
 
 /**
  * Created by echormonov on 01.11.17.
@@ -48,17 +45,11 @@ public class CVMaskView extends CVMaskResolver {
     private TextView alphaTV = null;
     private TextView hDiagTV = null;
 
-    private ChartView mMaskView = null;
-
     public void setAlphaTV(TextView alphaTV) {
         this.alphaTV = alphaTV;
     }
     public void sethDiagTV(TextView hDiagTV) {
         this.hDiagTV = hDiagTV;
-    }
-
-    public void setmMaskView(ChartView mMaskView) {
-        this.mMaskView = mMaskView;
     }
 
     public void clearMask(){
@@ -94,9 +85,8 @@ public class CVMaskView extends CVMaskResolver {
         canvasMask.drawRect(left,top,right,bottom,maskPaint);
     }
 
-    public void setFramePreview(final ByteBuffer byteBuffer, final Bitmap bitmap)
-    {
-
+    @Override
+    public void setImageBitmap(Bitmap bitmap) {
         if(mask == null){
             mask = Bitmap.createBitmap(bitmap);
             //mask.setConfig(Bitmap.Config.RGB_565);
