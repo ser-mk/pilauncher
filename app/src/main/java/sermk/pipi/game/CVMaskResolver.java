@@ -71,7 +71,7 @@ class CVMaskResolver extends ImageView {
 
         rectMaskByte = rect;
         bw.setTo(Scalar.all(0));
-        Imgproc.drawContours(bw,contours,maxValIdx,Scalar.all(255));
+        Imgproc.drawContours(bw,contours,maxValIdx,Scalar.all(255), -1);
         roiMask = bw.submat(rect);
 
         bw.release();

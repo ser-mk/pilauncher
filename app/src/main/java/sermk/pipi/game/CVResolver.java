@@ -1,6 +1,7 @@
 package sermk.pipi.game;
 
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
 import com.serenegiant.usb.IFrameCallback;
 import com.serenegiant.usb.UVCCamera;
@@ -9,6 +10,7 @@ import com.serenegiant.utils.FpsCounter;
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
@@ -42,6 +44,8 @@ final class CVResolver {
     byte[] rawBytes;
     Mat previewRawMat;
     Mat previewRGBMat;
+    Mat chartMat;
+    Bitmap chartBitmap;
     public CVResolver(final Settings settings) {
         currentSettings = new Settings();
         if (settings == null)
@@ -54,6 +58,10 @@ final class CVResolver {
         previewRGBMat = new Mat(settings.height,
                 settings.width, CvType.CV_8UC3, new Scalar(255,0,0));
         rawBytes = new byte[ settings.height * 2 * settings.width];
+        chartMat = new Mat(settings.chartView.getHeight(), settings.chartView.getWidth(),
+                CvType.CV_8UC3, new Scalar(0,0,0));
+        chartBitmap = Bitmap.createBitmap(settings.chartView.getWidth(),
+                settings.chartView.getHeight(), settings.bitmapConfig);
     }
 
 
@@ -64,7 +72,7 @@ final class CVResolver {
             frame.get(rawBytes);
             previewRawMat.put(0,0, rawBytes);
             Imgproc.cvtColor(previewRawMat, previewRGBMat,
-                    Imgproc.COLOR_YUV2RGB_YUYV,3);
+                    Imgproc.COLOR_YUV2RGB_YUYV);
 
             currentSettings.fpsCounter.count();
 
@@ -73,6 +81,31 @@ final class CVResolver {
             }
 
             currentSettings.captureView.post(mUpdateImageTask);
+
+            final Rect roiRect = currentSettings.captureView.getRectMaskByte();
+            final Mat roiMat = currentSettings.captureView.getRoiMask();
+
+            if(roiMat == null)
+                return;
+
+            int res = passRoiRectToCVPIPI(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
+            res = passFrameToCVPIPI(previewRawMat.getNativeObjAddr(), chartMat.getNativeObjAddr());
+
+
+            synchronized (chartBitmap) {
+                //chartBitmap = Bitmap.createBitmap(chartMat.width(), chartMat.height(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(chartMat, chartBitmap);
+            }
+            /**/
+            currentSettings.chartView.post(new Runnable() {
+                public void run() {
+                    synchronized (chartBitmap) {
+                    //Log.v(TAG,"R" + String.valueOf(chartBitmap.getHeight()));
+                        currentSettings.chartView.setImageBitmap(chartBitmap);
+                    }
+                }
+            });
+
         }
     };
 

@@ -16,14 +16,15 @@ static struct {
 
 int pi_cv::calcPipiChart(ID_TYPE refMatPreview, ID_TYPE refMatChart) {
     const Mat & preview = *reinterpret_cast<Mat*>(refMatPreview);
-    const Mat chart = *reinterpret_cast<Mat*>(refMatChart);
-
+    const Mat & chart = *reinterpret_cast<Mat*>(refMatChart);
     //return 0;
     Mat roiPreview = Mat(preview, piMask.rect);
-
     Mat rgbRoiPreview = Mat(roiPreview.rows, roiPreview.cols, CV_8UC3);
     cvtColor(roiPreview, rgbRoiPreview, COLOR_YUV2RGB_YUYV);
-    rgbRoiPreview.copyTo(chart);
+    Mat subChart = Mat(chart( piMask.rect));
+    rgbRoiPreview.copyTo(subChart
+            ,piMask.Mask
+    );
     return 0;
 }
 
