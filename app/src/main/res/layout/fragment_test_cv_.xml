@@ -96,7 +96,7 @@
             android:text="@string/progress_halfDiag" />
     </LinearLayout>
 
-    <sermk.pipi.game.ChartView
+    <ImageView
         android:id="@+id/chart_view"
         android:layout_width="match_parent"
         android:layout_height="480px"

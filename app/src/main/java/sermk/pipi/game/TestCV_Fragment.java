@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -37,6 +38,7 @@ public class TestCV_Fragment extends Fragment {
     private CVMaskView mImageView;
     private SeekText alphaSeek;
     private SeekText hDiagSeek;
+    private ImageView chartView;
 
     private final CpuMonitor mCpuMonitor = new CpuMonitor();
     private FpsCounter mFpsCounter;
@@ -67,7 +69,7 @@ public class TestCV_Fragment extends Fragment {
         mImageView.setAlphaTV(text_alpha_seek);
         mImageView.sethDiagTV(text_hdiag_seek);
 
-        ChartView chartView = (ChartView) rootView.findViewById(R.id.chart_view);
+        chartView = (ImageView) rootView.findViewById(R.id.chart_view);
 
         Button clear = (Button)rootView.findViewById(R.id.clear_button);
         clear.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +140,7 @@ public class TestCV_Fragment extends Fragment {
                 CVResolver.Settings settings = new CVResolver.Settings();
                 settings.captureView = mImageView;
                 settings.fpsCounter = mFpsCounter;
+                settings.chartView = chartView;
                 app.getGlobalSettings().setUVCSettings(settings);
                 app.getUVCReciver().startCapture(settings);
             } else {

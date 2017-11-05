@@ -23,6 +23,7 @@ final class CVResolver {
     static public class Settings{
         CVMaskView captureView = null;
         FpsCounter fpsCounter;
+        ImageView chartView;
         int width = 0; //.getCaptureWitgh();
         int height = 0; //.getCaptureHeight();
         int minFps = 0; //.getMinFps();

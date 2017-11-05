@@ -31,6 +31,14 @@ class CVMaskResolver extends ImageView {
         super(context, attrs);
     }
 
+    public Rect getRectMaskByte() {
+        return rectMaskByte;
+    }
+
+    public Mat getRoiMask() {
+        return roiMask;
+    }
+
     protected android.graphics.Rect findMaskCounter(final Bitmap inMask){
         Mat color = new Mat();
         Mat bw = new Mat();
