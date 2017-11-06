@@ -21,8 +21,8 @@ struct HistType{
     size_t size = 0;
     uint64 maxValue = 0;
 
-    void clearHist(){
-        memset(hist,0,MAX_WIGTH_HIST* sizeof(uint64));
+    void clearHist(uint64 val = 0){
+        memset(hist,val,MAX_WIGTH_HIST* sizeof(uint64));
         maxValue = 0;
     }
 
@@ -51,17 +51,15 @@ struct HistType{
         return maxValue;
     }
 
-    void normalize(const int chartRow){
-        const uint64 mv = getMaxValue();
+    void normalize(const int chartRow, const uint64 maxValue){
         for(size_t i=0; i < size; i++){
-            normHist[i] = static_cast<int>((chartRow * hist[i])/mv);
+            normHist[i] = static_cast<int>((chartRow * hist[i])/maxValue);
         }
     }
 
-    void plot2MatRGB(const Mat & mat){
+    void plot2MatRGB(const Mat & mat, const Scalar & colorPoints){
         const int matRows = mat.rows;
         const int matCols = mat.cols;
-        const Scalar colorPoints(255,0,0);
         for( int i = 1; i < this->size; i++ ){
             cv:line(mat,
                     Point(i-1, normHist[i-1]),
@@ -70,11 +68,23 @@ struct HistType{
                     2,8,0);
         }
     }
+};
 
+struct LearnType: public HistType {
 
+    void compareHist(const HistType & compHist){
+        for(size_t i = 0; i < compHist.size; i++){
+            uint64 val = compHist.hist[i];
+            if(this->hist[i] > val){
+                this->hist[i] = val;
+            }
+        }
+        this->size = compHist.size;
+    }
 };
 
 struct HistType currHist;
+struct LearnType learnHist;
 
 
 void clear3UMat(const Mat & mat){
@@ -118,10 +128,18 @@ int pi_cv::calcPipiChart(ID_TYPE refMatPreview, ID_TYPE refMatChart) {
 #endif
 
     currHist.verHistForMat(samplesMat);
-    const int rowChart = chart.rows - chart.rows/10;
-    currHist.normalize(rowChart);
-    currHist.plot2MatRGB(chart);
+    const int maxRow = chart.rows - chart.rows/10;
+    currHist.normalize(maxRow, currHist.getMaxValue());
+    const Scalar redPoints(255,0,0);
+    currHist.plot2MatRGB(chart,redPoints);
 
+    if(pi_cv::getLearnEnable()){
+        learnHist.compareHist(currHist);
+    }
+
+    learnHist.normalize(maxRow,currHist.maxValue);
+    const Scalar bluePoints(0,255,0);
+    learnHist.plot2MatRGB(chart,bluePoints);
 
     return 0;
 }
@@ -134,4 +152,8 @@ int pi_cv::setRectMask(jint xsRoi, jint ysRoi, ID_TYPE refMat) {
     int cols = mask.cols;
     piMask.rect = Rect(xsRoi, ysRoi, cols, rows);
     return 0;
+}
+
+void pi_cv::resetLearnHist() {
+    learnHist.clearHist(UINT64_MAX);
 }

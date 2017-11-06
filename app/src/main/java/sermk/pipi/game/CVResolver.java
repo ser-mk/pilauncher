@@ -1,7 +1,9 @@
 package sermk.pipi.game;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ToggleButton;
 
 import com.serenegiant.usb.IFrameCallback;
 import com.serenegiant.usb.UVCCamera;
@@ -26,6 +28,7 @@ final class CVResolver {
         CVMaskView captureView = null;
         FpsCounter fpsCounter;
         ImageView chartView;
+        ToggleButton learnButton;
         int width = 0; //.getCaptureWitgh();
         int height = 0; //.getCaptureHeight();
         int minFps = 0; //.getMinFps();
@@ -76,6 +79,7 @@ final class CVResolver {
 
             currentSettings.fpsCounter.count();
 
+            //ToDo: bitmap must final !
             synchronized (previewBitmap) {
                 Utils.matToBitmap(previewRGBMat,previewBitmap);
             }
@@ -88,10 +92,13 @@ final class CVResolver {
             if(roiMat == null)
                 return;
 
+            final boolean learnEnable = currentSettings.learnButton.isChecked();
+
+            enableLearn(learnEnable);
             int res = passRoiRectToCVPIPI(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
             res = passFrameToCVPIPI(previewRawMat.getNativeObjAddr(), chartMat.getNativeObjAddr());
 
-
+            //ToDo: bitmap must final !
             synchronized (chartBitmap) {
                 //chartBitmap = Bitmap.createBitmap(chartMat.width(), chartMat.height(), Bitmap.Config.ARGB_8888);
                 Utils.matToBitmap(chartMat, chartBitmap);
@@ -125,4 +132,6 @@ final class CVResolver {
 
     private static native int passFrameToCVPIPI(final long refMatPreview, final long  refMatChart);
     private static native int passRoiRectToCVPIPI(final int xsRoi, final int ysRoi, final long refMat);
+    private static native void enableLearn(final boolean enable);
+
 }

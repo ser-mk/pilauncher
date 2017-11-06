@@ -6,6 +6,8 @@
 #include <libuvc/libuvc.h>
 #include "pi_cv.h"
 
+bool pi_cv::learn = false;
+
 static jint passFrameToCVPIPI(JNIEnv *env, jobject thiz,
     ID_TYPE refMatPreview, ID_TYPE refMatChart) {
 
@@ -26,10 +28,19 @@ static jint passRoiRectToCVPIPI(JNIEnv *env, jobject thiz,
     return result;
 }
 
+static void enableLearn(JNIEnv *env, jobject thiz,
+                        jboolean enable) {
+
+    pi_cv::setLearnEnable(static_cast<bool>(enable));
+    //result = pi_cv::setRectMask(xsRoi, ysRoi, refMat);
+
+}
+
 
 static JNINativeMethod methods[] = {
         { "passFrameToCVPIPI",					"(JJ)I", (void *) passFrameToCVPIPI },
         { "passRoiRectToCVPIPI",                  "(IIJ)I", (void *) passRoiRectToCVPIPI },
+        { "enableLearn",                  "(Z)V", (void *) enableLearn },
 };
 
 #define		NUM_ARRAY_ELEMENTS(p)		((int) sizeof(p) / sizeof(p[0]))

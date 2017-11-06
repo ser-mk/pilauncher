@@ -53,6 +53,15 @@
                 android:textColor="@color/BLUEVIOLET"
                 android:textSize="24sp" />
 
+            <ToggleButton
+                android:id="@+id/learn_enable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Min"
+                android:textOff="capture"
+                android:textOn="learn"
+                tools:text="learn" />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -98,7 +107,7 @@
 
     <ImageView
         android:id="@+id/chart_view"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/capture_wight"
         android:layout_height="match_parent"
         android:src="@drawable/border_black"/>
 

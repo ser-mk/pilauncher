@@ -35,6 +35,7 @@ public class TestCV_Fragment extends Fragment {
     }
 
     private ToggleButton mPreviewButton;
+    private ToggleButton mLearnButton;
     private CVMaskView mImageView;
     private SeekText alphaSeek;
     private SeekText hDiagSeek;
@@ -51,7 +52,9 @@ public class TestCV_Fragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_test_cv_, container, false);
 
         mPreviewButton = (ToggleButton)rootView.findViewById(R.id.start_test);
-        setPreviewButton(false);
+        mLearnButton = (ToggleButton)rootView.findViewById(R.id.learn_enable);
+        setToogleButton(false);
+
         mPreviewButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
 
         mImageView = (CVMaskView)rootView.findViewById(R.id.capture_view);
@@ -141,6 +144,7 @@ public class TestCV_Fragment extends Fragment {
                 settings.captureView = mImageView;
                 settings.fpsCounter = mFpsCounter;
                 settings.chartView = chartView;
+                settings.learnButton = mLearnButton;
                 app.getGlobalSettings().setUVCSettings(settings);
                 app.getUVCReciver().startCapture(settings);
             } else {
@@ -149,13 +153,15 @@ public class TestCV_Fragment extends Fragment {
         }
     };
 
-    private void setPreviewButton(final boolean onoff) {
+    private void setToogleButton(final boolean onoff) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mPreviewButton.setOnCheckedChangeListener(null);
+                mLearnButton.setOnCheckedChangeListener(null);
                 try {
                     mPreviewButton.setChecked(onoff);
+                    mLearnButton.setChecked(onoff);
                 } catch (Exception e) {
                     Log.w(TAG, e);
                 }
