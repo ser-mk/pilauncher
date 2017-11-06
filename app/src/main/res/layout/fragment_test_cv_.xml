@@ -2,14 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:gravity="top|left"
     android:orientation="vertical"
     tools:context="sermk.pipi.game.TestCV_Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <sermk.pipi.game.CVMaskView
@@ -58,7 +58,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <sermk.pipi.game.SeekText
@@ -78,7 +78,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <sermk.pipi.game.SeekText
@@ -99,7 +99,7 @@
     <ImageView
         android:id="@+id/chart_view"
         android:layout_width="match_parent"
-        android:layout_height="480px"
+        android:layout_height="match_parent"
         android:src="@drawable/border_black"/>
 
 
