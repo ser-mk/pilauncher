@@ -56,6 +56,11 @@ public class CVMaskView extends CVMaskResolver {
         if(mask == null) return;
         mask.eraseColor(Color.TRANSPARENT);
         rectOfMask = null;
+        super.rectMaskByte = null;
+        if(super.roiMask != null) {
+            super.roiMask.release();
+            super.roiMask = null;
+        }
     }
 
     private void drawRectFrCenter(float x, float y){
@@ -152,3 +157,4 @@ public class CVMaskView extends CVMaskResolver {
     }
 
 }
+
