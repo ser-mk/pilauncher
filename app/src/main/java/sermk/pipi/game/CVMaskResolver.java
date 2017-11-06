@@ -46,13 +46,13 @@ class CVMaskResolver extends ImageView {
         Imgproc.cvtColor(color,bw,Imgproc.COLOR_RGB2GRAY,1);
         color.release();
 
-        Logger.v("channel :" + String.valueOf(bw.channels()));
+        //Logger.v("channels :" + String.valueOf(bw.channels()));
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat hierarchy = new Mat();
 
         Imgproc.findContours(bw,contours,hierarchy,
                 Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_SIMPLE);
-        Logger.v("qty contourse :" + String.valueOf(contours.size()));
+        //Logger.v("qty contourse :" + String.valueOf(contours.size()));
         double maxVal = 0;
         int maxValIdx = 0;
         for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++)

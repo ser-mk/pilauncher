@@ -143,7 +143,7 @@ public class CVMaskView extends CVMaskResolver {
                 drawRectFrCenter(x,y);
                 break;
             case MotionEvent.ACTION_UP:
-                Log.v(TAG,"ACTION_UP " + String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(w) + " " + String.valueOf(h));
+                //Log.v(TAG,"ACTION_UP " + String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(w) + " " + String.valueOf(h));
                 rectOfMask = super.findMaskCounter(mask);
                 break;
         }
