@@ -115,8 +115,15 @@ public class UVCReciver extends Thread {
         if (list.size() == 0) {
             return false;
         }
-
         UsbDevice device =  list.get(0);
+
+        Logger.v("getDeviceClass :" +
+                String.valueOf(device.getDeviceClass()) +" did: "
+                + String.valueOf(device.getDeviceId()) + " PId: "
+                + String.valueOf(device.getProductId()) + " Vid"
+                + String.valueOf(device.getVendorId() ) + " name: "
+                + device.getDeviceName()
+        );
 
         mUSBMonitor.requestPermission(device);
 
@@ -135,6 +142,12 @@ public class UVCReciver extends Thread {
                                 "selector=" + selector + "; " +
                                 "statusAttribute=" + statusAttribute + "; " +
                                 "data=...)", Toast.LENGTH_SHORT).show();
+                Logger.v("onStatus(statusClass=" + statusClass
+                        + "; " +
+                        "event=" + event + "; " +
+                        "selector=" + selector + "; " +
+                        "statusAttribute=" + statusAttribute + "; " +
+                        "data=...)");
                     }
                 });
         try {
