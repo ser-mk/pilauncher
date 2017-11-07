@@ -41,6 +41,9 @@ public class TestCV_Fragment extends Fragment {
     private SeekText hDiagSeek;
     private ImageView chartView;
 
+    TextView cpuView;
+    TextView fpsView;
+
     private final CpuMonitor mCpuMonitor = new CpuMonitor();
     private FpsCounter mFpsCounter;
     private Timer mTimer;
@@ -82,38 +85,43 @@ public class TestCV_Fragment extends Fragment {
             }
         });
 
-        final TextView cpuView = (TextView)rootView.findViewById(R.id.cpu_view);
-        final TextView fpsView = (TextView)rootView.findViewById(R.id.fps_view);
+        cpuView = (TextView)rootView.findViewById(R.id.cpu_view);
+        fpsView = (TextView)rootView.findViewById(R.id.fps_view);
 
         mTimer = new Timer("cpu_fps_timer");
         mFpsCounter = new FpsCounter();
         mFpsCounter.reset();
 
-        mTimer.schedule(new TimerTask() { // Определяем задачу
-            @Override
-            public void run() {
-                cpuView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        cpuView.setText(String.format(Locale.US, "CPU:%3d/%3d/%3d",
-                                mCpuMonitor.getCpuCurrent(),
-                                mCpuMonitor.getCpuAvg3(),
-                                mCpuMonitor.getCpuAvgAll()));
-                    }
-                });
-                fpsView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mFpsCounter.update();
-                        fpsView.setText(String.format(Locale.US, "FPS:%4.1f", mFpsCounter.getFps()));
-                    }
-                });
-            }
-        }, 1111L,
-                getResources().getInteger(R.integer.cpu_timer_period)); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mTimer.schedule(new TimerTask() { // Определяем задачу
+                            @Override
+                            public void run() {
+                                cpuView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cpuView.setText(String.format(Locale.US, "CPU:%3d/%3d/%3d",
+                                            mCpuMonitor.getCpuCurrent(),
+                                            mCpuMonitor.getCpuAvg3(),
+                                            mCpuMonitor.getCpuAvgAll()));
+                                    }
+                                });
+                                fpsView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mFpsCounter.update();
+                                        fpsView.setText(String.format(Locale.US, "FPS:%4.1f", mFpsCounter.getFps()));
+                                    }
+                                });
+                            }
+                        }, 1111L,
+            getResources().getInteger(R.integer.cpu_timer_period)); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
     }
 
     @Override
