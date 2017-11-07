@@ -82,7 +82,7 @@ struct LearnStruct: public HistStruct {
         this->size = compHist.size;
     }
 
-    void decreaseStable(const uint64 factor, const uint64 denominator){
+    void decreaseBound(const uint64 factor, const uint64 denominator){
         for(size_t i=0; i<size; i++){
             hist[i] -= (hist[i]*factor)/denominator;
         }
@@ -101,6 +101,19 @@ struct PowerStruct: public HistStruct{
             }
         }
         this->size = signal.size;
+    }
+
+    int calcPosition(){
+        uint64 mv = 0;
+        int position = -1;
+        for(int i=0; i < size; i++){
+            uint64 val = hist[i];
+            if(val > mv){
+                mv = val;
+                position = i;
+            }
+        }
+        return position;
     }
 };
 
@@ -171,7 +184,7 @@ int pi_cv::calcPipiChart(ID_TYPE refMatPreview, ID_TYPE refMatChart) {
     const Scalar bluePoints(0,0,255);
     powerHist.plot2MatRGB(chart,bluePoints);
 
-    return 0;
+    return powerHist.calcPosition();
 }
 
 
@@ -189,5 +202,5 @@ void pi_cv::resetLearnHist() {
 }
 
 void pi_cv::setupLearnHist() {
-    learnHist.decreaseStable(1,20);
+    learnHist.decreaseBound(1, 20);
 }

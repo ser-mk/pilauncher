@@ -95,15 +95,17 @@ final class CVResolver {
             final boolean learnEnable = currentSettings.learnButton.isChecked();
 
             enableLearn(learnEnable);
-            int res = passRoiRectToCVPIPI(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
-            res = passFrameToCVPIPI(previewRawMat.getNativeObjAddr(), chartMat.getNativeObjAddr());
+            final int res = passRoiRectToCVPIPI(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
+            final int pos = passFrameToCVPIPI(previewRawMat.getNativeObjAddr(), chartMat.getNativeObjAddr());
+
+            currentSettings.captureView.setPosition(pos);
 
             //ToDo: bitmap must final !
             synchronized (chartBitmap) {
                 //chartBitmap = Bitmap.createBitmap(chartMat.width(), chartMat.height(), Bitmap.Config.ARGB_8888);
                 Utils.matToBitmap(chartMat, chartBitmap);
             }
-            /**/
+
             currentSettings.chartView.post(new Runnable() {
                 public void run() {
                     synchronized (chartBitmap) {

@@ -52,6 +52,9 @@ public class CVMaskView extends CVMaskResolver {
         this.hDiagTV = hDiagTV;
     }
 
+    private int position = -1;
+    private Paint positionPaint = new Paint();
+
     public void clearMask(){
         if(mask == null) return;
         mask.eraseColor(Color.TRANSPARENT);
@@ -61,6 +64,7 @@ public class CVMaskView extends CVMaskResolver {
             super.roiMask.release();
             super.roiMask = null;
         }
+        position = -1;
     }
 
     private void drawRectFrCenter(float x, float y){
@@ -88,6 +92,23 @@ public class CVMaskView extends CVMaskResolver {
         float right = x + halfDiagonal;
 
         canvasMask.drawRect(left,top,right,bottom,maskPaint);
+    }
+
+    private void drawPosition(){
+        if(rectOfMask == null)
+            return;
+        final float top = 0;
+        final float bottom = result.getHeight();
+        final int w = 20;
+        final float left = rectOfMask.left + position - w;
+        final float right = left + 2*w;
+        positionPaint.setColor(Color.BLUE);
+        positionPaint.setAlpha(44);
+        canvasResult.drawRect(left,top,right,bottom,positionPaint);
+    }
+
+    public void setPosition(final int position) {
+        this.position = position;
     }
 
     @Override
@@ -118,6 +139,10 @@ public class CVMaskView extends CVMaskResolver {
 
         if(rectOfMask != null){
             canvasResult.drawRect(rectOfMask,pRectMask);
+        }
+
+        if(position > 0){
+            drawPosition();
         }
 
         super.setImageBitmap(result);
