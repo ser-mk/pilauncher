@@ -15,7 +15,7 @@ static struct {
 static const size_t MAX_WIGTH_HIST = 640;
 static const size_t NUM_CHANNEL = 2;
 
-struct HistType{
+struct HistStruct{
     uint64 hist[MAX_WIGTH_HIST] = {0};
     int normHist[MAX_WIGTH_HIST] = {0};
     size_t size = 0;
@@ -70,9 +70,9 @@ struct HistType{
     }
 };
 
-struct LearnType: public HistType {
+struct LearnStruct: public HistStruct {
 
-    void compareHist(const HistType & compHist){
+    void compareHist(const HistStruct & compHist){
         for(size_t i = 0; i < compHist.size; i++){
             uint64 val = compHist.hist[i];
             if(this->hist[i] > val){
@@ -81,10 +81,32 @@ struct LearnType: public HistType {
         }
         this->size = compHist.size;
     }
+
+    void decreaseStable(const uint64 factor, const uint64 denominator){
+        for(size_t i=0; i<size; i++){
+            hist[i] -= (hist[i]*factor)/denominator;
+        }
+    }
 };
 
-struct HistType currHist;
-struct LearnType learnHist;
+struct PowerStruct: public HistStruct{
+
+    void calcPower(const LearnStruct & learn, const HistStruct & signal){
+        this->clearHist();
+        for(size_t i=1; i < signal.size; i++){
+            int dif = static_cast<int>(learn.hist[i] - signal.hist[i]);
+            if(dif > 0) {
+                this->hist[i] = dif;
+                this->hist[i] += this->hist[i - 1];
+            }
+        }
+        this->size = signal.size;
+    }
+};
+
+struct HistStruct currHist;
+struct LearnStruct learnHist;
+struct PowerStruct powerHist;
 
 
 void clear3UMat(const Mat & mat){
@@ -135,11 +157,18 @@ int pi_cv::calcPipiChart(ID_TYPE refMatPreview, ID_TYPE refMatChart) {
 
     if(pi_cv::getLearnEnable()){
         learnHist.compareHist(currHist);
+    } else {
+        powerHist.calcPower(learnHist,currHist);
     }
 
     learnHist.normalize(maxRow,currHist.maxValue);
-    const Scalar bluePoints(0,255,0);
-    learnHist.plot2MatRGB(chart,bluePoints);
+    const Scalar greenPoints(0,255,0);
+    learnHist.plot2MatRGB(chart,greenPoints);
+
+
+    powerHist.normalize(maxRow,powerHist.getMaxValue());
+    const Scalar bluePoints(0,0,255);
+    powerHist.plot2MatRGB(chart,bluePoints);
 
     return 0;
 }
@@ -156,4 +185,8 @@ int pi_cv::setRectMask(jint xsRoi, jint ysRoi, ID_TYPE refMat) {
 
 void pi_cv::resetLearnHist() {
     learnHist.clearHist(UINT64_MAX);
+}
+
+void pi_cv::setupLearnHist() {
+    learnHist.decreaseStable(1,20);
 }
