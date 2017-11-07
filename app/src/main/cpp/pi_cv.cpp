@@ -141,6 +141,7 @@ int pi_cv::calcPipiChart(ID_TYPE refMatPreview, ID_TYPE refMatChart) {
     clear3UMat(chart);
     split(roiPreview,channels);
     const Mat & samplesMat = channels[0];
+    bitwise_and(samplesMat,piMask.Mask,samplesMat, noArray());
 #if 1
     Mat rgbRoiPreview = Mat(roiPreview.rows, roiPreview.cols, CV_8UC3);
     cvtColor(samplesMat, rgbRoiPreview, COLOR_GRAY2RGB);
