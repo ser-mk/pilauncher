@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="max_alpha">111</integer>
-    <integer name="max_halfDiag">60</integer>
+    <integer name="max_halfDiag">44</integer>
     <integer name="progress_alpha">70</integer>
     <integer name="progress_halfDiag">16</integer>
     <string name="progress_alpha">70</string>

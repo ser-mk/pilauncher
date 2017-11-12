@@ -55,18 +55,35 @@ final class CVResolver {
         if (settings == null)
             return;
         currentSettings = settings;
-        previewBitmap = Bitmap.createBitmap(settings.width,
-                settings.height, settings.bitmapConfig);
-        previewRawMat = new Mat(settings.height,
-                settings.width, CvType.CV_8UC2);
+        previewBitmap = Bitmap.createBitmap(settings.captureView.getWidth(),
+                settings.captureView.getHeight(), settings.bitmapConfig);
+        previewRawMat = new Mat(settings.captureView.getHeight(),
+            settings.captureView.getWidth(), CvType.CV_8UC2);
         previewRGBMat = new Mat(settings.height,
                 settings.width, CvType.CV_8UC3, new Scalar(255,0,0));
         rawBytes = new byte[ settings.height * 2 * settings.width];
+        /*
         chartMat = new Mat(settings.chartView.getHeight(), settings.chartView.getWidth(),
                 CvType.CV_8UC3, new Scalar(0,0,0));
         chartBitmap = Bitmap.createBitmap(settings.chartView.getWidth(),
                 settings.chartView.getHeight(), settings.bitmapConfig);
+                */
+        setPlotOption(settings.captureView.getWidth(), settings.captureView.getHeight());
         startCV(true);
+    }
+
+    private void plottCV(final long pointMat){
+        if(pointMat == 0) {
+            Logger.e("pointMat null");
+            return;
+        }
+        Mat plot = new Mat(pointMat);
+        Logger.v("pointMat " + String.valueOf(plot.rows()) + " " + String.valueOf(plot.cols()));
+        Logger.v("previewBitmap " + String.valueOf(previewBitmap.getHeight()) + " " + String.valueOf(previewBitmap.getWidth()));
+        synchronized (previewBitmap) {
+            Utils.matToBitmap(plot,previewBitmap);
+        }
+        currentSettings.captureView.post(mUpdateImageTask);
     }
 
     private void plottCV(final ByteBuffer frame){
@@ -74,7 +91,16 @@ final class CVResolver {
             Logger.e("frame empty");
             return;
         }
-        mIFrameCallback.onFrame(frame);
+        currentSettings.fpsCounter.count();
+        frame.get(rawBytes);
+
+        previewRawMat.put(0,0, rawBytes);
+        Imgproc.cvtColor(previewRawMat, previewRGBMat,
+            Imgproc.COLOR_YUV2RGB_YUYV);
+        synchronized (previewBitmap) {
+            Utils.matToBitmap(previewRGBMat,previewBitmap);
+        }
+        currentSettings.captureView.post(mUpdateImageTask);
     }
 
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
@@ -146,5 +172,6 @@ final class CVResolver {
     private static native void enableLearn(final boolean enable);
     //without static for call privat non-static method!
     private native void startCV(final boolean enable);
+    private native void setPlotOption(final int wigth, final int height);
 
 }

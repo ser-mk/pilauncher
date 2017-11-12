@@ -42,12 +42,8 @@ public class CVMaskView extends CVMaskResolver {
         return true;
     }
 
-    private TextView alphaTV = null;
     private TextView hDiagTV = null;
 
-    public void setAlphaTV(TextView alphaTV) {
-        this.alphaTV = alphaTV;
-    }
     public void sethDiagTV(TextView hDiagTV) {
         this.hDiagTV = hDiagTV;
     }
@@ -68,15 +64,6 @@ public class CVMaskView extends CVMaskResolver {
     }
 
     private void drawRectFrCenter(float x, float y){
-        if(alphaTV != null ) {
-            String str = alphaTV.getText().toString();
-            try{
-                int num = Integer.parseInt(str);
-                renderPaint.setAlpha(num);
-            } catch (NumberFormatException e) {
-                Logger.w("it's not int param " + str);
-            }
-        }
         if(hDiagTV != null ) {
             String str = hDiagTV.getText().toString();
             try{
@@ -111,8 +98,8 @@ public class CVMaskView extends CVMaskResolver {
         this.position = position;
     }
 
-    @Override
-    public void setImageBitmap(Bitmap bitmap) {
+    //@Override
+    public void setImageBitmap1(Bitmap bitmap) {
         if(mask == null){
             mask = Bitmap.createBitmap(bitmap);
             //mask.setConfig(Bitmap.Config.RGB_565);
@@ -125,7 +112,7 @@ public class CVMaskView extends CVMaskResolver {
             result.eraseColor(Color.TRANSPARENT);
             canvasResult = new Canvas(result);
             renderPaint = new Paint();
-            renderPaint.setAlpha(111);
+            renderPaint.setAlpha(70);
 
             pRectMask = new Paint();
             pRectMask.setColor(Color.GREEN);

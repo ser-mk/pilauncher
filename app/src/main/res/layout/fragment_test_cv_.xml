@@ -12,10 +12,49 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <sermk.pipi.game.SeekText
+            android:id="@+id/hdiag_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="@integer/max_halfDiag"
+            android:progress="@integer/progress_halfDiag" />
+
+        <TextView
+            android:id="@+id/text_hdiag_seek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/progress_halfDiag" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <sermk.pipi.game.SeekText
+            android:id="@+id/alpha_seek"
+            android:layout_width="@dimen/capture_wight"
+            android:layout_height="wrap_content"
+            android:max="@integer/max_alpha"
+            android:progress="@integer/progress_alpha" />
+
+        <TextView
+            android:id="@+id/text_alpha_seek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/progress_alpha" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
         <sermk.pipi.game.CVMaskView
             android:id="@+id/capture_view"
             android:layout_width="@dimen/capture_wight"
-            android:layout_height="@dimen/capture_height"
+            android:layout_height="match_parent"
             android:src="@color/BLUE_A020" />
 
         <!-- TODO: Update blank fragment layout -->
@@ -64,52 +103,6 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <sermk.pipi.game.SeekText
-            android:id="@+id/alpha_seek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:max="@integer/max_alpha"
-            android:progress="@integer/progress_alpha" />
-
-        <TextView
-            android:id="@+id/text_alpha_seek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/progress_alpha" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <sermk.pipi.game.SeekText
-            android:id="@+id/hdiag_seek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:max="@integer/max_halfDiag"
-            android:progress="@integer/progress_halfDiag" />
-
-        <TextView
-            android:id="@+id/text_hdiag_seek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/progress_halfDiag" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/chart_view"
-        android:layout_width="@dimen/capture_wight"
-        android:layout_height="match_parent"
-        android:src="@drawable/border_black"/>
 
 
 </LinearLayout>

@@ -37,7 +37,7 @@ public class TestCV_Fragment extends Fragment {
     private ToggleButton mPreviewButton;
     private ToggleButton mLearnButton;
     private CVMaskView mImageView;
-    private SeekText alphaSeek;
+    private SeekText posCallbackSeek;
     private SeekText hDiagSeek;
     private ImageView chartView;
 
@@ -61,21 +61,20 @@ public class TestCV_Fragment extends Fragment {
         mPreviewButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
 
         mImageView = (CVMaskView)rootView.findViewById(R.id.capture_view);
-
-        alphaSeek = (SeekText)rootView.findViewById(R.id.alpha_seek);
+/**/
+        posCallbackSeek = (SeekText)rootView.findViewById(R.id.alpha_seek);
         hDiagSeek = (SeekText)rootView.findViewById(R.id.hdiag_seek);
 
         TextView text_alpha_seek = (TextView)rootView.findViewById(R.id.text_alpha_seek);
         TextView text_hdiag_seek = (TextView)rootView.findViewById(R.id.text_hdiag_seek);
 
-        alphaSeek.setTv(text_alpha_seek);
+        posCallbackSeek.setTv(text_alpha_seek);
 
         hDiagSeek.setTv(text_hdiag_seek);
 
-        mImageView.setAlphaTV(text_alpha_seek);
         mImageView.sethDiagTV(text_hdiag_seek);
 
-        chartView = (ImageView) rootView.findViewById(R.id.chart_view);
+        //chartView = (ImageView) rootView.findViewById(R.id.chart_view);
 
         Button clear = (Button)rootView.findViewById(R.id.clear_button);
         clear.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +104,7 @@ public class TestCV_Fragment extends Fragment {
                                 cpuView.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        cpuView.setText(String.format(Locale.US, "CPU:%3d/%3d/%3d",
+                                        cpuView.setText(String.format(Locale.US, "GPU:%3d/%3d/%3d",
                                             mCpuMonitor.getCpuCurrent(),
                                             mCpuMonitor.getCpuAvg3(),
                                             mCpuMonitor.getCpuAvgAll()));
@@ -115,7 +114,7 @@ public class TestCV_Fragment extends Fragment {
                                     @Override
                                     public void run() {
                                         mFpsCounter.update();
-                                        fpsView.setText(String.format(Locale.US, "FPS:%4.1f", mFpsCounter.getFps()));
+                                        fpsView.setText(String.format(Locale.US, "CDR:%4.1f", mFpsCounter.getFps()));
                                     }
                                 });
                             }

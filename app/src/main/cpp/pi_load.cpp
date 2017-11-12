@@ -44,6 +44,7 @@ static JNINativeMethod methods[] = {
         { "passRoiRectToCVPIPI",                  "(IIJ)I", (void *) passRoiRectToCVPIPI },
         { "enableLearn",                  "(Z)V", (void *) enableLearn },
         { "startCV",                  "(Z)V", (void *) pi2_cv::startCV },
+        { "setPlotOption",                  "(II)V", (void *)pi2_plot::setPlotOption },
 };
 
 #define		NUM_ARRAY_ELEMENTS(p)		((int) sizeof(p) / sizeof(p[0]))
