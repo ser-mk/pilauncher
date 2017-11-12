@@ -5,6 +5,8 @@
 #include <string>
 #include <libuvc/libuvc.h>
 #include "pi_cv.h"
+#include "pi2_cv.h"
+
 
 bool pi_cv::learn = false;
 
@@ -41,6 +43,7 @@ static JNINativeMethod methods[] = {
         { "passFrameToCVPIPI",					"(JJ)I", (void *) passFrameToCVPIPI },
         { "passRoiRectToCVPIPI",                  "(IIJ)I", (void *) passRoiRectToCVPIPI },
         { "enableLearn",                  "(Z)V", (void *) enableLearn },
+        { "startCV",                  "(Z)V", (void *) pi2_cv::startCV },
 };
 
 #define		NUM_ARRAY_ELEMENTS(p)		((int) sizeof(p) / sizeof(p[0]))

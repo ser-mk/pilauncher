@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
+import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.IFrameCallback;
 import com.serenegiant.usb.UVCCamera;
 import com.serenegiant.utils.FpsCounter;
@@ -65,8 +66,16 @@ final class CVResolver {
                 CvType.CV_8UC3, new Scalar(0,0,0));
         chartBitmap = Bitmap.createBitmap(settings.chartView.getWidth(),
                 settings.chartView.getHeight(), settings.bitmapConfig);
+        startCV(true);
     }
 
+    private void plottCV(final ByteBuffer frame){
+        if(frame == null) {
+            Logger.e("frame empty");
+            return;
+        }
+        mIFrameCallback.onFrame(frame);
+    }
 
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
         @Override
@@ -135,5 +144,7 @@ final class CVResolver {
     private static native int passFrameToCVPIPI(final long refMatPreview, final long  refMatChart);
     private static native int passRoiRectToCVPIPI(final int xsRoi, final int ysRoi, final long refMat);
     private static native void enableLearn(final boolean enable);
+    //without static for call privat non-static method!
+    private native void startCV(final boolean enable);
 
 }

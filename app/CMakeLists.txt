@@ -10,10 +10,16 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/opencv_sdk/native/jni/inc
 add_library( lib_opencv SHARED IMPORTED )
 set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../UVC/opencv_sdk/native/libs/${ANDROID_ABI}/libopencv_java3.so)
 
+add_library( libUVCCamera SHARED IMPORTED )
+set_target_properties(libUVCCamera PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/libs/${ANDROID_ABI}/libUVCCamera.so)
+
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/libuvc/include/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/libuvc/include/libuvc/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/libusb/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/libusb/libusb/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../UVC/libuvccamera/src/main/jni/UVCCamera/)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -28,7 +34,8 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              src/main/cpp/pi_load.cpp
-             src/main/cpp/pi_cv.cpp)
+             src/main/cpp/pi_cv.cpp
+             src/main/cpp/pi2_cv.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -49,6 +56,8 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
                        native-lib
+
+                       libUVCCamera
 
                        # OpenCV lib
                        lib_opencv
