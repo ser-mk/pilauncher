@@ -6,7 +6,7 @@
 #include <libuvc/libuvc.h>
 #include "pi_cv.h"
 #include "pi2_cv.h"
-
+#include "pi2_plot.h"
 
 bool pi_cv::learn = false;
 

@@ -45,6 +45,7 @@ final class CVResolver {
     private final String TAG = "CVResolver";
 
     Bitmap previewBitmap;// = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
+    final private Object syncPreview = new Object();;
     byte[] rawBytes;
     Mat previewRawMat;
     Mat previewRGBMat;
@@ -77,11 +78,16 @@ final class CVResolver {
             Logger.e("pointMat null");
             return;
         }
-        Mat plot = new Mat(pointMat);
-        Logger.v("pointMat " + String.valueOf(plot.rows()) + " " + String.valueOf(plot.cols()));
-        Logger.v("previewBitmap " + String.valueOf(previewBitmap.getHeight()) + " " + String.valueOf(previewBitmap.getWidth()));
-        synchronized (previewBitmap) {
-            Utils.matToBitmap(plot,previewBitmap);
+        //Logger.v("pointMat p "  + String.valueOf(pointMat));
+        try {
+            Mat plot = new Mat(pointMat);
+            //Logger.v("pointMat " + String.valueOf(plot.rows()) + " " + String.valueOf(plot.cols()));
+            //Logger.v("previewBitmap " + String.valueOf(previewBitmap.getHeight()) + " " + String.valueOf(previewBitmap.getWidth()));
+            synchronized (syncPreview) {
+                Utils.matToBitmap(plot, previewBitmap);
+            }
+        } catch (Exception e){
+            Logger.e(e,"pointMat p "  + String.valueOf(pointMat));
         }
         currentSettings.captureView.post(mUpdateImageTask);
     }
@@ -156,7 +162,7 @@ final class CVResolver {
     private final Runnable mUpdateImageTask = new Runnable() {
         @Override
         public void run() {
-            synchronized (previewBitmap) {
+            synchronized (syncPreview) {
                 currentSettings.captureView
                         .setImageBitmap(previewBitmap);
             }
