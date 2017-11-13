@@ -58,38 +58,39 @@ final class CVResolver {
         currentSettings = settings;
         previewBitmap = Bitmap.createBitmap(settings.captureView.getWidth(),
                 settings.captureView.getHeight(), settings.bitmapConfig);
+        previewRGBMat = new Mat(settings.captureView.getHeight(),
+            settings.captureView.getWidth(), CvType.CV_8UC3, new Scalar(255,0,0));
+        /*
         previewRawMat = new Mat(settings.captureView.getHeight(),
             settings.captureView.getWidth(), CvType.CV_8UC2);
         previewRGBMat = new Mat(settings.height,
                 settings.width, CvType.CV_8UC3, new Scalar(255,0,0));
         rawBytes = new byte[ settings.height * 2 * settings.width];
-        /*
+
         chartMat = new Mat(settings.chartView.getHeight(), settings.chartView.getWidth(),
                 CvType.CV_8UC3, new Scalar(0,0,0));
         chartBitmap = Bitmap.createBitmap(settings.chartView.getWidth(),
                 settings.chartView.getHeight(), settings.bitmapConfig);
                 */
-        setPlotOption(settings.captureView.getWidth(), settings.captureView.getHeight());
+        setPlotOption(previewRGBMat.getNativeObjAddr());
         startCV(true);
     }
 
     private void plottCV(final long pointMat){
-        if(pointMat == 0) {
-            Logger.e("pointMat null");
-            return;
-        }
-        //Logger.v("pointMat p "  + String.valueOf(pointMat));
-        try {
-            Mat plot = new Mat(pointMat);
-            //Logger.v("pointMat " + String.valueOf(plot.rows()) + " " + String.valueOf(plot.cols()));
-            //Logger.v("previewBitmap " + String.valueOf(previewBitmap.getHeight()) + " " + String.valueOf(previewBitmap.getWidth()));
             synchronized (syncPreview) {
-                Utils.matToBitmap(plot, previewBitmap);
+                Utils.matToBitmap(previewRGBMat, previewBitmap);
             }
-        } catch (Exception e){
-            Logger.e(e,"pointMat p "  + String.valueOf(pointMat));
-        }
+
+        currentSettings.fpsCounter.count();
+
         currentSettings.captureView.post(mUpdateImageTask);
+
+        final Rect roiRect = currentSettings.captureView.getRectMaskByte();
+        final Mat roiMat = currentSettings.captureView.getRoiMask();
+
+        if(roiMat != null) {
+            setRectOfMask(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
+        }
     }
 
     private void plottCV(final ByteBuffer frame){
@@ -178,6 +179,7 @@ final class CVResolver {
     private static native void enableLearn(final boolean enable);
     //without static for call privat non-static method!
     private native void startCV(final boolean enable);
-    private native void setPlotOption(final int wigth, final int height);
+    private static native void setPlotOption(final long previewMat);
+    private static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
 
 }

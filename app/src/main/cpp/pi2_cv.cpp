@@ -10,22 +10,30 @@ using namespace cv;
 
 jobject pi2_cv::objectCV = NULL;
 jmethodID pi2_cv::midCV = NULL;
-uint8_t pi2_cv::arrayOfMask[pi2_plot::sizePreview] = {0};
-Rect pi2_cv::mask;
+uint8_t pi2_cv::arrayFromMask[pi2_plot::sizePreview] = {0};
+uint8_t pi2_cv::arrayMask[pi2_plot::sizePreview] = {0};
+Rect pi2_cv::maskRect;
 
 
 #define TAG "###>"
 
-void pi2_cv::calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & mask) {
-    const size_t xEnd = mask.x + mask.width;
-    const size_t yEnd = mask.y + mask.height;
+void pi2_cv::setRectOfMask(JNIEnv *env, jobject thiz, jint x, jint y, ID_TYPE refMat) {
+    Mat m = *reinterpret_cast<Mat*>(refMat);
+    maskRect = Rect(x, y, m.cols, m.rows);
+    uint8_t * pData = m.data;
+    memcpy(arrayMask, pData, m.total()*m.elemSize());
+}
+
+void pi2_cv::calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect) {
+    const size_t xEnd = maskRect.x + maskRect.width;
+    const size_t yEnd = maskRect.y + maskRect.height;
     const size_t widhtFrameYU = frame->width * 2;
     const uint8_t * pFrame = reinterpret_cast<const uint8_t *>(frame->data);
     LOGV(TAG"pFrame %p", pFrame);
     size_t i = 0;
-    for(size_t y= mask.y; y < yEnd; y++){
-        for(size_t x=mask.x; x < xEnd; x++){
-            arrayOfMask[i] = pFrame[y*widhtFrameYU + 2*x];
+    for(size_t y= maskRect.y; y < yEnd; y++){
+        for(size_t x=maskRect.x; x < xEnd; x++){
+            arrayFromMask[i] = pFrame[y*widhtFrameYU + 2*x];// & arrayMask[i];
             i++;
         }
     }
@@ -40,15 +48,21 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
     }
 
 
-    Rect testRect = Rect(0,0,400,100);
-    calcUVC_FrameOfMask(frame,testRect);
+    if(!maskRect.empty()){
+        Rect testRect = Rect(maskRect);
+        calcUVC_FrameOfMask(frame,testRect);
+
+        testRect.y = pi2_plot::heightPreview;
+        testRect.x = 0;
+        pi2_plot::plotSubGrayArray(arrayFromMask,testRect);
+    }
+
 
     pi2_plot::plotPreviewFrame(frame);
-    testRect.y += pi2_plot::heightPreview;
-    pi2_plot::plotSubGrayArray(arrayOfMask,testRect);
-/*
-    env->CallVoidMethod(objectCV, midCV,&pi2_plot::chart);
-*/
+
+/**/
+    env->CallVoidMethod(objectCV, midCV,NULL);
+
 }
 
 void pi2_cv::startCV(JNIEnv *env, jobject thiz, jboolean plotiing) {

@@ -99,7 +99,7 @@ public class CVMaskView extends CVMaskResolver {
     }
 
     //@Override
-    public void setImageBitmap1(Bitmap bitmap) {
+    public void setImageBitmap(Bitmap bitmap) {
         if(mask == null){
             mask = Bitmap.createBitmap(bitmap);
             //mask.setConfig(Bitmap.Config.RGB_565);

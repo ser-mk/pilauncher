@@ -10,8 +10,8 @@
 
 struct pi2_plot{
 
-    static void setPlotOption(JNIEnv *env, jobject thiz, jint width, jint height){
-        chart = cv::Mat(height, width,CV_8UC3);
+    static void setPlotOption(JNIEnv *env, jobject thiz, ID_TYPE refMat){
+        chart = *reinterpret_cast<cv::Mat*>(refMat);
     }
 
     static cv::Mat chart;

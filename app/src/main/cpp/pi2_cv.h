@@ -11,16 +11,18 @@
 class pi2_cv {
 
     static void cvProccessing(JNIEnv *env, uvc_frame_t *frame);
-    static void callByteBufferFrame(JNIEnv *env, uvc_frame_t *frame);
     static jobject objectCV;
     static jmethodID midCV;
-    static cv::Rect mask;
-    static uint8_t arrayOfMask[pi2_plot::sizePreview];
-    static void calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & m);
+    static cv::Rect maskRect;
+    static uint8_t arrayFromMask[pi2_plot::sizePreview];
+    static uint8_t arrayMask[pi2_plot::sizePreview];
+    static void calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect);
 
 public:
 
     static void startCV(JNIEnv *env, jobject thiz, jboolean plotiing);
+    static void setRectOfMask(JNIEnv *env, jobject thiz,
+                              jint xsRoi, jint ysRoi, ID_TYPE refMat);
 
 };
 
