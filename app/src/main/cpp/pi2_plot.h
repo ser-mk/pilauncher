@@ -6,7 +6,7 @@
 #define PIPI_STADALONE_PI2_PLOT_H
 #include <opencv2/opencv.hpp>
 #include <libuvc/libuvc.h>
-
+#include "HistType.h"
 
 struct pi2_plot{
 
@@ -32,9 +32,15 @@ struct pi2_plot{
         return cv::Mat(pi2_plot::chart(rectPlot));
     }
 
+    static void clearAll(){
+        chart.setTo(0);
+    }
+
     static void plotSubGrayArray(uint8_t * grayArray, cv::Rect rectPlot);
     static void plotPreviewFrameFast(uvc_frame_t *frame);
     static void plotPreviewFrame(uvc_frame_t *frame);
+
+    static void plotHist(HistType &vh, HistType &lh, HistType &ph);
 };
 
 

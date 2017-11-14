@@ -10,6 +10,13 @@
 
 class pi2_cv {
 
+    enum MODE {
+        CAPTURE = 0,
+        LEARN,
+    };
+
+    static MODE mode;
+
     static void cvProccessing(JNIEnv *env, uvc_frame_t *frame);
     static jobject objectCV;
     static jmethodID midCV;
@@ -24,20 +31,7 @@ public:
     static void setRectOfMask(JNIEnv *env, jobject thiz,
                               jint xsRoi, jint ysRoi, ID_TYPE refMat);
 
-};
-
-struct HistType{
-    static const size_t MAX_WIGTH_HIST = 640;
-    uint64 hist[MAX_WIGTH_HIST] = {0};
-    size_t currSize = 0;
-
-    void clearHist(uint64 val = 0) {
-        memset(hist, val, MAX_WIGTH_HIST * sizeof(uint64));
-    }
-
-    void verHistArrayYUYV(uint8_t * data_frame, size_t size_frame){
-        const size_t size_data = size_frame/2;
-    }
+    static void setMode(JNIEnv *env, jobject thiz, jint mode);
 };
 
 #endif //GAME_PI2_CV_H

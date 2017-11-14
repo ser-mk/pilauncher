@@ -13,9 +13,22 @@ jmethodID pi2_cv::midCV = NULL;
 uint8_t pi2_cv::arrayFromMask[pi2_plot::sizePreview] = {0};
 uint8_t pi2_cv::arrayMask[pi2_plot::sizePreview] = {0};
 Rect pi2_cv::maskRect;
+pi2_cv::MODE pi2_cv::mode = pi2_cv::MODE::CAPTURE;
 
 
 #define TAG "###>"
+
+void HistType::newVerHistArrayYUYV(const uint8_t *array, const Rect &maskRect){
+    const size_t sizeHist = static_cast<size_t >(maskRect.width);
+    const size_t rows = static_cast<size_t >(maskRect.height);
+    this->clearHist();
+    for(size_t y=0; y<rows; y++){
+        for(size_t x=0; x<sizeHist; x++){
+            this->hist[x] += array[y*sizeHist + x];
+        }
+    }
+    this->currSize = sizeHist;
+}
 
 void pi2_cv::setRectOfMask(JNIEnv *env, jobject thiz, jint x, jint y, ID_TYPE refMat) {
     Mat m = *reinterpret_cast<Mat*>(refMat);
@@ -29,19 +42,22 @@ void pi2_cv::calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect) 
     const size_t yEnd = maskRect.y + maskRect.height;
     const size_t widhtFrameYU = frame->width * 2;
     const uint8_t * pFrame = reinterpret_cast<const uint8_t *>(frame->data);
-    LOGV(TAG"pFrame %p", pFrame);
     size_t i = 0;
     for(size_t y= maskRect.y; y < yEnd; y++){
         for(size_t x=maskRect.x; x < xEnd; x++){
-            arrayFromMask[i] = pFrame[y*widhtFrameYU + 2*x];// & arrayMask[i];
+            arrayFromMask[i] = pFrame[y*widhtFrameYU + 2*x] & arrayMask[i];
             i++;
         }
     }
 
 }
 
+struct HistType vertHist;
+struct LearnHType learnHist;
+struct PowerHType powerHist;
+
 void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
-    LOGV(TAG"test %p", frame);
+
     if (!LIKELY(frame)) {
         LOGW(TAG"bad frame !!!");
         return;
@@ -50,18 +66,44 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
 
     if(!maskRect.empty()){
         Rect testRect = Rect(maskRect);
-        calcUVC_FrameOfMask(frame,testRect);
-
-        testRect.y = pi2_plot::heightPreview;
-        testRect.x = 0;
-        pi2_plot::plotSubGrayArray(arrayFromMask,testRect);
+        calcUVC_FrameOfMask(frame,maskRect);
+        vertHist.newVerHistArrayYUYV(arrayFromMask,maskRect);
+        if( mode == LEARN) {
+            learnHist.setMinValue(vertHist);
+        } else {
+            powerHist.calcPower(learnHist, vertHist);
+        }
     }
 
 
+    pi2_plot::clearAll();
+    Rect testRect = Rect(maskRect);
+    testRect.y = pi2_plot::heightPreview;
+    testRect.x = 0;
+    pi2_plot::plotSubGrayArray(arrayFromMask,testRect);
+    pi2_plot::plotHist(vertHist, learnHist, powerHist);
     pi2_plot::plotPreviewFrame(frame);
 
 /**/
     env->CallVoidMethod(objectCV, midCV,NULL);
+
+}
+
+void pi2_cv::setMode(JNIEnv *env, jobject thiz, jint modeWork) {
+    if( modeWork==CAPTURE ){
+        if( mode != CAPTURE ){
+            LOGI("reset learnHist");
+            learnHist.clearHist(UINT64_MAX);
+        }
+        return;
+    }
+
+    if( modeWork==LEARN ){
+        if( mode != LEARN ){
+            LOGI("provisioning for capture");
+            learnHist.mullArray(1,20);
+        }
+    }
 
 }
 

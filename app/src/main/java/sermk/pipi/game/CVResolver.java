@@ -40,6 +40,9 @@ final class CVResolver {
         int pixelFormatCallback = UVCCamera.PIXEL_FORMAT_RGBX;
     }
 
+    int MODE_CAPTURE = 0;
+    int MODE_LEARN = 0;
+
     private Settings currentSettings;
 
     private final String TAG = "CVResolver";
@@ -73,6 +76,7 @@ final class CVResolver {
                 settings.chartView.getHeight(), settings.bitmapConfig);
                 */
         setPlotOption(previewRGBMat.getNativeObjAddr());
+        setMode(MODE_CAPTURE);
         startCV(true);
     }
 
@@ -91,24 +95,14 @@ final class CVResolver {
         if(roiMat != null) {
             setRectOfMask(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
         }
+        final boolean learnEnable = currentSettings.learnButton.isChecked();
+        if(learnEnable){
+            setMode(MODE_LEARN);
+        } else {
+            setMode(MODE_CAPTURE);
+        }
     }
 
-    private void plottCV(final ByteBuffer frame){
-        if(frame == null) {
-            Logger.e("frame empty");
-            return;
-        }
-        currentSettings.fpsCounter.count();
-        frame.get(rawBytes);
-
-        previewRawMat.put(0,0, rawBytes);
-        Imgproc.cvtColor(previewRawMat, previewRGBMat,
-            Imgproc.COLOR_YUV2RGB_YUYV);
-        synchronized (previewBitmap) {
-            Utils.matToBitmap(previewRGBMat,previewBitmap);
-        }
-        currentSettings.captureView.post(mUpdateImageTask);
-    }
 
     private final IFrameCallback mIFrameCallback = new IFrameCallback() {
         @Override
@@ -179,7 +173,8 @@ final class CVResolver {
     private static native void enableLearn(final boolean enable);
     //without static for call privat non-static method!
     private native void startCV(final boolean enable);
+
     private static native void setPlotOption(final long previewMat);
     private static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
-
+    private static native void setMode(final int mode);
 }

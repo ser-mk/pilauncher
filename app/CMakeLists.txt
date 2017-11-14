@@ -34,7 +34,7 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              src/main/cpp/pi_load.cpp
-             src/main/cpp/pi_cv.cpp
+             #src/main/cpp/pi_cv.cpp
              src/main/cpp/pi2_cv.cpp
              src/main/cpp/pi2_plot.cpp)
 

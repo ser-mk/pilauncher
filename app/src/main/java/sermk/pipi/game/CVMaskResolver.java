@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.orhanobut.logger.Logger;
 
 import org.opencv.android.Utils;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
@@ -72,7 +73,9 @@ class CVMaskResolver extends ImageView {
         rectMaskByte = rect;
         bw.setTo(Scalar.all(0));
         Imgproc.drawContours(bw,contours,maxValIdx,Scalar.all(255), -1);
-        roiMask = bw.submat(rect);
+        Mat submatRect = bw.submat(rect);
+        roiMask = new Mat(submatRect.size(), CvType.CV_8UC1);
+        submatRect.copyTo(roiMask);
 
         bw.release();
 

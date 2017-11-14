@@ -9,7 +9,7 @@
 #include "pi2_plot.h"
 
 bool pi_cv::learn = false;
-
+#if 0
 static jint passFrameToCVPIPI(JNIEnv *env, jobject thiz,
     ID_TYPE refMatPreview, ID_TYPE refMatChart) {
 
@@ -37,14 +37,17 @@ static void enableLearn(JNIEnv *env, jobject thiz,
     //result = pi_cv::setRectMask(xsRoi, ysRoi, refMat);
 
 }
-
+#endif
 
 static JNINativeMethod methods[] = {
+#if 0
         { "passFrameToCVPIPI",					"(JJ)I", (void *) passFrameToCVPIPI },
         { "passRoiRectToCVPIPI",                  "(IIJ)I", (void *) passRoiRectToCVPIPI },
         { "enableLearn",                  "(Z)V", (void *) enableLearn },
+#endif
         { "startCV",                  "(Z)V", (void *) pi2_cv::startCV },
         { "setRectOfMask",                  "(IIJ)I", (void *) pi2_cv::setRectOfMask },
+        { "setMode",                  "(I)V", (void *)pi2_cv::setMode },
         { "setPlotOption",                  "(J)V", (void *)pi2_plot::setPlotOption },
 };
 
