@@ -41,7 +41,7 @@ final class CVResolver {
     }
 
     int MODE_CAPTURE = 0;
-    int MODE_LEARN = 0;
+    int MODE_LEARN = 1;
 
     private Settings currentSettings;
 

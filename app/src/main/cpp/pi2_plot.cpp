@@ -54,7 +54,7 @@ void normalizeHist(HistType &vh,const size_t maxHeight, const uint64 maxValue){
 
 #define LINE_OPTIONS 2,8,0
 
-void pi2_plot::plotHist(HistType &vh, HistType &lh, HistType &ph) {
+void pi2_plot::plotHist(HistType &vh, const HistType &lh, HistType &ph) {
     size_t heightChart = chart.rows - pi2_plot::heightPreview;
     heightChart -= heightChart/20;
     const uint64 maxVH = getMaxValueOfHist(vh);
@@ -69,27 +69,48 @@ void pi2_plot::plotHist(HistType &vh, HistType &lh, HistType &ph) {
         );
     }
 
-    normalizeHist(lh, heightChart, maxVH);
+    HistType copyHist;
+    for(size_t i=0; i< lh.currSize; i++){
+        copyHist.hist[i] = lh.hist[i];
+    }
+    copyHist.currSize = lh.currSize;
+    normalizeHist(copyHist, heightChart, maxVH);
     const Scalar greenPoints(0,255,0);
-    for( int i = 1; i < vh.currSize; i++ ){
+    for( int i = 1; i < copyHist.currSize; i++ ){
         cv::line(chart,
-                Point(i-1, vh.hist[i-1] + pi2_plot::heightPreview),
-                Point(i, vh.hist[i] + pi2_plot::heightPreview),
+                Point(i-1, copyHist.hist[i-1] + pi2_plot::heightPreview),
+                Point(i, copyHist.hist[i] + pi2_plot::heightPreview),
                 greenPoints,
                  LINE_OPTIONS
         );
     }
-    //return;
+
     const uint64 maxPH = getMaxValueOfHist(ph);
     normalizeHist(ph, heightChart, maxPH);
     const Scalar bluePoints(0,0,255);
-    for( int i = 1; i < vh.currSize; i++ ){
+    for( int i = 1; i < ph.currSize; i++ ){
         cv::line(chart,
-                 Point(i-1, vh.hist[i-1] + pi2_plot::heightPreview),
-                 Point(i, vh.hist[i] + pi2_plot::heightPreview),
+                 Point(i-1, ph.hist[i-1] + pi2_plot::heightPreview),
+                 Point(i, ph.hist[i] + pi2_plot::heightPreview),
                  bluePoints,
                  LINE_OPTIONS
         );
     }
-    //const uint64
+
+    int levelPower = 0;
+    Scalar levelColor;
+    if(maxPH > maxVH){
+        levelPower = (maxVH * heightChart) / maxPH;
+        levelColor = Scalar(255,0,255);
+    } else {
+        levelPower = (maxPH * heightChart) / maxVH;
+        levelColor = Scalar(0,255,255);
+    }
+
+    cv::line(chart,
+             Point(0, levelPower + pi2_plot::heightPreview),
+             Point(ph.currSize-1, levelPower + pi2_plot::heightPreview),
+             levelColor,
+             LINE_OPTIONS
+    );
 }

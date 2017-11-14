@@ -40,7 +40,7 @@ struct pi2_plot{
     static void plotPreviewFrameFast(uvc_frame_t *frame);
     static void plotPreviewFrame(uvc_frame_t *frame);
 
-    static void plotHist(HistType &vh, HistType &lh, HistType &ph);
+    static void plotHist(HistType &vh, const HistType &lh, HistType &ph);
 };
 
 

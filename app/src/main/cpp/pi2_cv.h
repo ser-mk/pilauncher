@@ -15,7 +15,7 @@ class pi2_cv {
         LEARN,
     };
 
-    static MODE mode;
+    static int mode;
 
     static void cvProccessing(JNIEnv *env, uvc_frame_t *frame);
     static jobject objectCV;

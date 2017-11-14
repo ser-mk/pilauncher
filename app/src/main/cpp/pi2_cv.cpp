@@ -13,7 +13,7 @@ jmethodID pi2_cv::midCV = NULL;
 uint8_t pi2_cv::arrayFromMask[pi2_plot::sizePreview] = {0};
 uint8_t pi2_cv::arrayMask[pi2_plot::sizePreview] = {0};
 Rect pi2_cv::maskRect;
-pi2_cv::MODE pi2_cv::mode = pi2_cv::MODE::CAPTURE;
+int pi2_cv::mode = pi2_cv::CAPTURE;
 
 
 #define TAG "###>"
@@ -92,19 +92,18 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
 void pi2_cv::setMode(JNIEnv *env, jobject thiz, jint modeWork) {
     if( modeWork==CAPTURE ){
         if( mode != CAPTURE ){
-            LOGI("reset learnHist");
-            learnHist.clearHist(UINT64_MAX);
-        }
-        return;
-    }
-
-    if( modeWork==LEARN ){
-        if( mode != LEARN ){
             LOGI("provisioning for capture");
             learnHist.mullArray(1,20);
         }
     }
 
+    if( modeWork==LEARN ){
+        if( mode != LEARN ){
+            LOGI("reset learnHist");
+            learnHist.clearHist(UINT64_MAX);
+        }
+    }
+    mode = modeWork;
 }
 
 void pi2_cv::startCV(JNIEnv *env, jobject thiz, jboolean plotiing) {
