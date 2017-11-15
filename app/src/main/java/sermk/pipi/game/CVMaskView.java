@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
@@ -43,9 +44,14 @@ public class CVMaskView extends CVMaskResolver {
     }
 
     private TextView hDiagTV = null;
+    private SeekText posSeek = null;
 
     public void sethDiagTV(TextView hDiagTV) {
         this.hDiagTV = hDiagTV;
+    }
+
+    public void setPosSeek(SeekText posSeek) {
+        this.posSeek = posSeek;
     }
 
     private int position = -1;
@@ -89,9 +95,24 @@ public class CVMaskView extends CVMaskResolver {
         final int w = 20;
         final float left = rectOfMask.left + position - w;
         final float right = left + 2*w;
-        positionPaint.setColor(Color.BLUE);
+        positionPaint.setColor(Color.MAGENTA);
         positionPaint.setAlpha(44);
         canvasResult.drawRect(left,top,right,bottom,positionPaint);
+    }
+
+    public void seekPosition(final int posInMask){
+        if(posInMask<0)
+            return;
+        if(rectOfMask == null)
+            return;
+
+        final int width = rectOfMask.width();
+        if(posInMask > width)
+            return;
+
+        final int maxSeekValue = posSeek.getMax();
+        final int pos = (posInMask * maxSeekValue )/ width;
+        posSeek.setProgress(pos);
     }
 
     public void setPosition(final int position) {

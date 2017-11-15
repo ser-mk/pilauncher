@@ -63,6 +63,7 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         return;
     }
 
+    int position = -1;
 
     if(!maskRect.empty()){
         Rect testRect = Rect(maskRect);
@@ -72,20 +73,21 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
             learnHist.setMinValue(vertHist);
         } else {
             powerHist.calcPower(learnHist, vertHist);
+            position = powerHist.calcPosition();
         }
     }
 
-
-    pi2_plot::clearAll();
-    Rect testRect = Rect(maskRect);
-    testRect.y = pi2_plot::heightPreview;
-    testRect.x = 0;
-    pi2_plot::plotSubGrayArray(arrayFromMask,testRect);
-    pi2_plot::plotHist(vertHist, learnHist, powerHist);
-    pi2_plot::plotPreviewFrame(frame);
-
+    if(pi2_plot::isDisablePlot() == true) {
+        pi2_plot::clearAll();
+        Rect testRect = Rect(maskRect);
+        testRect.y = pi2_plot::heightPreview;
+        testRect.x = 0;
+        pi2_plot::plotSubGrayArray(arrayFromMask, testRect);
+        pi2_plot::plotHist(vertHist, learnHist, powerHist);
+        pi2_plot::plotPreviewFrame(frame);
+    }
 /**/
-    env->CallVoidMethod(objectCV, midCV,NULL);
+    env->CallVoidMethod(objectCV, midCV,position);
 
 }
 
@@ -117,8 +119,7 @@ void pi2_cv::startCV(JNIEnv *env, jobject thiz, jboolean plotiing) {
     env->DeleteGlobalRef(objectCV);
     objectCV = env->NewGlobalRef(thiz);
     if (LIKELY(clazz)) {
-        //midCV = env->GetMethodID(clazz, "plottCV","(Ljava/nio/ByteBuffer;)V");
-        midCV = env->GetMethodID(clazz, "plottCV","(J)V");
+        midCV = env->GetMethodID(clazz, "plottCV","(I)V");
     } else {
         LOGW(TAG"failed to get object class");
     }

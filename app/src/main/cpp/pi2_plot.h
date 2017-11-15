@@ -41,6 +41,16 @@ struct pi2_plot{
     static void plotPreviewFrame(uvc_frame_t *frame);
 
     static void plotHist(HistType &vh, const HistType &lh, HistType &ph);
+
+    static bool disablePlot;
+
+    static bool isDisablePlot() {
+        return disablePlot;
+    }
+
+    static void setDisablePlot(const jboolean disable){
+        disablePlot = disable;
+    }
 };
 
 

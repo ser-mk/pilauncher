@@ -49,6 +49,7 @@ static JNINativeMethod methods[] = {
         { "setRectOfMask",                  "(IIJ)I", (void *) pi2_cv::setRectOfMask },
         { "setMode",                  "(I)V", (void *)pi2_cv::setMode },
         { "setPlotOption",                  "(J)V", (void *)pi2_plot::setPlotOption },
+        { "setDisablePlot",                  "(Z)V", (void *)pi2_plot::setDisablePlot },
 };
 
 #define		NUM_ARRAY_ELEMENTS(p)		((int) sizeof(p) / sizeof(p[0]))

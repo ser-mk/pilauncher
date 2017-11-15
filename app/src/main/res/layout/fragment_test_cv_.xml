@@ -101,6 +101,14 @@
                 android:textOn="learn"
                 tools:text="learn" />
 
+            <ToggleButton
+                android:id="@+id/draw_disable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Toggle_Draw"
+                android:textOff="Draw"
+                android:textOn="No Draw"/>
+
         </LinearLayout>
     </LinearLayout>
 

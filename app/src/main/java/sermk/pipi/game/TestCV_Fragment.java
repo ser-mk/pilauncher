@@ -36,10 +36,8 @@ public class TestCV_Fragment extends Fragment {
 
     private ToggleButton mPreviewButton;
     private ToggleButton mLearnButton;
+    private ToggleButton mDrawButton;
     private CVMaskView mImageView;
-    private SeekText posCallbackSeek;
-    private SeekText hDiagSeek;
-    private ImageView chartView;
 
     TextView cpuView;
     TextView fpsView;
@@ -56,14 +54,15 @@ public class TestCV_Fragment extends Fragment {
 
         mPreviewButton = (ToggleButton)rootView.findViewById(R.id.start_test);
         mLearnButton = (ToggleButton)rootView.findViewById(R.id.learn_enable);
+        mDrawButton = (ToggleButton)rootView.findViewById(R.id.draw_disable);
         setToogleButton(false);
 
         mPreviewButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
 
         mImageView = (CVMaskView)rootView.findViewById(R.id.capture_view);
 /**/
-        posCallbackSeek = (SeekText)rootView.findViewById(R.id.alpha_seek);
-        hDiagSeek = (SeekText)rootView.findViewById(R.id.hdiag_seek);
+        SeekText posCallbackSeek = (SeekText)rootView.findViewById(R.id.alpha_seek);
+        SeekText hDiagSeek = (SeekText)rootView.findViewById(R.id.hdiag_seek);
 
         TextView text_alpha_seek = (TextView)rootView.findViewById(R.id.text_alpha_seek);
         TextView text_hdiag_seek = (TextView)rootView.findViewById(R.id.text_hdiag_seek);
@@ -73,8 +72,7 @@ public class TestCV_Fragment extends Fragment {
         hDiagSeek.setTv(text_hdiag_seek);
 
         mImageView.sethDiagTV(text_hdiag_seek);
-
-        //chartView = (ImageView) rootView.findViewById(R.id.chart_view);
+        mImageView.setPosSeek(posCallbackSeek);
 
         Button clear = (Button)rootView.findViewById(R.id.clear_button);
         clear.setOnClickListener(new View.OnClickListener() {
@@ -150,8 +148,8 @@ public class TestCV_Fragment extends Fragment {
                 CVResolver.Settings settings = new CVResolver.Settings();
                 settings.captureView = mImageView;
                 settings.fpsCounter = mFpsCounter;
-                settings.chartView = chartView;
                 settings.learnButton = mLearnButton;
+                settings.drawButton = mDrawButton;
                 app.getGlobalSettings().setUVCSettings(settings);
                 app.getUVCReciver().startCapture(settings);
             } else {

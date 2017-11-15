@@ -28,8 +28,8 @@ final class CVResolver {
     static public class Settings{
         CVMaskView captureView = null;
         FpsCounter fpsCounter;
-        ImageView chartView;
         ToggleButton learnButton;
+        ToggleButton drawButton;
         int width = 0; //.getCaptureWitgh();
         int height = 0; //.getCaptureHeight();
         int minFps = 0; //.getMinFps();
@@ -40,10 +40,10 @@ final class CVResolver {
         int pixelFormatCallback = UVCCamera.PIXEL_FORMAT_RGBX;
     }
 
-    int MODE_CAPTURE = 0;
-    int MODE_LEARN = 1;
+    final int MODE_CAPTURE = 0;
+    final int MODE_LEARN = 1;
 
-    private Settings currentSettings;
+    private Settings currentSettings = null;
 
     private final String TAG = "CVResolver";
 
@@ -63,24 +63,32 @@ final class CVResolver {
                 settings.captureView.getHeight(), settings.bitmapConfig);
         previewRGBMat = new Mat(settings.captureView.getHeight(),
             settings.captureView.getWidth(), CvType.CV_8UC3, new Scalar(255,0,0));
-        /*
-        previewRawMat = new Mat(settings.captureView.getHeight(),
-            settings.captureView.getWidth(), CvType.CV_8UC2);
-        previewRGBMat = new Mat(settings.height,
-                settings.width, CvType.CV_8UC3, new Scalar(255,0,0));
-        rawBytes = new byte[ settings.height * 2 * settings.width];
 
-        chartMat = new Mat(settings.chartView.getHeight(), settings.chartView.getWidth(),
-                CvType.CV_8UC3, new Scalar(0,0,0));
-        chartBitmap = Bitmap.createBitmap(settings.chartView.getWidth(),
-                settings.chartView.getHeight(), settings.bitmapConfig);
-                */
         setPlotOption(previewRGBMat.getNativeObjAddr());
         setMode(MODE_CAPTURE);
         startCV(true);
     }
 
-    private void plottCV(final long pointMat){
+    private void setPosition(final int position){
+
+    }
+
+    private void plottCV(final int position){
+
+        if(position > 0){
+            currentSettings.captureView.setPosition(position);
+            currentSettings.captureView.seekPosition(position);
+            Logger.v("position: " + String.valueOf(position));
+        }
+
+        final boolean drawDisable = currentSettings.drawButton.isChecked();
+        setDisablePlot(drawDisable);
+
+        if(drawDisable){
+            Logger.v("draw Disable");
+            return;
+        }
+
             synchronized (syncPreview) {
                 Utils.matToBitmap(previewRGBMat, previewBitmap);
             }
@@ -101,6 +109,7 @@ final class CVResolver {
         } else {
             setMode(MODE_CAPTURE);
         }
+
     }
 
 
@@ -142,15 +151,6 @@ final class CVResolver {
                 Utils.matToBitmap(chartMat, chartBitmap);
             }
 
-            currentSettings.chartView.post(new Runnable() {
-                public void run() {
-                    synchronized (chartBitmap) {
-                    //Log.v(TAG,"R" + String.valueOf(chartBitmap.getHeight()));
-                        currentSettings.chartView.setImageBitmap(chartBitmap);
-                    }
-                }
-            });
-
         }
     };
 
@@ -164,10 +164,6 @@ final class CVResolver {
         }
     };
 
-    public IFrameCallback getIFrameCallback() {
-        return mIFrameCallback;
-    }
-
     private static native int passFrameToCVPIPI(final long refMatPreview, final long  refMatChart);
     private static native int passRoiRectToCVPIPI(final int xsRoi, final int ysRoi, final long refMat);
     private static native void enableLearn(final boolean enable);
@@ -177,4 +173,5 @@ final class CVResolver {
     private static native void setPlotOption(final long previewMat);
     private static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
     private static native void setMode(final int mode);
+    private static native void setDisablePlot(final boolean disable);
 }

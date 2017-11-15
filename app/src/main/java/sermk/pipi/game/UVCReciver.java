@@ -162,8 +162,7 @@ public class UVCReciver extends Thread {
         camera.setPreviewDisplay((Surface)null);
         camera.setPreviewSize(settings.width,settings.height, settings.minFps,
                 settings.maxFps, settings.frameformat, settings.bandwightFactor);
-        camera.setFrameCallback(cvr.getIFrameCallback(),
-                settings.pixelFormatCallback/*UVCCamera.PIXEL_FORMAT_NV21*/);
+        //camera.setFrameCallback(cvr.getIFrameCallback(), settings.pixelFormatCallback/*UVCCamera.PIXEL_FORMAT_NV21*/);
         camera.startPreview();
 
         synchronized (mSyncExit) {

@@ -10,7 +10,7 @@ using namespace cv;
 Mat pi2_plot::chart;
 const Rect pi2_plot::rect = Rect(0,0, pi2_plot::widthPreview, pi2_plot::heightPreview);
 Mat pi2_plot::grayCapture = Mat(pi2_plot::heightPreview,pi2_plot::widthPreview,CV_8UC1);
-
+bool pi2_plot::disablePlot = false;
 
 void pi2_plot::plotSubGrayArray(uint8_t *grayArray, cv::Rect rectPlot) {
     Mat subMat = Mat(pi2_plot::chart(rectPlot));
