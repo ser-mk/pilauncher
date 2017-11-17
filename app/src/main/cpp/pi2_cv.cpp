@@ -127,6 +127,5 @@ void pi2_cv::startCV(JNIEnv *env, jobject thiz, jboolean plotiing) {
     if (!midCV) {
         LOGE(TAG"Can't find plottCV : %p %p", midCV, clazz);
     }
-    env->CallVoidMethod(objectCV, midCV, NULL);
     LOGI(TAG"succes set startCV! midCV point %p ",midCV);
 }
