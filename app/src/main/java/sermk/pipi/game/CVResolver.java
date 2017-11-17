@@ -25,153 +25,174 @@ import java.nio.ByteBuffer;
 
 final class CVResolver {
 
-    static public class Settings{
-        CVMaskView captureView = null;
-        FpsCounter fpsCounter;
-        ToggleButton learnButton;
-        ToggleButton drawButton;
-        int width = 0; //.getCaptureWitgh();
-        int height = 0; //.getCaptureHeight();
-        int minFps = 0; //.getMinFps();
-        int maxFps = 0; //.getMaxFps();
-        int frameformat = 0; //.getFrameFormat();
-        float bandwightFactor = 0; //.getBandwightFactor();
-        Bitmap.Config bitmapConfig = Bitmap.Config.RGB_565;
-        int pixelFormatCallback = UVCCamera.PIXEL_FORMAT_RGBX;
+    public interface IMaskProvider {
+
+        public boolean checkNewMask();
+        public Mat getMatMask();
+        public Rect getRectMask();
+
     }
+
+    public interface ICallback {
+        public boolean callbackPosition(final int pos);
+    }
+
+    private final String TAG = "CVResolver";
 
     final int MODE_CAPTURE = 0;
     final int MODE_LEARN = 1;
 
-    private Settings currentSettings = null;
+    private ICallback mICallback = NULL;
 
-    private final String TAG = "CVResolver";
-
-    Bitmap previewBitmap;// = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
-    final private Object syncPreview = new Object();;
-    byte[] rawBytes;
-    Mat previewRawMat;
-    Mat previewRGBMat;
-    Mat chartMat;
-    Bitmap chartBitmap;
-    public CVResolver(final Settings settings) {
-        currentSettings = new Settings();
-        if (settings == null)
-            return;
-        currentSettings = settings;
-        previewBitmap = Bitmap.createBitmap(settings.captureView.getWidth(),
-                settings.captureView.getHeight(), settings.bitmapConfig);
-        previewRGBMat = new Mat(settings.captureView.getHeight(),
-            settings.captureView.getWidth(), CvType.CV_8UC3, new Scalar(255,0,0));
-
-        setPlotOption(previewRGBMat.getNativeObjAddr());
-        setMode(MODE_CAPTURE);
-        startCV(true);
+    public CVResolver( final ICallback callback) {
+        this.mICallback = callback;
     }
 
-    private void setPosition(final int position){
-
-    }
-
-    private void plottCV(final int position){
-
-        if(position > 0){
-            currentSettings.captureView.setPosition(position);
-            currentSettings.captureView.seekPosition(position);
-            Logger.v("position: " + String.valueOf(position));
+    /*
+        static public class Settings{
+            CVMaskView captureView = null;
+            FpsCounter fpsCounter;
+            ToggleButton learnButton;
+            ToggleButton drawButton;
+            int width = 0; //.getCaptureWitgh();
+            int height = 0; //.getCaptureHeight();
+            int minFps = 0; //.getMinFps();
+            int maxFps = 0; //.getMaxFps();
+            int frameformat = 0; //.getFrameFormat();
+            float bandwightFactor = 0; //.getBandwightFactor();
+            Bitmap.Config bitmapConfig = Bitmap.Config.RGB_565;
+            int pixelFormatCallback = UVCCamera.PIXEL_FORMAT_RGBX;
         }
 
-        final boolean drawDisable = currentSettings.drawButton.isChecked();
-        setDisablePlot(drawDisable);
+        private Settings currentSettings = null;
 
-        if(drawDisable){
-            Logger.v("draw Disable");
-            return;
+        Bitmap previewBitmap;// = Bitmap.createBitmap(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
+        final private Object syncPreview = new Object();;
+        byte[] rawBytes;
+        Mat previewRawMat;
+        Mat previewRGBMat;
+        Mat chartMat;
+        Bitmap chartBitmap;
+        public CVResolver(final Settings settings) {
+            currentSettings = new Settings();
+            if (settings == null)
+                return;
+            currentSettings = settings;
+            previewBitmap = Bitmap.createBitmap(settings.captureView.getWidth(),
+                    settings.captureView.getHeight(), settings.bitmapConfig);
+            previewRGBMat = new Mat(settings.captureView.getHeight(),
+                settings.captureView.getWidth(), CvType.CV_8UC3, new Scalar(255,0,0));
+
+            setPlotOption(previewRGBMat.getNativeObjAddr());
+            setMode(MODE_CAPTURE);
+            startCV(true);
         }
 
-            synchronized (syncPreview) {
-                Utils.matToBitmap(previewRGBMat, previewBitmap);
+        private void setPosition(final int position){
+
+        }
+
+        private void plottCV(final int position){
+
+            if(position > 0){
+                currentSettings.captureView.setPosition(position);
+                //currentSettings.captureView.seekPosition(position);
+                Logger.v("position: " + String.valueOf(position));
             }
 
-        currentSettings.fpsCounter.count();
+            final boolean drawDisable = currentSettings.drawButton.isChecked();
+            setDisablePlot(drawDisable);
 
-        currentSettings.captureView.post(mUpdateImageTask);
+            if(drawDisable){
+                Logger.v("draw Disable");
+                return;
+            }
 
-        final Rect roiRect = currentSettings.captureView.getRectMaskByte();
-        final Mat roiMat = currentSettings.captureView.getRoiMask();
-
-        if(roiMat != null) {
-            setRectOfMask(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
-        }
-        final boolean learnEnable = currentSettings.learnButton.isChecked();
-        if(learnEnable){
-            setMode(MODE_LEARN);
-        } else {
-            setMode(MODE_CAPTURE);
-        }
-
-    }
-
-
-    private final IFrameCallback mIFrameCallback = new IFrameCallback() {
-        @Override
-        public void onFrame(final ByteBuffer frame) {
-
-            frame.get(rawBytes);
-            previewRawMat.put(0,0, rawBytes);
-            Imgproc.cvtColor(previewRawMat, previewRGBMat,
-                    Imgproc.COLOR_YUV2RGB_YUYV);
+                synchronized (syncPreview) {
+                    Utils.matToBitmap(previewRGBMat, previewBitmap);
+                }
 
             currentSettings.fpsCounter.count();
 
-            //ToDo: bitmap must final !
-            synchronized (previewBitmap) {
-                Utils.matToBitmap(previewRGBMat,previewBitmap);
+            //currentSettings.captureView.post(mUpdateImageTask);
+
+            final Rect roiRect = currentSettings.captureView.getRectMask();
+            final Mat roiMat = currentSettings.captureView.getMatMask();
+
+            if(roiMat != null) {
+                setRectOfMask(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
             }
-
-            currentSettings.captureView.post(mUpdateImageTask);
-
-            final Rect roiRect = currentSettings.captureView.getRectMaskByte();
-            final Mat roiMat = currentSettings.captureView.getRoiMask();
-
-            if(roiMat == null)
-                return;
-
             final boolean learnEnable = currentSettings.learnButton.isChecked();
-
-            enableLearn(learnEnable);
-            final int res = passRoiRectToCVPIPI(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
-            final int pos = passFrameToCVPIPI(previewRawMat.getNativeObjAddr(), chartMat.getNativeObjAddr());
-
-            currentSettings.captureView.setPosition(pos);
-
-            //ToDo: bitmap must final !
-            synchronized (chartBitmap) {
-                //chartBitmap = Bitmap.createBitmap(chartMat.width(), chartMat.height(), Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(chartMat, chartBitmap);
+            if(learnEnable){
+                setMode(MODE_LEARN);
+            } else {
+                setMode(MODE_CAPTURE);
             }
 
         }
-    };
 
-    private final Runnable mUpdateImageTask = new Runnable() {
-        @Override
-        public void run() {
-            synchronized (syncPreview) {
-                currentSettings.captureView
-                        .setImageBitmap(previewBitmap);
+    /*
+        private final IFrameCallback mIFrameCallback = new IFrameCallback() {
+            @Override
+            public void onFrame(final ByteBuffer frame) {
+
+                frame.get(rawBytes);
+                previewRawMat.put(0,0, rawBytes);
+                Imgproc.cvtColor(previewRawMat, previewRGBMat,
+                        Imgproc.COLOR_YUV2RGB_YUYV);
+
+                currentSettings.fpsCounter.count();
+
+                //ToDo: bitmap must final !
+                synchronized (previewBitmap) {
+                    Utils.matToBitmap(previewRGBMat,previewBitmap);
+                }
+
+                currentSettings.captureView.post(mUpdateImageTask);
+
+                final Rect roiRect = currentSettings.captureView.getRectMaskByte();
+                final Mat roiMat = currentSettings.captureView.getRoiMask();
+
+                if(roiMat == null)
+                    return;
+
+                final boolean learnEnable = currentSettings.learnButton.isChecked();
+
+                enableLearn(learnEnable);
+                final int res = passRoiRectToCVPIPI(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
+                final int pos = passFrameToCVPIPI(previewRawMat.getNativeObjAddr(), chartMat.getNativeObjAddr());
+
+                currentSettings.captureView.setPosition(pos);
+
+                //ToDo: bitmap must final !
+                synchronized (chartBitmap) {
+                    //chartBitmap = Bitmap.createBitmap(chartMat.width(), chartMat.height(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(chartMat, chartBitmap);
+                }
+
             }
-        }
-    };
+        };
 
-    private static native int passFrameToCVPIPI(final long refMatPreview, final long  refMatChart);
-    private static native int passRoiRectToCVPIPI(final int xsRoi, final int ysRoi, final long refMat);
-    private static native void enableLearn(final boolean enable);
+        private final Runnable mUpdateImageTask = new Runnable() {
+            @Override
+            public void run() {
+                synchronized (syncPreview) {
+                    currentSettings.captureView
+                            .setImageBitmap(previewBitmap);
+                }
+            }
+        };
+    /*
+        private static native int passFrameToCVPIPI(final long refMatPreview, final long  refMatChart);
+        private static native int passRoiRectToCVPIPI(final int xsRoi, final int ysRoi, final long refMat);
+        private static native void enableLearn(final boolean enable);
+    */
     //without static for call privat non-static method!
     private native void startCV(final boolean enable);
 
-    private static native void setPlotOption(final long previewMat);
     private static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
     private static native void setMode(final int mode);
+
     private static native void setDisablePlot(final boolean disable);
+    private static native void setPlotOption(final long previewMat);
 }

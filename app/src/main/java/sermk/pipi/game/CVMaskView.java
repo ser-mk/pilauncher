@@ -99,7 +99,7 @@ public class CVMaskView extends CVMaskResolver {
         positionPaint.setAlpha(44);
         canvasResult.drawRect(left,top,right,bottom,positionPaint);
     }
-
+/*
     public void seekPosition(final int posInMask){
         if(posInMask<0)
             return;
@@ -114,12 +114,12 @@ public class CVMaskView extends CVMaskResolver {
         final int pos = (posInMask * maxSeekValue )/ width;
         posSeek.setProgress(pos);
     }
-
+*/
     public void setPosition(final int position) {
         this.position = position;
     }
 
-    //@Override
+    @Override
     public void setImageBitmap(Bitmap bitmap) {
         if(mask == null){
             mask = Bitmap.createBitmap(bitmap);
