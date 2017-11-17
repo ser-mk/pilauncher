@@ -134,8 +134,6 @@ public class UVCReciver extends Thread {
 
         mUSBMonitor.requestPermission(device);
 
-        CVResolver cvr = new CVResolver(settings);
-
         final UsbControlBlock ublock = mUSBMonitor.openDevice(device);
         final UVCCamera camera = new UVCCamera();
         camera.open(ublock);

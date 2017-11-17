@@ -1,6 +1,7 @@
 package sermk.pipi.game;
 
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
@@ -17,6 +18,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 
 /**
@@ -24,14 +26,6 @@ import java.nio.ByteBuffer;
  */
 
 final class CVResolver {
-
-    public interface IMaskProvider {
-
-        public boolean checkNewMask();
-        public Mat getMatMask();
-        public Rect getRectMask();
-
-    }
 
     public interface ICallback {
         public boolean callbackPosition(final int pos);
@@ -44,8 +38,15 @@ final class CVResolver {
 
     private ICallback mICallback = NULL;
 
-    public CVResolver( final ICallback callback) {
+    public CVResolver(@Nullable final ICallback callback) {
         this.mICallback = callback;
+    }
+
+    private void plottCV(final int position){
+        if(this.mICallback == null){
+            return;
+        }
+        this.mICallback.callbackPosition(position);
     }
 
     /*
@@ -188,11 +189,11 @@ final class CVResolver {
         private static native void enableLearn(final boolean enable);
     */
     //without static for call privat non-static method!
-    private native void startCV(final boolean enable);
+    public native void startCV(final boolean enable);
 
-    private static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
-    private static native void setMode(final int mode);
+    public static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
+    public static native void setMode(final int mode);
 
-    private static native void setDisablePlot(final boolean disable);
-    private static native void setPlotOption(final long previewMat);
+    public static native void setDisablePlot(final boolean disable);
+    public static native void setPlotOption(final long previewMat);
 }

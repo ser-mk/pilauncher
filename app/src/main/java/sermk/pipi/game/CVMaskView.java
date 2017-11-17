@@ -44,14 +44,9 @@ public class CVMaskView extends CVMaskResolver {
     }
 
     private TextView hDiagTV = null;
-    private SeekText posSeek = null;
 
     public void sethDiagTV(TextView hDiagTV) {
         this.hDiagTV = hDiagTV;
-    }
-
-    public void setPosSeek(SeekText posSeek) {
-        this.posSeek = posSeek;
     }
 
     private int position = -1;
@@ -100,6 +95,8 @@ public class CVMaskView extends CVMaskResolver {
         canvasResult.drawRect(left,top,right,bottom,positionPaint);
     }
 /*
+    private SeekText posSeek = null;
+    public void setPosSeek(SeekText posSeek) {      this.posSeek = posSeek;    }
     public void seekPosition(final int posInMask){
         if(posInMask<0)
             return;
@@ -138,8 +135,6 @@ public class CVMaskView extends CVMaskResolver {
             pRectMask = new Paint();
             pRectMask.setColor(Color.GREEN);
             pRectMask.setStyle(Paint.Style.STROKE);
-
-            Logger.v("create mask type:" + String.valueOf(result.getConfig()));
         }
 
         canvasResult.drawBitmap(bitmap,0,0,null);
