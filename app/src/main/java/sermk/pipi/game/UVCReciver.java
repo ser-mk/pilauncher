@@ -37,9 +37,16 @@ public class UVCReciver extends Thread {
     public static final int MSG_MEDIA_UPDATE = 7;
     public static final int MSG_RELEASE = 9;
 
-    CVResolver.Settings cvrSettings;
+    static public class Settings {
+        int width = 0; //.getCaptureWitgh();
+        int height = 0; //.getCaptureHeight();
+        int minFps = 0; //.getMinFps();
+        int maxFps = 0; //.getMaxFps();
+        int frameformat = 0; //.getFrameFormat();
+        float bandwightFactor = 0; //.getBandwightFactor();
+    }
 
-
+    Settings uvcSettings;
 
     /**
      * for accessing USB
@@ -89,8 +96,8 @@ public class UVCReciver extends Thread {
 
     };
 
-    public void startCapture(final CVResolver.Settings settings){
-        cvrSettings = settings;
+    public void startCapture(final Settings settings){
+        uvcSettings = settings;
         this.start();
         Logger.v("start UVC thread");
     }
@@ -103,11 +110,11 @@ public class UVCReciver extends Thread {
 
     @Override
     public void run() {
-        openUVC(cvrSettings);
+        openUVC(uvcSettings);
         Logger.v("exit run");
     }
 
-    private boolean openUVC(final CVResolver.Settings settings){
+    private boolean openUVC(final Settings settings){
         if (!mUSBMonitor.isRegistered())
             return false;
         final List<UsbDevice> list = mUSBMonitor.getDeviceList();

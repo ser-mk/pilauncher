@@ -22,15 +22,13 @@ public final class GlobalSettings {
     public int getFrameFormat() { return UVCCamera.FRAME_FORMAT_YUYV; }
     public float getBandwightFactor() { return 1.0f; }
     
-    void setUVCSettings(CVResolver.Settings settings){
+    void setUVCSettings(UVCReciver.Settings settings){
         settings.width = getCaptureWitgh();
         settings.height = getCaptureHeight();
         settings.minFps = getMinFps();
         settings.maxFps = getMaxFps();
         settings.frameformat = getFrameFormat();
         settings.bandwightFactor = getBandwightFactor();
-        settings.bitmapConfig = Bitmap.Config.ARGB_8888;
-        settings.pixelFormatCallback = UVCCamera.PIXEL_FORMAT_RGBX;
     }
 
 }
