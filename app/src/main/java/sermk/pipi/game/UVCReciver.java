@@ -150,19 +150,21 @@ public class UVCReciver extends Thread {
                         "data=...)");
                     }
                 });
+
+        if (settings == null) return false;
+
         try {
-            camera.setPreviewSize(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, UVCCamera.DEFAULT_PREVIEW_MODE);
+            camera.setPreviewDisplay((Surface)null);
+            camera.setPreviewSize(settings.width,settings.height, settings.minFps,
+                    settings.maxFps, settings.frameformat, settings.bandwightFactor);
         } catch (final IllegalArgumentException e1) {
+            camera.destroy();
+            return false;
+        } catch (Exception e) {
             camera.destroy();
             return false;
         }
 
-        if (settings == null) return false;
-
-        camera.setPreviewDisplay((Surface)null);
-        camera.setPreviewSize(settings.width,settings.height, settings.minFps,
-                settings.maxFps, settings.frameformat, settings.bandwightFactor);
-        //camera.setFrameCallback(cvr.getIFrameCallback(), settings.pixelFormatCallback/*UVCCamera.PIXEL_FORMAT_NV21*/);
         camera.startPreview();
 
         synchronized (mSyncExit) {
