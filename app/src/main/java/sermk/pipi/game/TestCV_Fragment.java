@@ -129,8 +129,12 @@ public class TestCV_Fragment extends Fragment {
 
     @Override
     public void onStop() {
-        mTimer.cancel();
-        mTimer.purge();
+        try {
+            mTimer.cancel();
+            mTimer.purge();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onStop();
     }
 
