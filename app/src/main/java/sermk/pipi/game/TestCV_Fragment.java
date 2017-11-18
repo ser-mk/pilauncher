@@ -38,6 +38,7 @@ public class TestCV_Fragment extends Fragment {
     private ToggleButton mDrawButton;
     private CVMaskView mPlotPreview;
     SeekText posCallbackSeek;
+    TextView text_hdiag_seek;
 
     TextView cpuView;
     TextView fpsView;
@@ -65,13 +66,13 @@ public class TestCV_Fragment extends Fragment {
         SeekText hDiagSeek = (SeekText)rootView.findViewById(R.id.hdiag_seek);
 
         TextView text_alpha_seek = (TextView)rootView.findViewById(R.id.text_alpha_seek);
-        TextView text_hdiag_seek = (TextView)rootView.findViewById(R.id.text_hdiag_seek);
+        text_hdiag_seek = (TextView)rootView.findViewById(R.id.text_hdiag_seek);
 
         posCallbackSeek.setTv(text_alpha_seek);
 
         hDiagSeek.setTv(text_hdiag_seek);
 
-        mPlotPreview.sethDiagTV(text_hdiag_seek);
+        //mPlotPreview.sethDiagTV(text_hdiag_seek);
         //mPlotPreview.setPosSeek(posCallbackSeek);
 
         Button clear = (Button)rootView.findViewById(R.id.clear_button);
@@ -185,6 +186,8 @@ public class TestCV_Fragment extends Fragment {
         @Override
         public boolean callbackPosition(final int position, final CVResolver cvr) {
             if(position > 0){
+                final int seek = mPlotPreview.relativePosition(position,posCallbackSeek.getMax());
+                posCallbackSeek.setProgress(seek);
                 //mPlotPreview.setPosition(position);
                 //currentSettings.captureView.seekPosition(position);
                 Log.v(TAG,"position: " + String.valueOf(position));
@@ -206,6 +209,8 @@ public class TestCV_Fragment extends Fragment {
                 Log.v(TAG,"draw Disable");
                 return true;
             }
+            final String str = text_hdiag_seek.getText().toString();
+            mPlotPreview.setHdiag(str);
 
             mPlotPreview.cvCallback(position,cvr);
             return true;

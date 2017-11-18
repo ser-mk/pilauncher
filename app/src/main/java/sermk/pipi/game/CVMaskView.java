@@ -34,7 +34,7 @@ public class CVMaskView extends CVMaskResolver {
     private Canvas canvasMask = null;
     private Paint maskPaint = null;
     private Paint renderPaint = null;
-    private float halfDiagonal = 111;
+    private float halfDiagonal = 33;
     private Rect rectOfMask = null;
     private Paint pRectMask;
 
@@ -43,13 +43,12 @@ public class CVMaskView extends CVMaskResolver {
             return false;
         return true;
     }
-
+/*
     private TextView hDiagTV = null;
-
     public void sethDiagTV(TextView hDiagTV) {
         this.hDiagTV = hDiagTV;
     }
-
+*/
     private int position = -1;
     private Paint positionPaint = new Paint();
 
@@ -61,7 +60,19 @@ public class CVMaskView extends CVMaskResolver {
         position = -1;
     }
 
+
+    public void setHdiag(final String str){
+        try{
+            int num = Integer.parseInt(str);
+            halfDiagonal = (float)num;
+        } catch (NumberFormatException e) {
+            Logger.w("it's not float param " + str);
+            halfDiagonal = 0;
+        }
+    }
+
     private void drawRectFrCenter(float x, float y){
+        /*
         if(hDiagTV != null ) {
             String str = hDiagTV.getText().toString();
             try{
@@ -71,6 +82,7 @@ public class CVMaskView extends CVMaskResolver {
                 Logger.w("it's not float param " + str);
             }
         }
+        */
         float top = y - halfDiagonal;
         float bottom = y + halfDiagonal;
         float left = x - halfDiagonal;
@@ -90,6 +102,19 @@ public class CVMaskView extends CVMaskResolver {
         positionPaint.setColor(Color.MAGENTA);
         positionPaint.setAlpha(44);
         canvasResult.drawRect(left,top,right,bottom,positionPaint);
+    }
+
+    public int relativePosition(final int position, final int maxValue){
+        if(position < 0)
+            return 0;
+        if(rectOfMask == null)
+            return 0;
+
+        final int width = rectOfMask.width();
+        if(position > width)
+            return maxValue;
+        final int relativePos = (position * maxValue )/ width;
+        return relativePos;
     }
 /*
     private SeekText posSeek = null;
@@ -134,6 +159,7 @@ public class CVMaskView extends CVMaskResolver {
     @Override
     public void cvCallback(final int position, final CVResolver cvr){
         super.cvCallback(position,cvr);
+        this.position = position;
         final Bitmap bm = super.getPreviewBitmap();
         final ImageView it = this;
         this.post(new Runnable() {
