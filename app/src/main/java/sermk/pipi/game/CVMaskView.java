@@ -103,7 +103,7 @@ public class CVMaskView extends CVMaskResolver {
 
     @Override
     protected void onDraw(Canvas canvasResult) {
-R        canvasResult.drawBitmap(super.getPreviewBitmap(),0,0,null);
+        canvasResult.drawBitmap(super.getPreviewBitmap(),0,0,null);
 
         canvasResult.drawBitmap(mask,0,0,renderPaint);
 
