@@ -86,7 +86,6 @@ public class TestCV_Fragment extends Fragment {
         cpuView = (TextView)rootView.findViewById(R.id.cpu_view);
         fpsView = (TextView)rootView.findViewById(R.id.fps_view);
 
-        mTimer = new Timer("cpu_fps_timer");
         mFpsCounter = new FpsCounter();
         mFpsCounter.reset();
 
@@ -97,6 +96,11 @@ public class TestCV_Fragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        mTimer = new Timer("cpu_fps_timer");
         mTimer.schedule(new TimerTask() { // Определяем задачу
                             @Override
                             public void run() {
@@ -119,7 +123,7 @@ public class TestCV_Fragment extends Fragment {
                             }
                         }, 1111L,
             getResources().getInteger(R.integer.cpu_timer_period)); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
+        super.onResume();
     }
 
     @Override
@@ -132,7 +136,7 @@ public class TestCV_Fragment extends Fragment {
     public void onStop() {
         try {
             mTimer.cancel();
-            mTimer.purge();
+            //mTimer.purge();
         } catch (Exception e) {
             e.printStackTrace();
         }
