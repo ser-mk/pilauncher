@@ -1,9 +1,13 @@
 package sermk.pipi.game;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+
+import com.orhanobut.logger.Logger;
+
 
 public class Standalone extends Activity {
 
@@ -26,6 +30,8 @@ public class Standalone extends Activity {
         getFragmentManager().beginTransaction()
                 .add(R.id.container, new TestCV_Fragment()).commit();
 
+        Logger.v("start service");
+        startService(new Intent(this, NotifyService.class));
     }
 
     @Override
