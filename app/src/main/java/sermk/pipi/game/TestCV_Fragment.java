@@ -166,13 +166,6 @@ public class TestCV_Fragment extends Fragment {
             Log.v(TAG, "Test CV enable " + isChecked);
             GlobalController app = (GlobalController)getActivity().getApplication();
             if (isChecked) {
-                /*
-                CVResolver.Settings settings = new CVResolver.Settings();
-                settings.captureView = mPlotPreview;
-                settings.fpsCounter = mFpsCounter;
-                settings.learnButton = mLearnButton;
-                settings.drawButton = mDrawButton;
-                */
                 UVCReciver.Settings settings = new UVCReciver.Settings();
                 app.getGlobalSettings().setUVCSettings(settings);
                 app.getUVCReciver().startCapture(settings,posCallback);
@@ -188,9 +181,6 @@ public class TestCV_Fragment extends Fragment {
             if(position > 0){
                 final int seek = mPlotPreview.relativePosition(position,posCallbackSeek.getMax());
                 posCallbackSeek.setProgress(seek);
-                //mPlotPreview.setPosition(position);
-                //currentSettings.captureView.seekPosition(position);
-                Log.v(TAG,"position: " + String.valueOf(position));
             }
 
             mFpsCounter.count();
@@ -217,14 +207,6 @@ public class TestCV_Fragment extends Fragment {
 /*
             synchronized (syncPreview) {
                 Utils.matToBitmap(previewRGBMat, previewBitmap);
-            }
-            //currentSettings.captureView.post(mUpdateImageTask);
-
-            final Rect roiRect = currentSettings.captureView.getRectMask();
-            final Mat roiMat = currentSettings.captureView.getMatMask();
-
-            if(roiMat != null) {
-                setRectOfMask(roiRect.x, roiRect.y, roiMat.getNativeObjAddr());
             }
             */
 

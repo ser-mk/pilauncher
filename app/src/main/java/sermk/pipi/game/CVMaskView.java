@@ -43,12 +43,7 @@ public class CVMaskView extends CVMaskResolver {
             return false;
         return true;
     }
-/*
-    private TextView hDiagTV = null;
-    public void sethDiagTV(TextView hDiagTV) {
-        this.hDiagTV = hDiagTV;
-    }
-*/
+
     private int position = -1;
     private Paint positionPaint = new Paint();
 
@@ -72,17 +67,6 @@ public class CVMaskView extends CVMaskResolver {
     }
 
     private void drawRectFrCenter(float x, float y){
-        /*
-        if(hDiagTV != null ) {
-            String str = hDiagTV.getText().toString();
-            try{
-                int num = Integer.parseInt(str);
-                halfDiagonal = (float)num;
-            } catch (NumberFormatException e) {
-                Logger.w("it's not float param " + str);
-            }
-        }
-        */
         float top = y - halfDiagonal;
         float bottom = y + halfDiagonal;
         float left = x - halfDiagonal;
@@ -116,28 +100,6 @@ public class CVMaskView extends CVMaskResolver {
         final int relativePos = (position * maxValue )/ width;
         return relativePos;
     }
-/*
-    private SeekText posSeek = null;
-    public void setPosSeek(SeekText posSeek) {      this.posSeek = posSeek;    }
-    public void seekPosition(final int posInMask){
-        if(posInMask<0)
-            return;
-        if(rectOfMask == null)
-            return;
-
-        final int width = rectOfMask.width();
-        if(posInMask > width)
-            return;
-
-        final int maxSeekValue = posSeek.getMax();
-        final int pos = (posInMask * maxSeekValue )/ width;
-        posSeek.setProgress(pos);
-    }
-
-    public void setPosition(final int position) {
-        this.position = position;
-    }
-*/
 
     @Override
     protected void onDraw(Canvas canvasResult) {
@@ -212,4 +174,3 @@ R        canvasResult.drawBitmap(super.getPreviewBitmap(),0,0,null);
     }
 
 }
-
