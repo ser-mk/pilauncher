@@ -140,9 +140,9 @@ public class CVMaskView extends CVMaskResolver {
 */
 
     @Override
-    public void setImageBitmap(Bitmap bitmap) {
+    protected void onDraw(Canvas canvasResult) {
+R        canvasResult.drawBitmap(super.getPreviewBitmap(),0,0,null);
 
-        canvasResult.drawBitmap(bitmap,0,0,null);
         canvasResult.drawBitmap(mask,0,0,renderPaint);
 
         if(rectOfMask != null){
@@ -153,21 +153,14 @@ public class CVMaskView extends CVMaskResolver {
             drawPosition();
         }
 
-        super.setImageBitmap(result);
+        super.onDraw(canvasResult);
     }
 
     @Override
     public void cvCallback(final int position, final CVResolver cvr){
         super.cvCallback(position,cvr);
         this.position = position;
-        final Bitmap bm = super.getPreviewBitmap();
-        final ImageView it = this;
-        this.post(new Runnable() {
-            @Override
-            public void run() {
-                it.setImageBitmap(bm);
-            }
-        });
+        this.postInvalidate();
     }
 
     @Override
