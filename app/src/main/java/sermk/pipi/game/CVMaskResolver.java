@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.orhanobut.logger.Logger;
-
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -32,12 +30,39 @@ class CVMaskResolver extends ImageView {
         super(context, attrs);
     }
 
-    public Rect getRectMaskByte() {
-        return rectMaskByte;
+    private Mat previewRGBMat;
+    protected Bitmap previewBitmap;
+    boolean changedPreviewMat = false;
+
+    @Override
+    public void onSizeChanged (int w, int h, int oldw, int oldh){
+        super.onSizeChanged(w, h, oldw, oldh);
+        if(previewRGBMat != null)
+            previewRGBMat.release();
+        previewRGBMat = new Mat(h, w, CvType.CV_8UC3);
+        previewBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        changedPreviewMat = true;
     }
 
-    public Mat getRoiMask() {
-        return roiMask;
+    protected void clearMask(){
+        rectMaskByte = null;
+        if(roiMask != null) {
+            roiMask.release();
+            roiMask = null;
+        }
+    }
+    public void cvCallback(final int position, final CVResolver cvr){
+        if(changedPreviewMat && (previewRGBMat != null)){
+            changedPreviewMat = false;
+            cvr.setPlotOption(previewRGBMat.getNativeObjAddr());
+        }
+        if(roiMask != null) {
+            cvr.setRectOfMask(rectMaskByte.x, rectMaskByte.y, roiMask.getNativeObjAddr());
+        }
+    }
+    protected Bitmap getPreviewBitmap(){
+        Utils.matToBitmap(previewRGBMat, previewBitmap);
+        return previewBitmap;
     }
 
     protected android.graphics.Rect findMaskCounter(final Bitmap inMask){

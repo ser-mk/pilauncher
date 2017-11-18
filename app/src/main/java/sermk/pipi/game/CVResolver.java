@@ -1,25 +1,6 @@
 package sermk.pipi.game;
 
-import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.ToggleButton;
-
-import com.orhanobut.logger.Logger;
-import com.serenegiant.usb.IFrameCallback;
-import com.serenegiant.usb.UVCCamera;
-import com.serenegiant.utils.FpsCounter;
-
-import org.opencv.android.Utils;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-
-import java.lang.ref.WeakReference;
-import java.nio.ByteBuffer;
 
 /**
  * Created by echormonov on 31.10.17.
@@ -27,26 +8,32 @@ import java.nio.ByteBuffer;
 
 final class CVResolver {
 
-    public interface ICallback {
-        public boolean callbackPosition(final int pos);
+    public interface ICallbackPosition {
+        public boolean callbackPosition(final int pos, final CVResolver cvr);
     }
 
     private final String TAG = "CVResolver";
 
-    final int MODE_CAPTURE = 0;
-    final int MODE_LEARN = 1;
+    public final int MODE_CAPTURE = 0;
+    public final int MODE_LEARN = 1;
 
-    private ICallback mICallback = NULL;
+    private ICallbackPosition mICallbackPosition = null;
 
-    public CVResolver(@Nullable final ICallback callback) {
-        this.mICallback = callback;
+    public CVResolver(@Nullable final ICallbackPosition callback) {
+        setCallback(callback);
+        setMode(MODE_CAPTURE);
+        startCV(false);
+    }
+
+    public void setCallback(@Nullable final ICallbackPosition callback) {
+        this.mICallbackPosition = callback;
     }
 
     private void plottCV(final int position){
-        if(this.mICallback == null){
+        if(this.mICallbackPosition == null){
             return;
         }
-        this.mICallback.callbackPosition(position);
+        this.mICallbackPosition.callbackPosition(position, this);
     }
 
     /*
@@ -193,6 +180,7 @@ final class CVResolver {
 
     public static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
     public static native void setMode(final int mode);
+    public void stop(){}
 
     public static native void setDisablePlot(final boolean disable);
     public static native void setPlotOption(final long previewMat);

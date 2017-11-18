@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -53,14 +54,10 @@ public class CVMaskView extends CVMaskResolver {
     private Paint positionPaint = new Paint();
 
     public void clearMask(){
+        super.clearMask();
         if(mask == null) return;
         mask.eraseColor(Color.TRANSPARENT);
         rectOfMask = null;
-        super.rectMaskByte = null;
-        if(super.roiMask != null) {
-            super.roiMask.release();
-            super.roiMask = null;
-        }
         position = -1;
     }
 
@@ -111,31 +108,14 @@ public class CVMaskView extends CVMaskResolver {
         final int pos = (posInMask * maxSeekValue )/ width;
         posSeek.setProgress(pos);
     }
-*/
+
     public void setPosition(final int position) {
         this.position = position;
     }
+*/
 
     @Override
     public void setImageBitmap(Bitmap bitmap) {
-        if(mask == null){
-            mask = Bitmap.createBitmap(bitmap);
-            //mask.setConfig(Bitmap.Config.RGB_565);
-            clearMask();
-            canvasMask = new Canvas(mask);
-            maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            maskPaint.setColor(Color.RED);
-
-            result = Bitmap.createBitmap(bitmap);
-            result.eraseColor(Color.TRANSPARENT);
-            canvasResult = new Canvas(result);
-            renderPaint = new Paint();
-            renderPaint.setAlpha(70);
-
-            pRectMask = new Paint();
-            pRectMask.setColor(Color.GREEN);
-            pRectMask.setStyle(Paint.Style.STROKE);
-        }
 
         canvasResult.drawBitmap(bitmap,0,0,null);
         canvasResult.drawBitmap(mask,0,0,renderPaint);
@@ -151,7 +131,38 @@ public class CVMaskView extends CVMaskResolver {
         super.setImageBitmap(result);
     }
 
+    @Override
+    public void cvCallback(final int position, final CVResolver cvr){
+        super.cvCallback(position,cvr);
+        final Bitmap bm = super.getPreviewBitmap();
+        final ImageView it = this;
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                it.setImageBitmap(bm);
+            }
+        });
+    }
 
+    @Override
+    public void onSizeChanged (int w, int h, int oldw, int oldh){
+        super.onSizeChanged(w, h, oldw, oldh);
+        mask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        clearMask();
+        canvasMask = new Canvas(mask);
+        maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        maskPaint.setColor(Color.RED);
+
+        result = Bitmap.createBitmap(mask);
+        result.eraseColor(Color.TRANSPARENT);
+        canvasResult = new Canvas(result);
+        renderPaint = new Paint();
+        renderPaint.setAlpha(70);
+
+        pRectMask = new Paint();
+        pRectMask.setColor(Color.GREEN);
+        pRectMask.setStyle(Paint.Style.STROKE);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -163,11 +174,8 @@ public class CVMaskView extends CVMaskResolver {
         // and other input controls. In this case, you are only
         // interested in events where the touch position changed.
 
-        float x = e.getX();
-        float y = e.getY();
-
-        int w = getWidth();
-        int h = getHeight();
+        final float x = e.getX();
+        final float y = e.getY();
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:

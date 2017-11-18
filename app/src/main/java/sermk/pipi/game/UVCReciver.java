@@ -2,6 +2,7 @@ package sermk.pipi.game;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
+import android.support.annotation.Nullable;
 import android.view.Surface;
 import android.widget.Toast;
 
@@ -96,7 +97,8 @@ public class UVCReciver extends Thread {
 
     };
 
-    public void startCapture(final Settings settings){
+    public void startCapture(final Settings settings,@Nullable final CVResolver.ICallbackPosition callback){
+        mCallBackPosition = callback;
         uvcSettings = settings;
         this.start();
         Logger.v("start UVC thread");
@@ -106,6 +108,7 @@ public class UVCReciver extends Thread {
         synchronized(mSyncExit) {
             mSyncExit.notifyAll();
         }
+        mCallBackPosition = defaultCallBackPosition;
     }
 
     @Override
@@ -170,26 +173,39 @@ public class UVCReciver extends Thread {
             return false;
         }
 
+        final CVResolver cvr = new CVResolver(mCallBackPosition);
+
         camera.startPreview();
 
         synchronized (mSyncExit) {
             try {
                 mSyncExit.wait();
             } catch (final InterruptedException e) {
-                Logger.e(e,"exc");
+                Logger.e(e,"exit failed");
             }
         }
+
+        cvr.stop();
 
         if (camera != null) {
             camera.stopPreview();
             camera.setStatusCallback(null);
             camera.setButtonCallback(null);
-            camera.setFrameCallback(null, UVCCamera.PIXEL_FORMAT_RAW);
             camera.close();
             camera.destroy();
         }
 
         return true;
     }
+
+    CVResolver.ICallbackPosition mCallBackPosition = null;
+
+    final CVResolver.ICallbackPosition defaultCallBackPosition = new CVResolver.ICallbackPosition() {
+        @Override
+        public boolean callbackPosition(final int pos, final CVResolver cvr ) {
+            Logger.v("!");
+            return true;
+        }
+    };
 
 }
