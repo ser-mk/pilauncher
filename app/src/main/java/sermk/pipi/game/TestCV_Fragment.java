@@ -185,6 +185,7 @@ public class TestCV_Fragment extends Fragment {
             if(position > 0){
                 final int seek = mPlotPreview.relativePosition(position,posCallbackSeek.getMax());
                 posCallbackSeek.setProgress(seek);
+                Log.v(TAG,"p=" + String.valueOf(position));
             }
 
             mFpsCounter.count();
@@ -200,7 +201,6 @@ public class TestCV_Fragment extends Fragment {
             cvr.setDisablePlot(drawDisable);
 
             if(drawDisable){
-                Log.v(TAG,"draw Disable");
                 return true;
             }
             final String str = text_hdiag_seek.getText().toString();
