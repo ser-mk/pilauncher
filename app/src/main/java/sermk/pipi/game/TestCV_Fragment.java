@@ -1,8 +1,14 @@
 package sermk.pipi.game;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.orhanobut.logger.Logger;
 import com.serenegiant.utils.CpuMonitor;
 import com.serenegiant.utils.FpsCounter;
 
@@ -88,6 +96,14 @@ public class TestCV_Fragment extends Fragment {
 
         mFpsCounter = new FpsCounter();
         mFpsCounter.reset();
+
+        Button runButton = (Button)rootView.findViewById(R.id.start_app);
+        runButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runApp();
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;
@@ -216,5 +232,28 @@ public class TestCV_Fragment extends Fragment {
 
         }
     };
+
+    private boolean runApp(){
+        final String packageName = "sermk.pipi.ra";
+        Logger.v(packageName);
+        PackageManager manager = getActivity().getPackageManager();
+        try {
+            Intent i = manager.getLaunchIntentForPackage(packageName);
+            if (i == null) {
+                Logger.v("i == null");
+                return false;
+                //throw new ActivityNotFoundException();
+            }
+            i.addCategory(Intent.CATEGORY_LAUNCHER);
+            i.setFlags(0);
+            i.putExtra("aaa","111");
+            //getActivity().startActivity(i);
+
+            getActivity().startActivityForResult(i,1);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            return false;
+        }
+    }
 
 }

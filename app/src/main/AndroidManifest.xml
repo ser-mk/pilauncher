@@ -33,7 +33,12 @@
         </activity>
         <service
             android:name=".NotifyService"
+            android:enabled="true"
+            android:exported="true"
              >
+            <intent-filter>
+                <action android:name="aaaa"></action>
+            </intent-filter>
         </service>
     </application>
 

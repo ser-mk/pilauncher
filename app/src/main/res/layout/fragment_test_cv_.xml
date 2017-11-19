@@ -109,6 +109,12 @@
                 android:textOff="Draw"
                 android:textOn="No Draw"/>
 
+            <Button
+                android:id="@+id/start_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="run" />
+
         </LinearLayout>
     </LinearLayout>
 

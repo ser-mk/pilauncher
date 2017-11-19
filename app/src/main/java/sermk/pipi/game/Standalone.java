@@ -39,9 +39,14 @@ public class Standalone extends Activity {
         super.onStart();
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.v(
+            String.valueOf(requestCode) + " " + String.valueOf(resultCode) + " a"
+        );
+        //super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+
 }
