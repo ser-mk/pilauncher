@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -78,12 +79,21 @@ final public class NotifyService extends Service {
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_SAY_HELLO:
-                    Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    super.handleMessage(msg);
+            Logger.v("msg.what" + String.valueOf(msg.what));
+
+            //Setup the reply message
+            Message message = Message.obtain(null, 2, 0, 0);
+            try
+            {
+                //make the RPC invocation
+                Messenger replyTo = msg.replyTo;
+                replyTo.send(message);
+            }
+            catch(RemoteException rme)
+            {
+                //Show an Error Message
+                //Toast.makeText(RemoteService.this, "Invocation Failed!!", Toast.LENGTH_LONG).show();
+                Logger.e("Invocation Failed!!");
             }
         }
     }

@@ -32,12 +32,11 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <service
-            android:name=".NotifyService"
+            android:name="sermk.pipi.game.NotifyService"
             android:enabled="true"
-            android:exported="true"
-             >
+            android:exported="true">
             <intent-filter>
-                <action android:name="aaaa"></action>
+                <action android:name="sermk.pipi.game.NotifyService"></action>
             </intent-filter>
         </service>
     </application>
