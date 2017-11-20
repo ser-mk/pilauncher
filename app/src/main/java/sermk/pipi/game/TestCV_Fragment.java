@@ -188,9 +188,11 @@ public class TestCV_Fragment extends Fragment {
             if (isChecked) {
                 UVCReciver.Settings settings = new UVCReciver.Settings();
                 app.getGlobalSettings().setUVCSettings(settings);
-                app.getUVCReciver().startCapture(settings,posCallback);
+                //app.getUVCReciver().startCapture(settings,posCallback);
+                ((Standalone)getActivity()).getPIService().startUVC(settings,posCallback);
             } else {
-                app.getUVCReciver().exitRun();
+                //app.getUVCReciver().exitRun();
+                ((Standalone)getActivity()).getPIService().completeUVC();
             }
         }
     };

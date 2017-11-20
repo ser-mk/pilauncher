@@ -63,7 +63,14 @@ public class UVCReciver extends Thread {
         }
         gContext = context;
     }
-/* */
+
+    public void deInit(){
+        if (mUSBMonitor != null) {
+            mUSBMonitor.unregister();
+            mUSBMonitor = null;
+        }
+    }
+
     private final OnDeviceConnectListener mOnDeviceConnectListener = new OnDeviceConnectListener() {
     @Override
     public void onAttach(final UsbDevice device) {
@@ -139,6 +146,7 @@ public class UVCReciver extends Thread {
 
         final UsbControlBlock ublock = mUSBMonitor.openDevice(device);
         final UVCCamera camera = new UVCCamera();
+        //todo: try - catch
         camera.open(ublock);
         camera.setStatusCallback(new IStatusCallback() {
             @Override

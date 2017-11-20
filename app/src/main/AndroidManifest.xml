@@ -39,6 +39,14 @@
                 <action android:name="sermk.pipi.game.NotifyService"></action>
             </intent-filter>
         </service>
+        <service
+            android:name=".PIService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name=".PIService"></action>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

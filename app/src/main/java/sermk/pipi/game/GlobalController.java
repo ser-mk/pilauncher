@@ -14,7 +14,6 @@ import org.opencv.android.OpenCVLoader;
 
 public final class GlobalController extends Application {
 
-    private UVCReciver mUVCReciver;
     private GlobalSettings globalSettings;
     private static GlobalController app = null;
 
@@ -25,7 +24,6 @@ public final class GlobalController extends Application {
         super.onCreate();
         LogOptions.SetupLog();
         // Required initialization logic here!
-        mUVCReciver = new UVCReciver(this);
         globalSettings = new GlobalSettings(this);
     }
 
@@ -48,11 +46,7 @@ public final class GlobalController extends Application {
     public void onLowMemory() {
         super.onLowMemory();
     }
-
-    public UVCReciver getUVCReciver(){
-        return mUVCReciver;
-    }
-
+    
     public GlobalSettings getGlobalSettings() { return globalSettings; }
 
     // Used to load the 'native-lib' library on application startup.
