@@ -5,11 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -32,6 +28,7 @@ public final class PIService extends Service {
     private NotificationManager mNotificationManager;
 
     static private PIService single = null;
+    private PiHandler pih = null;
 
     static public PIService getInstance(){
         return single;
@@ -47,6 +44,7 @@ public final class PIService extends Service {
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         showNotification("PIService start!");
         single = this;
+        pih = new PiHandler();
     }
 
     @Override
@@ -67,22 +65,45 @@ public final class PIService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private void setPositionHandler(){
+        final boolean res = mUVCReciver.setCallBackPositionInRun(pih);
+        Logger.v("set pos callback " + res);
+    }
+
+    private void unSetPositionHandler(){
+        final boolean res = mUVCReciver.setCallBackPositionInRun(null);
+        Logger.v("unset pos callback " + res);
+    }
+
+    //final PInterface_Impl pInterface_binder = new PInterface_Impl();
+    final Pinterface.Stub pInterface_binder = new Pinterface.Stub() {
+        @Override
+        public int getPosition() throws RemoteException {
+            return 0;
+        }
+    };
+
     @Override
     public IBinder onBind(final Intent intent) {
         Log.d(TAG, "----onBind:" + intent);
 
-        return mMessenger.getBinder();
+        setPositionHandler();
+
+        //return mMessenger.getBinder();
+        //return pih.getMessenger().getBinder();
+        return pInterface_binder;
     }
 
     @Override
     public void onRebind(final Intent intent) {
         Log.d(TAG, "onRebind:" + intent);
+        setPositionHandler();
     }
 
     @Override
     public boolean onUnbind(final Intent intent) {
         Log.d(TAG, "onUnbind:" + intent);
-
+        unSetPositionHandler();
         Log.d(TAG, "onUnbind:finished");
         return true;
     }
@@ -112,37 +133,4 @@ public final class PIService extends Service {
     public void completeUVC(){
         mUVCReciver.exitRun();
     }
-
-    /** Command to the service to display a message */
-    static final int MSG_SAY_HELLO = 1;
-
-    /**
-     * Handler of incoming messages from clients.
-     */
-    public class IncomingHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            Logger.v("msg.what" + String.valueOf(msg.what));
-
-            //Setup the reply message
-            Message message = Message.obtain(null, 2, 0, 0);
-            try
-            {
-                //make the RPC invocation
-                Messenger replyTo = msg.replyTo;
-                replyTo.send(message);
-            }
-            catch(RemoteException rme)
-            {
-                //Show an Error Message
-                //Toast.makeText(RemoteService.this, "Invocation Failed!!", Toast.LENGTH_LONG).show();
-                Logger.e("Invocation Failed!!");
-            }
-        }
-    }
-
-    /**
-     * Target we publish for clients to send messages to IncomingHandler.
-     */
-    final Messenger mMessenger = new Messenger(new IncomingHandler());
 }
