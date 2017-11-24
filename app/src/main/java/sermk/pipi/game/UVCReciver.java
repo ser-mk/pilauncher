@@ -13,6 +13,7 @@ import com.serenegiant.usb.USBMonitor.OnDeviceConnectListener;
 import com.serenegiant.usb.USBMonitor.UsbControlBlock;
 import com.serenegiant.usb.UVCCamera;
 
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -48,6 +49,8 @@ public class UVCReciver extends Thread {
     }
 
     Settings uvcSettings;
+
+    private WeakReference<CVResolver> inThreadResolver;
 
     /**
      * for accessing USB
@@ -109,6 +112,18 @@ public class UVCReciver extends Thread {
         uvcSettings = settings;
         this.start();
         Logger.v("start UVC thread");
+    }
+
+    public boolean setCallBackPositionInRun(CVResolver.ICallbackPosition callBackPosition) {
+        final CVResolver cvr = inThreadResolver.get();
+        if(cvr==null){
+            Logger.w("cvresolver not exist!");
+            return false;
+        }
+
+        cvr.setCallback(callBackPosition);
+        return true;
+        //this.mCallBackPosition = mCallBackPosition;
     }
 
     void exitRun(){
@@ -184,6 +199,7 @@ public class UVCReciver extends Thread {
         }
 
         final CVResolver cvr = new CVResolver(mCallBackPosition);
+        inThreadResolver = new WeakReference<CVResolver>(cvr);
 
         camera.startPreview();
 
