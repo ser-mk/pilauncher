@@ -6,11 +6,16 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 
+import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.USBMonitor;
 
 /**
@@ -26,14 +31,11 @@ public final class PIService extends Service {
     private UVCReciver mUVCReciver;
     private NotificationManager mNotificationManager;
 
-    public class LocalBinder extends Binder {
-        PIService getService() {
-            // Return this instance of LocalService so clients can call public methods
-            return PIService.this;
-        }
+    static private PIService single = null;
+
+    static public PIService getInstance(){
+        return single;
     }
-    // Binder given to clients
-    private final IBinder mLocalBinder = new LocalBinder();
 
     @Override
     public void onCreate() {
@@ -44,6 +46,7 @@ public final class PIService extends Service {
         }
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         showNotification("PIService start!");
+        single = this;
     }
 
     @Override
@@ -54,13 +57,21 @@ public final class PIService extends Service {
             mNotificationManager.cancel(NOTIFICATION);
             mNotificationManager = null;
         }
+        single = null;
         super.onDestroy();
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.v(TAG,"@@@ onStartCommand" + intent.toString() + String.valueOf(flags) + String.valueOf(startId));
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     public IBinder onBind(final Intent intent) {
-        Log.d(TAG, "onBind:" + intent);
-        return mLocalBinder;
+        Log.d(TAG, "----onBind:" + intent);
+
+        return mMessenger.getBinder();
     }
 
     @Override
@@ -101,4 +112,37 @@ public final class PIService extends Service {
     public void completeUVC(){
         mUVCReciver.exitRun();
     }
+
+    /** Command to the service to display a message */
+    static final int MSG_SAY_HELLO = 1;
+
+    /**
+     * Handler of incoming messages from clients.
+     */
+    public class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            Logger.v("msg.what" + String.valueOf(msg.what));
+
+            //Setup the reply message
+            Message message = Message.obtain(null, 2, 0, 0);
+            try
+            {
+                //make the RPC invocation
+                Messenger replyTo = msg.replyTo;
+                replyTo.send(message);
+            }
+            catch(RemoteException rme)
+            {
+                //Show an Error Message
+                //Toast.makeText(RemoteService.this, "Invocation Failed!!", Toast.LENGTH_LONG).show();
+                Logger.e("Invocation Failed!!");
+            }
+        }
+    }
+
+    /**
+     * Target we publish for clients to send messages to IncomingHandler.
+     */
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
 }

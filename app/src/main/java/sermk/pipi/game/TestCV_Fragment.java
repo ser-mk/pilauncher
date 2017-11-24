@@ -101,7 +101,7 @@ public class TestCV_Fragment extends Fragment {
         runButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runApp();
+                ((Standalone)getActivity()).runApp();
             }
         });
 
@@ -188,11 +188,9 @@ public class TestCV_Fragment extends Fragment {
             if (isChecked) {
                 UVCReciver.Settings settings = new UVCReciver.Settings();
                 app.getGlobalSettings().setUVCSettings(settings);
-                //app.getUVCReciver().startCapture(settings,posCallback);
-                ((Standalone)getActivity()).getPIService().startUVC(settings,posCallback);
+                PIService.getInstance().startUVC(settings,posCallback);
             } else {
-                //app.getUVCReciver().exitRun();
-                ((Standalone)getActivity()).getPIService().completeUVC();
+                PIService.getInstance().completeUVC();
             }
         }
     };
@@ -226,36 +224,7 @@ public class TestCV_Fragment extends Fragment {
 
             mPlotPreview.cvCallback(position,cvr);
             return true;
-/*
-            synchronized (syncPreview) {
-                Utils.matToBitmap(previewRGBMat, previewBitmap);
-            }
-            */
 
         }
     };
-
-    private boolean runApp(){
-        final String packageName = "sermk.pipi.ra";
-        Logger.v(packageName);
-        PackageManager manager = getActivity().getPackageManager();
-        try {
-            Intent i = manager.getLaunchIntentForPackage(packageName);
-            if (i == null) {
-                Logger.v("i == null");
-                return false;
-                //throw new ActivityNotFoundException();
-            }
-            i.addCategory(Intent.CATEGORY_LAUNCHER);
-            i.setFlags(0);
-            i.putExtra("aaa","111");
-            //getActivity().startActivity(i);
-
-            getActivity().startActivityForResult(i,1);
-            return true;
-        } catch (ActivityNotFoundException e) {
-            return false;
-        }
-    }
-
 }

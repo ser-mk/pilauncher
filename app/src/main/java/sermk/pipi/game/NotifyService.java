@@ -15,9 +15,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
-import com.serenegiant.common.BaseService;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by echormonov on 18.11.17.
@@ -41,11 +38,6 @@ final public class NotifyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Logger.v("onStartCommand service");
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    public IBinder onBind11(Intent arg0) {
-        Logger.v("onBind service");
-        return null;
     }
 
     private void showNotification(final CharSequence text) {
@@ -109,7 +101,7 @@ final public class NotifyService extends Service {
      */
     @Override
     public IBinder onBind(Intent intent) {
-        Logger.v("onBind service!");
+        Logger.v("onBind service! " + intent.toString());
         Toast.makeText(getApplicationContext(), "binding", Toast.LENGTH_SHORT).show();
         return mMessenger.getBinder();
     }

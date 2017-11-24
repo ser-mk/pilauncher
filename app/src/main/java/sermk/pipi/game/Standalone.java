@@ -1,22 +1,22 @@
 package sermk.pipi.game;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.orhanobut.logger.Logger;
 
 
 public class Standalone extends Activity {
-
-    private PIService mPIService;
-    boolean mBoundPI = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +43,6 @@ public class Standalone extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, PIService.class);
-        final boolean result = bindService(intent, mPIConnection, Context.BIND_AUTO_CREATE);
-        Logger.v("bind service " + String.valueOf(result));
     }
 
     @Override
@@ -53,30 +50,31 @@ public class Standalone extends Activity {
         Logger.v(
             String.valueOf(requestCode) + " " + String.valueOf(resultCode)
         );
+        //bindPIService();
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
-    private ServiceConnection mPIConnection = new ServiceConnection() {
+    public boolean runApp(){
+        //unbindService(mPIConnection);
+        final String packageName = "sermk.pipi.ra";
+        Logger.v(packageName);
+        PackageManager manager = getPackageManager();
+        try {
+            Intent i = manager.getLaunchIntentForPackage(packageName);
+            if (i == null) {
+                Logger.v("i == null");
+                return false;
+                //throw new ActivityNotFoundException();
+            }
+            i.addCategory(Intent.CATEGORY_LAUNCHER);
+            i.setFlags(0);
+            i.putExtra("aaa","111");
 
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            Logger.v("PI onServiceConnected");
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            PIService.LocalBinder binder = (PIService.LocalBinder) service;
-            mPIService = binder.getService();
-            mBoundPI = true;
+            startActivityForResult(i,1);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            return false;
         }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBoundPI = false;
-            Logger.v("PI onServiceDisconnected");
-        }
-    };
-
-    public PIService getPIService() {
-        return mPIService;
     }
+
 }
