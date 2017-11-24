@@ -10,6 +10,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import sermk.pipi.pilib;
 
 import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.USBMonitor;

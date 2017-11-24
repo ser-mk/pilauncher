@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/UVC/openCVLibrary330" />
             <option value="$PROJECT_DIR$/UVC/usbCameraCommon" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/pilib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
