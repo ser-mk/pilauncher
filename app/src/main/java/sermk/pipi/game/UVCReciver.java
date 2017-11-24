@@ -175,8 +175,10 @@ public class UVCReciver extends Thread {
                     settings.maxFps, settings.frameformat, settings.bandwightFactor);
         } catch (final IllegalArgumentException e1) {
             camera.destroy();
+            Logger.e(e1, "camera IllegalArgumentException!");
             return false;
         } catch (Exception e) {
+            Logger.e(e,"camera common exaption!");
             camera.destroy();
             return false;
         }
