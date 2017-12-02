@@ -10,7 +10,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import sermk.pipi.pilib;
+import sermk.pipi.pilib.Pinterface;
 
 import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.USBMonitor;
@@ -76,14 +76,15 @@ public final class PIService extends Service {
         Logger.v("unset pos callback " + res);
     }
 
-    //final PInterface_Impl pInterface_binder = new PInterface_Impl();
+    final PInterface_Impl pInterface_binder = new PInterface_Impl();
+    /*
     final Pinterface.Stub pInterface_binder = new Pinterface.Stub() {
         @Override
         public int getPosition() throws RemoteException {
             return 0;
         }
     };
-
+*/
     @Override
     public IBinder onBind(final Intent intent) {
         Log.d(TAG, "----onBind:" + intent);
@@ -91,8 +92,8 @@ public final class PIService extends Service {
         setPositionHandler();
 
         //return mMessenger.getBinder();
-        //return pih.getMessenger().getBinder();
-        return pInterface_binder;
+        return pih.getMessenger().getBinder();
+        //return pInterface_binder;
     }
 
     @Override

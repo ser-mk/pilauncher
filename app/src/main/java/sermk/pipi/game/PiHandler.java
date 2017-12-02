@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.orhanobut.logger.Logger;
 
@@ -15,12 +16,14 @@ public final class PiHandler extends Handler implements CVResolver.ICallbackPosi
 
     /** Command to the service to display a message */
     static final int MSG_SAY_HELLO = 1;
+    final String TAG = "PiHandler";
 
     /**
      * Target we publish for clients to send messages to IncomingHandler.
      */
     final Messenger mMessenger;// = new Messenger(new IncomingHandler());
-    private Messenger replyTo = null;
+    int position = 0;
+
 
     public PiHandler() {
         super();
@@ -33,10 +36,10 @@ public final class PiHandler extends Handler implements CVResolver.ICallbackPosi
 
     @Override
     public void handleMessage(Message msg) {
-        Logger.v("msg.what" + String.valueOf(msg.what));
+        Log.v(TAG,"msg.what" + String.valueOf(msg.what));
 
         //Setup the reply message
-        Message message = Message.obtain(null, 2, 0, 0);
+        Message message = Message.obtain(null, 2, position, 0);
         try
         {
             //make the RPC invocation
@@ -51,8 +54,17 @@ public final class PiHandler extends Handler implements CVResolver.ICallbackPosi
         }
     }
 
+
+    private Messenger replyTo = null;
     @Override
-    public boolean callbackPosition(int pos, CVResolver cvr) {
+    public boolean callbackPosition(int pos, CVResolver cvr){
+        position = pos;
+        return true;
+    }
+
+
+    public boolean callbackPosition1(int pos, CVResolver cvr)
+    {
         /**/
         Message message = Message.obtain(null, 2, 0, 0);
         if(replyTo==null){
