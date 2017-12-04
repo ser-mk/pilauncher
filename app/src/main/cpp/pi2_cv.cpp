@@ -82,8 +82,10 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         Rect testRect = Rect(maskRect);
         testRect.y = pi2_plot::heightPreview;
         testRect.x = 0;
-        pi2_plot::plotSubGrayArray(arrayFromMask, testRect);
-        pi2_plot::plotHist(vertHist, learnHist, powerHist);
+        if(!maskRect.empty()) {
+            pi2_plot::plotSubGrayArray(arrayFromMask, testRect);
+            pi2_plot::plotHist(vertHist, learnHist, powerHist);
+        }
         pi2_plot::plotPreviewFrame(frame);
     }
 /**/

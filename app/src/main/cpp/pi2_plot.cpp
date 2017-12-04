@@ -58,6 +58,9 @@ void pi2_plot::plotHist(HistType &vh, const HistType &lh, HistType &ph) {
     size_t heightChart = chart.rows - pi2_plot::heightPreview;
     heightChart -= heightChart/20;
     const uint64 maxVH = getMaxValueOfHist(vh);
+    if(maxVH == 0){
+        return;
+    }
     normalizeHist(vh, heightChart, maxVH);
     const Scalar redPoint(255,0,0);
     for( int i = 1; i < vh.currSize; i++ ){
@@ -86,6 +89,9 @@ void pi2_plot::plotHist(HistType &vh, const HistType &lh, HistType &ph) {
     }
 
     const uint64 maxPH = getMaxValueOfHist(ph);
+    if(maxPH == 0){
+        return;
+    }
     normalizeHist(ph, heightChart, maxPH);
     const Scalar bluePoints(0,0,255);
     for( int i = 1; i < ph.currSize; i++ ){
