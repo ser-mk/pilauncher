@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.game.GUIFragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,13 +8,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+
+import sermk.pipi.game.CVResolver;
+import sermk.pipi.game.GUIFragment.CVMaskResolver;
 
 /**
  * Created by echormonov on 01.11.17.

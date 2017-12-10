@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.game.GUIFragment;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,7 +9,7 @@ import android.widget.TextView;
  * Created by echormonov on 02.11.17.
  */
 
-final class SeekText extends SeekBar {
+final public class SeekText extends SeekBar {
 
     private TextView tv;
 

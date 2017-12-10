@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.game.GUIFragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,11 +17,13 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
+import sermk.pipi.game.CVResolver;
+
 /**
  * Created by ser on 02.11.17.
  */
 
-class CVMaskResolver extends ImageView {
+public class CVMaskResolver extends ImageView {
 
     protected Rect rectMaskByte = null;
     protected Mat roiMask = null;

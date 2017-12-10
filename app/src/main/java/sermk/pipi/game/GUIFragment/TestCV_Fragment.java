@@ -1,14 +1,8 @@
-package sermk.pipi.game;
+package sermk.pipi.game.GUIFragment;
 
 import android.app.Fragment;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +10,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.orhanobut.logger.Logger;
 import com.serenegiant.utils.CpuMonitor;
 import com.serenegiant.utils.FpsCounter;
 
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import sermk.pipi.game.CVResolver;
+import sermk.pipi.game.GUIFragment.CVMaskView;
+import sermk.pipi.game.GUIFragment.SeekText;
+import sermk.pipi.game.GlobalController;
+import sermk.pipi.game.PIService;
+import sermk.pipi.game.R;
+import sermk.pipi.game.Standalone;
+import sermk.pipi.game.UVCReciver;
 
 
 /**

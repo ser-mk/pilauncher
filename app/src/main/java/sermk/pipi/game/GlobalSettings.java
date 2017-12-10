@@ -21,8 +21,8 @@ public final class GlobalSettings {
     public int getMaxFps() { return 30; }
     public int getFrameFormat() { return UVCCamera.FRAME_FORMAT_YUYV; }
     public float getBandwightFactor() { return 1.0f; }
-    
-    void setUVCSettings(UVCReciver.Settings settings){
+
+    public void setUVCSettings(UVCReciver.Settings settings){
         settings.width = getCaptureWitgh();
         settings.height = getCaptureHeight();
         settings.minFps = getMinFps();

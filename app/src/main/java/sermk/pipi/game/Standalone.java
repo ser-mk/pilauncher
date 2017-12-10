@@ -2,18 +2,15 @@ package sermk.pipi.game;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.orhanobut.logger.Logger;
+
+import sermk.pipi.game.GUIFragment.TestCV_Fragment;
 
 
 public class Standalone extends Activity {
@@ -36,7 +33,6 @@ public class Standalone extends Activity {
                 .add(R.id.container, new TestCV_Fragment()).commit();
 
         Logger.v("start services");
-        //startService(new Intent(this, NotifyService.class));
         startService(new Intent(this, PIService.class));
     }
 

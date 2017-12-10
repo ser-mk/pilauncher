@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
  * Created by echormonov on 31.10.17.
  */
 
-final class CVResolver {
+public final class CVResolver {
 
     public interface ICallbackPosition {
         public boolean callbackPosition(final int pos, final CVResolver cvr);
