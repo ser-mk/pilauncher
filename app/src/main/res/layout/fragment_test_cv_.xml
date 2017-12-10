@@ -115,6 +115,12 @@
                 android:layout_height="wrap_content"
                 android:text="run" />
 
+            <Button
+                android:id="@+id/sendMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sendMessage" />
+
         </LinearLayout>
     </LinearLayout>
 

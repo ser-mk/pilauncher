@@ -2,24 +2,27 @@ package sermk.pipi.pilauncher;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.orhanobut.logger.Logger;
 
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
+import sermk.pipi.pilauncher.externalcooperation.ClientWrapper;
 
 
-public class Standalone extends Activity {
+public class LauncherAct extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_standalone);
-
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -34,6 +37,12 @@ public class Standalone extends Activity {
 
         Logger.v("start services");
         startService(new Intent(this, PIService.class));
+        ClientWrapper.getInstance().setInstance(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

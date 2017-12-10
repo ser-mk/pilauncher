@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.orhanobut.logger.Logger;
 
 import sermk.pipi.pilauncher.R;
-import sermk.pipi.pilauncher.Standalone;
+import sermk.pipi.pilauncher.LauncherAct;
 
 /**
  * Created by echormonov on 18.11.17.
@@ -52,7 +52,7 @@ final public class NotifyService extends Service {
             .setWhen(System.currentTimeMillis())  // the time stamp
             .setContentTitle(getText(R.string.app_name))  // the label of the entry
             .setContentText(text)  // the contents of the entry
-            .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, Standalone.class), 0))  // The intent to send when the entry is clicked
+            .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, LauncherAct.class), 0))  // The intent to send when the entry is clicked
             .build();
 
         startForeground(NOTIFICATION, notification);

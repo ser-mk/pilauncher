@@ -14,7 +14,6 @@ import org.opencv.android.OpenCVLoader;
 
 public final class GlobalController extends Application {
 
-    private GlobalSettings globalSettings;
     private static GlobalController app = null;
 
     // Called when the application is starting, before any other application objects have been created.
@@ -24,7 +23,6 @@ public final class GlobalController extends Application {
         super.onCreate();
         LogOptions.SetupLog();
         // Required initialization logic here!
-        globalSettings = new GlobalSettings(this);
     }
 
     public static GlobalController getInstance(final String sObject){
@@ -46,8 +44,6 @@ public final class GlobalController extends Application {
     public void onLowMemory() {
         super.onLowMemory();
     }
-    
-    public GlobalSettings getGlobalSettings() { return globalSettings; }
 
     // Used to load the 'native-lib' library on application startup.
     static {

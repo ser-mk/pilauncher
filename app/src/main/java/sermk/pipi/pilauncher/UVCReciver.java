@@ -29,23 +29,14 @@ public class UVCReciver extends Thread {
     private final Object mSync = new Object();
     private final Object mSyncExit = new Object();
 
-    public static final int MSG_OPEN = 0;
-    public static final int MSG_CLOSE = 1;
-    public static final int MSG_PREVIEW_START = 2;
-    public static final int MSG_PREVIEW_STOP = 3;
-    public static final int MSG_CAPTURE_STILL = 4;
-    public static final int MSG_CAPTURE_START = 5;
-    public static final int MSG_CAPTURE_STOP = 6;
-    public static final int MSG_MEDIA_UPDATE = 7;
-    public static final int MSG_RELEASE = 9;
 
     static public class Settings {
-        int width = 0; //.getCaptureWitgh();
-        int height = 0; //.getCaptureHeight();
-        int minFps = 0; //.getMinFps();
-        int maxFps = 0; //.getMaxFps();
-        int frameformat = 0; //.getFrameFormat();
-        float bandwightFactor = 0; //.getBandwightFactor();
+        public int width = 0; //.getCaptureWitgh();
+        public int height = 0; //.getCaptureHeight();
+        public int minFps = 0; //.getMinFps();
+        public int maxFps = 0; //.getMaxFps();
+        public int frameformat = 0; //.getFrameFormat();
+        public float bandwightFactor = 0; //.getBandwightFactor();
     }
 
     Settings uvcSettings;

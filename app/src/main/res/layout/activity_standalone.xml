@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sermk.pipi.pilauncher.Standalone">
+    tools:context="sermk.pipi.pilauncher.LauncherAct">
 
     <FrameLayout
         android:id="@+id/container"

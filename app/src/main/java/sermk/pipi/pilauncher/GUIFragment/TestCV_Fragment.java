@@ -23,8 +23,10 @@ import sermk.pipi.pilauncher.CVResolver;
 import sermk.pipi.pilauncher.GlobalController;
 import sermk.pipi.pilauncher.PIService;
 import sermk.pipi.pilauncher.R;
-import sermk.pipi.pilauncher.Standalone;
+import sermk.pipi.pilauncher.LauncherAct;
 import sermk.pipi.pilauncher.UVCReciver;
+import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+import sermk.pipi.pilauncher.externalcooperation.ClientWrapper;
 
 
 /**
@@ -79,9 +81,6 @@ public class TestCV_Fragment extends Fragment {
 
         hDiagSeek.setTv(text_hdiag_seek);
 
-        //mPlotPreview.sethDiagTV(text_hdiag_seek);
-        //mPlotPreview.setPosSeek(posCallbackSeek);
-
         Button clear = (Button)rootView.findViewById(R.id.clear_button);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,9 +99,19 @@ public class TestCV_Fragment extends Fragment {
         runButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Standalone)getActivity()).runApp();
+                ((LauncherAct)getActivity()).runApp();
             }
         });
+
+        Button sendButton = (Button)rootView.findViewById(R.id.sendMessage);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClientWrapper.getInstance().sendMessage("hello");
+            }
+        });
+
+
 
         // Inflate the layout for this fragment
         return rootView;
@@ -186,7 +195,7 @@ public class TestCV_Fragment extends Fragment {
             GlobalController app = (GlobalController)getActivity().getApplication();
             if (isChecked) {
                 UVCReciver.Settings settings = new UVCReciver.Settings();
-                app.getGlobalSettings().setUVCSettings(settings);
+                AllSettings.getInstance().setUVCSettings(settings);
                 PIService.getInstance().startUVC(settings,posCallback);
             } else {
                 PIService.getInstance().completeUVC();
