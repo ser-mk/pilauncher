@@ -1,7 +1,6 @@
-package sermk.pipi.game;
+package sermk.pipi.pilauncher;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import com.serenegiant.usb.UVCCamera;
 

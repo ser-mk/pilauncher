@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.pilauncher;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -6,11 +6,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import sermk.pipi.pilib.Pinterface;
 
 import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.USBMonitor;
@@ -62,7 +59,7 @@ public final class PIService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(TAG,"@@@ onStartCommand" + intent.toString() + String.valueOf(flags) + String.valueOf(startId));
+        //Log.v(TAG,"@@@ onStartCommand" + intent.toString() + String.valueOf(flags) + String.valueOf(startId));
         return super.onStartCommand(intent, flags, startId);
     }
 

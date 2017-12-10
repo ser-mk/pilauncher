@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.pilauncher;
 
 import android.support.annotation.Nullable;
 

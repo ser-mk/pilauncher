@@ -1,4 +1,4 @@
-package sermk.pipi.game.GUIFragment;
+package sermk.pipi.pilauncher.GUIFragment;
 
 import android.content.Context;
 import android.util.AttributeSet;

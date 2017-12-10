@@ -1,4 +1,4 @@
-package sermk.pipi.game.GUIFragment;
+package sermk.pipi.pilauncher.GUIFragment;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -19,14 +19,12 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import sermk.pipi.game.CVResolver;
-import sermk.pipi.game.GUIFragment.CVMaskView;
-import sermk.pipi.game.GUIFragment.SeekText;
-import sermk.pipi.game.GlobalController;
-import sermk.pipi.game.PIService;
-import sermk.pipi.game.R;
-import sermk.pipi.game.Standalone;
-import sermk.pipi.game.UVCReciver;
+import sermk.pipi.pilauncher.CVResolver;
+import sermk.pipi.pilauncher.GlobalController;
+import sermk.pipi.pilauncher.PIService;
+import sermk.pipi.pilauncher.R;
+import sermk.pipi.pilauncher.Standalone;
+import sermk.pipi.pilauncher.UVCReciver;
 
 
 /**

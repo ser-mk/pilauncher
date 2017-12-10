@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.pilauncher;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;

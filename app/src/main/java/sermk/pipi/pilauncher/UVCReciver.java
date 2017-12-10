@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.pilauncher;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;

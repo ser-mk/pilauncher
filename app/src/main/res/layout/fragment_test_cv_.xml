@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:gravity="top|left"
     android:orientation="vertical"
-    tools:context="sermk.pipi.game.GUIFragment.TestCV_Fragment">
+    tools:context="sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <sermk.pipi.game.GUIFragment.SeekText
+        <sermk.pipi.pilauncher.GUIFragment.SeekText
             android:id="@+id/hdiag_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <sermk.pipi.game.GUIFragment.SeekText
+        <sermk.pipi.pilauncher.GUIFragment.SeekText
             android:id="@+id/alpha_seek"
             android:layout_width="@dimen/capture_wight"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <sermk.pipi.game.GUIFragment.CVMaskView
+        <sermk.pipi.pilauncher.GUIFragment.CVMaskView
             android:id="@+id/capture_view"
             android:layout_width="@dimen/capture_wight"
             android:layout_height="match_parent"

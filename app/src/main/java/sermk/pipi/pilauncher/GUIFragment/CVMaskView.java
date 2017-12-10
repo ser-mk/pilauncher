@@ -1,4 +1,4 @@
-package sermk.pipi.game.GUIFragment;
+package sermk.pipi.pilauncher.GUIFragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,8 +12,7 @@ import android.view.MotionEvent;
 
 import com.orhanobut.logger.Logger;
 
-import sermk.pipi.game.CVResolver;
-import sermk.pipi.game.GUIFragment.CVMaskResolver;
+import sermk.pipi.pilauncher.CVResolver;
 
 /**
  * Created by echormonov on 01.11.17.

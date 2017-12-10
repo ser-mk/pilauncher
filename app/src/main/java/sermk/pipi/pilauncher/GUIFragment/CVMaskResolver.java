@@ -1,4 +1,4 @@
-package sermk.pipi.game.GUIFragment;
+package sermk.pipi.pilauncher.GUIFragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +17,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
-import sermk.pipi.game.CVResolver;
+import sermk.pipi.pilauncher.CVResolver;
 
 /**
  * Created by ser on 02.11.17.

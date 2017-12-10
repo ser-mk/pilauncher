@@ -1,4 +1,4 @@
-package sermk.pipi.game;
+package sermk.pipi.pilauncher;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.orhanobut.logger.Logger;
 
-import sermk.pipi.game.GUIFragment.TestCV_Fragment;
+import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
 
 
 public class Standalone extends Activity {

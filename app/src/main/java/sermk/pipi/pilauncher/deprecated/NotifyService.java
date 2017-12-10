@@ -1,4 +1,4 @@
-package sermk.pipi.game.deprecated;
+package sermk.pipi.pilauncher.deprecated;
 
 
 import android.app.Notification;
@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
-import sermk.pipi.game.R;
-import sermk.pipi.game.Standalone;
+import sermk.pipi.pilauncher.R;
+import sermk.pipi.pilauncher.Standalone;
 
 /**
  * Created by echormonov on 18.11.17.
