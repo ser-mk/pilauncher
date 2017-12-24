@@ -107,11 +107,9 @@ public class TestCV_Fragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClientWrapper.getInstance().sendMessage("hello");
+                ClientWrapper.getInstance().sendMessage("from pipi","empty", null);
             }
         });
-
-
 
         // Inflate the layout for this fragment
         return rootView;

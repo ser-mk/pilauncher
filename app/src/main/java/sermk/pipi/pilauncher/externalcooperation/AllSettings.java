@@ -37,7 +37,7 @@ public final class AllSettings {
     static String NAME_MC_PACKAGE(){
         return "sermk.pipi.mclient";
     }
-    static String NAME_MCS_SERVICE(){return "sermk.pipi.mclient.MCSService";}
+    static String NAME_MCS_SERVICE(){return "sermk.pipi.mlib.MTransmitterService";}
     static String NAME_STRING_FIELD(){ return "STRING_FIELD";}
 
 }

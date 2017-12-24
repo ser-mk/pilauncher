@@ -2,7 +2,9 @@ package sermk.pipi.pilauncher.externalcooperation;
 
 import android.app.Activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 /**
@@ -12,7 +14,7 @@ import android.util.Log;
 final public class ClientWrapper {
     Activity act = null;
     private final String TAG = "ClientWrapper";
-    public void setInstance(final Activity act){ this.act = act; }
+    public void setContext(final Activity act){ this.act = act; }
 
     private static ClientWrapper instance = null;
 
@@ -29,11 +31,20 @@ final public class ClientWrapper {
         return intent;
     }
 
-    public boolean sendMessage(final String message){
+    public boolean sendMessage(@NonNull final String subject, @NonNull final String data,
+                                                      final byte[] attached_data){
         Intent intent = tempIntent();
-        intent.putExtra(AllSettings.NAME_STRING_FIELD(),message);
-        this.act.startService(intent);
-        Log.v(TAG, "sending");
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, data);
+        //intent.putExtra(Intent.EXTRA_STREAM, new String[0]);
+
+        final ComponentName c = this.act.startService(intent);
+        if(c == null){
+            Log.w(TAG, "sent FAILED!");
+            return false;
+        } else {
+            Log.v(TAG, "sent succes");
+        }
         return true;
     }
 }
