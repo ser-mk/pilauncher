@@ -73,15 +73,7 @@ public final class PIService extends Service {
         Logger.v("unset pos callback " + res);
     }
 
-    final PInterface_Impl pInterface_binder = new PInterface_Impl();
-    /*
-    final Pinterface.Stub pInterface_binder = new Pinterface.Stub() {
-        @Override
-        public int getPosition() throws RemoteException {
-            return 0;
-        }
-    };
-*/
+
     @Override
     public IBinder onBind(final Intent intent) {
         Log.d(TAG, "----onBind:" + intent);
