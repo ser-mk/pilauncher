@@ -62,12 +62,11 @@ public class TestCV_Fragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_test_cv_, container, false);
 
-        mPreviewButton = (ToggleButton)rootView.findViewById(R.id.start_test);
+        ((ToggleButton)rootView.findViewById(R.id.start_test))
+            .setOnCheckedChangeListener(runAndStopUVC_listener);
+
         mLearnButton = (ToggleButton)rootView.findViewById(R.id.learn_enable);
         mDrawButton = (ToggleButton)rootView.findViewById(R.id.draw_disable);
-        setToogleButton(false);
-
-        mPreviewButton.setOnCheckedChangeListener(mOnCheckedChangeListener);
 
         mPlotPreview = (CVMaskView)rootView.findViewById(R.id.capture_view);
 /**/
@@ -81,8 +80,8 @@ public class TestCV_Fragment extends Fragment {
 
         hDiagSeek.setTv(text_hdiag_seek);
 
-        Button clear = (Button)rootView.findViewById(R.id.clear_button);
-        clear.setOnClickListener(new View.OnClickListener() {
+        ((Button)rootView.findViewById(R.id.clear_button))
+            .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPlotPreview.clearMask();
@@ -95,16 +94,23 @@ public class TestCV_Fragment extends Fragment {
         mFpsCounter = new FpsCounter();
         mFpsCounter.reset();
 
-        Button runButton = (Button)rootView.findViewById(R.id.start_app);
-        runButton.setOnClickListener(new View.OnClickListener() {
+        ((Button)rootView.findViewById(R.id.start_app)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((LauncherAct)getActivity()).runApp();
             }
         });
 
-        Button sendButton = (Button)rootView.findViewById(R.id.sendMessage);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        ((Button)rootView.findViewById(R.id.save_mask)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AllSettings.getInstance().saveMaskOptions(
+                    mPlotPreview.getRectMaskByte(),
+                    mPlotPreview.getByteArrayMask());
+            }
+        });
+
+        ((Button)rootView.findViewById(R.id.sendMessage)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClientWrapper.getInstance().sendMessage("from pipi","empty", null);
@@ -165,28 +171,12 @@ public class TestCV_Fragment extends Fragment {
         super.onStop();
     }
 
-    private void setToogleButton(final boolean onoff) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mPreviewButton.setOnCheckedChangeListener(null);
-                mLearnButton.setOnCheckedChangeListener(null);
-                try {
-                    mPreviewButton.setChecked(onoff);
-                    mLearnButton.setChecked(onoff);
-                } catch (Exception e) {
-                    Log.w(TAG, e);
-                }
-            }
-        });
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
     }
 
-    private final CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    private final CompoundButton.OnCheckedChangeListener runAndStopUVC_listener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
             Log.v(TAG, "Test CV enable " + isChecked);

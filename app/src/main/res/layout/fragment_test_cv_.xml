@@ -67,13 +67,20 @@
             <ToggleButton
                 android:id="@+id/start_test"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:checked="false"/>
 
             <Button
                 android:id="@+id/clear_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Clear Mask" />
+
+            <Button
+                android:id="@+id/save_mask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save Mask" />
 
             <TextView
                 android:id="@+id/cpu_view"
@@ -106,6 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Toggle_Draw"
+                android:checked="false"
                 android:textOff="Draw"
                 android:textOn="No Draw"/>
 
