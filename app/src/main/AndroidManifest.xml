@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sermk.pipi.pilauncher">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:configChanges="orientation"
-        android:screenOrientation="portrait">
+        android:screenOrientation="portrait"
+        android:largeHeap="true"
+        android:persistent="true">
         <activity
             android:name="sermk.pipi.pilauncher.LauncherAct"
             android:label="@string/app_name"
