@@ -62,7 +62,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         return JNI_ERR;
     }
 
-    const char JAVA_CLASS[] = "sermk/pipi/game/CVResolver";
+    const char JAVA_CLASS[] = "sermk/pipi/pilauncher/CVResolver";
 
     jclass cls = env->FindClass(JAVA_CLASS);
     if (cls == NULL)
