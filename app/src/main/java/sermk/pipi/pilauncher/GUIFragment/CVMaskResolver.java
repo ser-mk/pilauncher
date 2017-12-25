@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sermk.pipi.pilauncher.CVResolver;
+import sermk.pipi.pilauncher.PiUtils;
 
 /**
  * Created by ser on 02.11.17.
@@ -25,16 +26,33 @@ import sermk.pipi.pilauncher.CVResolver;
 
 public class CVMaskResolver extends ImageView {
 
-    protected Rect rectMaskByte = null;
-    protected Mat roiMask = null;
+    protected Rect rectMaskByte;
+    protected Mat roiMask;
 
     public CVMaskResolver(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        clearMask();
     }
 
     private Mat previewRGBMat;
     protected Bitmap previewBitmap;
     boolean changedPreviewMat = false;
+
+    public PiUtils.RectMask getRectMaskByte() {
+        PiUtils.RectMask ret = new PiUtils.RectMask();
+        ret.x = rectMaskByte.x;
+        ret.y = rectMaskByte.y;
+        ret.width = rectMaskByte.width;
+        ret.height = rectMaskByte.height;
+        return ret;
+    }
+
+    public byte[] getByteArrayMask() {
+        byte[] return_buff = new byte[(int) (roiMask.total() *
+            roiMask.channels())];
+        roiMask.get(0, 0, return_buff);
+        return return_buff;
+    }
 
     @Override
     public void onSizeChanged (int w, int h, int oldw, int oldh){
@@ -47,20 +65,20 @@ public class CVMaskResolver extends ImageView {
     }
 
     protected void clearMask(){
-        rectMaskByte = null;
+        rectMaskByte = new Rect(0,0,0,0);
         if(roiMask != null) {
             roiMask.release();
-            roiMask = null;
         }
+        roiMask = new Mat(0,0,0);
     }
     public void cvCallback(final int position, final CVResolver cvr){
         if(changedPreviewMat && (previewRGBMat != null)){
             changedPreviewMat = false;
             cvr.setPlotOption(previewRGBMat.getNativeObjAddr());
         }
-        if(roiMask != null) {
-            cvr.setRectOfMask(rectMaskByte.x, rectMaskByte.y, roiMask.getNativeObjAddr());
-        }
+
+        cvr.setRectOfMask(rectMaskByte.x, rectMaskByte.y, roiMask.getNativeObjAddr());
+
     }
     protected Bitmap getPreviewBitmap(){
         Utils.matToBitmap(previewRGBMat, previewBitmap);
@@ -101,6 +119,7 @@ public class CVMaskResolver extends ImageView {
         bw.setTo(Scalar.all(0));
         Imgproc.drawContours(bw,contours,maxValIdx,Scalar.all(255), -1);
         Mat submatRect = bw.submat(rect);
+        //may be danger
         roiMask = new Mat(submatRect.size(), CvType.CV_8UC1);
         submatRect.copyTo(roiMask);
 
