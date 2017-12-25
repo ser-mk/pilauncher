@@ -54,6 +54,16 @@
                 <action android:name=".PIService"></action>
             </intent-filter>
         </service>
+
+        <receiver
+            android:name=".externalcooperation.PiReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="@string/ACTION_RECIVER_SAVE_SETTINGS" />
+                <action android:name="@string/ACTION_RECIVER_SAVE_SETTINGS" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

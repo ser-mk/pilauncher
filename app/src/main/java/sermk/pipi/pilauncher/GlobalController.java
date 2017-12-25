@@ -7,6 +7,9 @@ import com.orhanobut.logger.Logger;
 
 import org.opencv.android.OpenCVLoader;
 
+import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+import sermk.pipi.pilauncher.externalcooperation.PiReceiver;
+
 
 /**
  * Created by echormonov on 30.10.17.
@@ -22,6 +25,8 @@ public final class GlobalController extends Application {
     public void onCreate() {
         super.onCreate();
         LogOptions.SetupLog();
+        PiReceiver.init(this);
+        AllSettings.getInstance().setInstance(this);
         // Required initialization logic here!
     }
 

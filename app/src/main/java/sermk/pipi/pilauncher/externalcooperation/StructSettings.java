@@ -1,8 +1,11 @@
 package sermk.pipi.pilauncher.externalcooperation;
 
+import sermk.pipi.pilauncher.PiUtils;
+
 /**
  * Created by echormonov on 24.12.17.
  */
 
-public class StructSettings {
+class StructSettings {
+    public PiUtils.RectMask rectMask;
 }

@@ -5,4 +5,8 @@ package sermk.pipi.pilauncher;
  */
 
 public class PiUtils {
+
+    static public class RectMask{
+        public int x, y, width, height;
+    }
 }

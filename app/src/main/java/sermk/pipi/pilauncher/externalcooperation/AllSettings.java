@@ -1,9 +1,13 @@
 package sermk.pipi.pilauncher.externalcooperation;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.serenegiant.usb.UVCCamera;
 
+import sermk.pipi.pilauncher.PiUtils;
 import sermk.pipi.pilauncher.UVCReciver;
 
 /**
@@ -12,9 +16,19 @@ import sermk.pipi.pilauncher.UVCReciver;
 
 public final class AllSettings {
 
-    private Context gContext;
+    final private String TAG = this.getClass().getName();
 
-    void setInstance(final Context context){ this.gContext = context; }
+    private Context gContext;
+    private StructSettings currentSettings = new StructSettings();
+    private byte[] bytesMask = new byte[0];
+
+    static String NAME_MC_PACKAGE(){return "sermk.pipi.mclient";}
+    static String NAME_MCS_SERVICE(){return "sermk.pipi.mlib.MTransmitterService";}
+    static String NAME_STRING_FIELD(){ return "STRING_FIELD";}
+
+    static private final String CURRENT_SETTINGS_NAME_FIELD = "last_all_settings";
+
+    public void setInstance(final Context context){ this.gContext = context; }
 
     private static AllSettings instance = null;
 
@@ -34,10 +48,32 @@ public final class AllSettings {
         settings.bandwightFactor = 1.0f;
     }
 
-    static String NAME_MC_PACKAGE(){
-        return "sermk.pipi.mclient";
+    public void setCurrentSettings( String json, byte[] bytesMask) {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        StructSettings tempSettings =  gson.fromJson(json, StructSettings.class);
+        if(tempSettings != null ){
+            this.currentSettings = tempSettings;
+        }
+        if (bytesMask != null){
+            this.bytesMask = bytesMask;
+        }
     }
-    static String NAME_MCS_SERVICE(){return "sermk.pipi.mlib.MTransmitterService";}
-    static String NAME_STRING_FIELD(){ return "STRING_FIELD";}
+
+    private String jsonCurrentSettings(){
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        final String json = gson.toJson(currentSettings);
+        return json;
+    }
+
+
+    public boolean saveMask(final PiUtils.RectMask rm, final byte[] byteMask){
+        currentSettings.rectMask = rm;
+        final String json = jsonCurrentSettings();
+        Log.v(TAG, "json = " + json);
+        PiReceiver.sendBroadCastData(gContext, PiReceiver.ACTION_RECIVER_SET_SETTINGS, json, byteMask);
+        return true;
+    }
 
 }

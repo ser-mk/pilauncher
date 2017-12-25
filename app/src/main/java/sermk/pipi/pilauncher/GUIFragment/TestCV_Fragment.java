@@ -104,7 +104,7 @@ public class TestCV_Fragment extends Fragment {
         ((Button)rootView.findViewById(R.id.save_mask)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AllSettings.getInstance().saveMaskOptions(
+                AllSettings.getInstance().saveMask(
                     mPlotPreview.getRectMaskByte(),
                     mPlotPreview.getByteArrayMask());
             }
