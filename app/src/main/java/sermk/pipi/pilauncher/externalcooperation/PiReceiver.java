@@ -53,14 +53,14 @@ public class PiReceiver extends BroadcastReceiver {
             Log.w(TAG, "attached data absent!");
         }
 
-        doAction(action, content, bytesArray);
+        doAction(context, content, bytesArray, action);
     }
 
-    private boolean doAction(@NonNull final String action, final String content, final byte[] bytesArray){
+    private boolean doAction(Context context, final String content, final byte[] bytesArray, @NonNull final String action){
         if(action.equals(ACTION_RECIVER_SET_SETTINGS)){
             return setSettings(content, bytesArray);
         } else if (action.equals(ACTION_RECIVER_SAVE_SETTINGS)){
-            return saveSettings();
+            return saveSettings(context);
         }
 
         Log.w(TAG, "undefined action!");
@@ -73,7 +73,8 @@ public class PiReceiver extends BroadcastReceiver {
         return true;
     }
 
-    private boolean saveSettings(){
+    private boolean saveSettings(Context context){
+        AllSettings.getInstance().saveCurrentSettings(context);
         return true;
     }
 
