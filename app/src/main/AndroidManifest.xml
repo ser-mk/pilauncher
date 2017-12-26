@@ -6,24 +6,25 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <application
+        android:name=".GlobalController"
         android:allowBackup="true"
+        android:configChanges="orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name="sermk.pipi.pilauncher.GlobalController"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:configChanges="orientation"
-        android:screenOrientation="portrait"
         android:largeHeap="true"
-        android:persistent="true">
+        android:persistent="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <activity
-            android:name="sermk.pipi.pilauncher.LauncherAct"
+            android:name=".LauncherAct"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -32,6 +33,7 @@
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
             </intent-filter>
+
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
@@ -47,11 +49,11 @@
         </service>
         -->
         <service
-            android:name="sermk.pipi.pilauncher.PIService"
+            android:name=".PIService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name=".PIService"></action>
+                <action android:name=".PIService" />
             </intent-filter>
         </service>
 
@@ -62,6 +64,14 @@
             <intent-filter>
                 <action android:name="@string/ACTION_RECIVER_SAVE_SETTINGS" />
                 <action android:name="@string/ACTION_RECIVER_SAVE_SETTINGS" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".externalcooperation.PingReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="PING" />
             </intent-filter>
         </receiver>
     </application>
