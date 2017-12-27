@@ -8,11 +8,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/EXT/PiLib" />
             <option value="$PROJECT_DIR$/UVC/libuvccamera" />
             <option value="$PROJECT_DIR$/UVC/openCVLibrary330" />
             <option value="$PROJECT_DIR$/UVC/usbCameraCommon" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/pilib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

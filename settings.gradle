@@ -1,4 +1,5 @@
-include ':app', ':libuvccamera', ':usbCameraCommon', ':openCVLibrary330', ':pilib'
+include ':app', ':libuvccamera', ':usbCameraCommon', ':openCVLibrary330', ':PiLib'
 project(':libuvccamera').projectDir = new File('UVC/libuvccamera')
 project(':usbCameraCommon').projectDir = new File('UVC/usbCameraCommon')
 project(':openCVLibrary330').projectDir = new File('UVC/openCVLibrary330')
+project(':PiLib').projectDir = new File('EXT/PiLib')

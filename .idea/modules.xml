@@ -3,10 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PiLauncher.iml" filepath="$PROJECT_DIR$/PiLauncher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EXT/PiLib/PiLib.iml" filepath="$PROJECT_DIR$/EXT/PiLib/PiLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/UVC/libuvccamera/libuvccamera.iml" filepath="$PROJECT_DIR$/UVC/libuvccamera/libuvccamera.iml" />
       <module fileurl="file://$PROJECT_DIR$/UVC/openCVLibrary330/openCVLibrary330.iml" filepath="$PROJECT_DIR$/UVC/openCVLibrary330/openCVLibrary330.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pilib/pilib.iml" filepath="$PROJECT_DIR$/pilib/pilib.iml" />
       <module fileurl="file://$PROJECT_DIR$/UVC/usbCameraCommon/usbCameraCommon.iml" filepath="$PROJECT_DIR$/UVC/usbCameraCommon/usbCameraCommon.iml" />
     </modules>
   </component>

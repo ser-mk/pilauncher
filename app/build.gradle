@@ -5,7 +5,7 @@ android {
     buildToolsVersion versionBuildTool
 
     defaultConfig {
-        applicationId "sermk.pipi.game"
+        applicationId "sermk.pipi.pilauncher"
         minSdkVersion versionMinSdkTarget
         targetSdkVersion versionTarget
         versionCode 1
@@ -60,5 +60,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     //compile 'com.jakewharton.timber:timber:3.1.0'
     //compile 'org.jetbrains:annotations-java5:15.0'
-    implementation project(':pilib')
+    implementation project(':PiLib')
 }
