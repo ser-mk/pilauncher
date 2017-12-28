@@ -121,13 +121,13 @@
                 android:id="@+id/start_app"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="run" />
+                android:text="run game" />
 
             <Button
                 android:id="@+id/sendMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sendMessage" />
+                android:text="send Message" />
 
         </LinearLayout>
     </LinearLayout>

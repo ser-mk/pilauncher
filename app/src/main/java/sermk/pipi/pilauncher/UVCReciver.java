@@ -106,6 +106,10 @@ public class UVCReciver extends Thread {
     }
 
     public boolean setCallBackPositionInRun(CVResolver.ICallbackPosition callBackPosition) {
+        if(inThreadResolver == null){
+            Logger.w("UVC not RAN!");
+            return false;
+        }
         final CVResolver cvr = inThreadResolver.get();
         if(cvr==null){
             Logger.w("cvresolver not exist!");

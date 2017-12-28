@@ -13,6 +13,7 @@ import com.orhanobut.logger.Logger;
 
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
 import sermk.pipi.pilauncher.externalcooperation.ClientWrapper;
+import sermk.pipi.pilib.GameRunner;
 
 
 public class LauncherAct extends Activity {
@@ -56,15 +57,14 @@ public class LauncherAct extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Logger.v(
-            String.valueOf(requestCode) + " " + String.valueOf(resultCode)
-        );
-        //bindPIService();
-        super.onActivityResult(requestCode, resultCode, data);
+        GameRunner.onGameResult(requestCode,resultCode,data);
     }
 
-    public boolean runApp(){
-        //unbindService(mPIConnection);
+    public boolean runApp() {
+        return GameRunner.run(this,"sermk.pipi.testbind");
+    }
+
+    public boolean runApp_old(){
         final String packageName = "sermk.pipi.ra";
         Logger.v(packageName);
         PackageManager manager = getPackageManager();

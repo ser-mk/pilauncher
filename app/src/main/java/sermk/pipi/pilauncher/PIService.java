@@ -12,6 +12,8 @@ import android.util.Log;
 import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.USBMonitor;
 
+import sermk.pipi.pilib.Pinterface;
+
 /**
  * Created by echormonov on 20.11.17.
  */
@@ -73,6 +75,8 @@ public final class PIService extends Service {
         Logger.v("unset pos callback " + res);
     }
 
+    private final PInterface_Impl mBinder = new PInterface_Impl();
+
 
     @Override
     public IBinder onBind(final Intent intent) {
@@ -81,8 +85,8 @@ public final class PIService extends Service {
         setPositionHandler();
 
         //return mMessenger.getBinder();
-        return pih.getMessenger().getBinder();
-        //return pInterface_binder;
+        //return pih.getMessenger().getBinder();
+        return mBinder;
     }
 
     @Override
