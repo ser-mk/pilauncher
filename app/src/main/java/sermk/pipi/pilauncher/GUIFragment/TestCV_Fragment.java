@@ -181,9 +181,7 @@ public class TestCV_Fragment extends Fragment {
             Log.v(TAG, "Test CV enable " + isChecked);
             GlobalController app = (GlobalController)getActivity().getApplication();
             if (isChecked) {
-                UVCReciver.Settings settings = new UVCReciver.Settings();
-                AllSettings.getInstance().setUVCSettings(settings);
-                PIService.getInstance().startUVC(settings,posCallback);
+                PIService.getInstance().startUVC(posCallback);
             } else {
                 PIService.getInstance().completeUVC();
             }

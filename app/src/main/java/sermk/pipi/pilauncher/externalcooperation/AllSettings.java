@@ -8,7 +8,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.serenegiant.usb.UVCCamera;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import sermk.pipi.pilauncher.PiUtils;
 import sermk.pipi.pilauncher.UVCReciver;
@@ -21,7 +24,6 @@ public final class AllSettings {
 
     final private String TAG = this.getClass().getName();
 
-    private Context gContext;
     private StructSettings currentSettings = new StructSettings();
     private byte[] bytesMask = new byte[0];
 
@@ -35,8 +37,8 @@ public final class AllSettings {
     private SharedPreferences sharedPreferences;
 
     public void setInstance(final Context context){
-        this.gContext = context;
         sharedPreferences = context.getSharedPreferences("NAME_FILE_ALL_SETTINGS",Context.MODE_PRIVATE);
+        loadSettings(context);
     }
 
     private static AllSettings instance = null;
@@ -48,25 +50,44 @@ public final class AllSettings {
         return instance;
     }
 
-    public void setUVCSettings(UVCReciver.Settings settings){
-        settings.width = UVCCamera.DEFAULT_PREVIEW_WIDTH;
-        settings.height = UVCCamera.DEFAULT_PREVIEW_HEIGHT;;
-        settings.minFps = 25;
-        settings.maxFps = 30;
-        settings.frameformat = UVCCamera.FRAME_FORMAT_YUYV;
-        settings.bandwightFactor = 1.0f;
+    public StructSettings getCurrentSettings(){
+        return  currentSettings;
     }
 
-    public void setCurrentSettings( String json, byte[] bytesMask) {
+    public boolean setCurrentSettings( String json, byte[] bytesMask) {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         StructSettings tempSettings =  gson.fromJson(json, StructSettings.class);
-        if(tempSettings != null ){
-            this.currentSettings = tempSettings;
-        }
         if (bytesMask != null){
             this.bytesMask = bytesMask;
+        } else {
+            Log.e(TAG, "setted byte mask not exist!");
+            return false;
         }
+        if(tempSettings != null ){ // todo check correct subclass!
+            this.currentSettings = tempSettings;
+        } else {
+            Log.e(TAG, "setted Struct Settings not exist!");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean loadSettings(final Context context){
+        final String json = sharedPreferences.getString(NAME_FIELD_STRUCT_SETTINGS, "");
+        Log.i(TAG, "load settings : " + json );
+        byte[] bytes = new byte[0];
+        try(FileInputStream inputStream = context.openFileInput(NAME_FILE_MASK)){
+            bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return setCurrentSettings(json, bytes);
     }
 
     public void saveCurrentSettings(Context context){
@@ -93,8 +114,8 @@ public final class AllSettings {
         currentSettings.rectMask = rm;
         final String json = jsonCurrentSettings();
         Log.v(TAG, "json = " + json);
-        PiReceiver.sendBroadCastData(gContext, PiReceiver.ACTION_RECIVER_SET_SETTINGS, json, byteMask);
-        PiReceiver.sendBroadCastData(gContext, PiReceiver.ACTION_RECIVER_SAVE_SETTINGS, null, null);
+        PiReceiver.sendBroadCastData(context, PiReceiver.ACTION_RECIVER_SET_SETTINGS, json, byteMask);
+        PiReceiver.sendBroadCastData(context, PiReceiver.ACTION_RECIVER_SAVE_SETTINGS, null, null);
         return true;
     }
 

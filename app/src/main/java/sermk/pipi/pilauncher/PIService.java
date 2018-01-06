@@ -39,7 +39,7 @@ public final class PIService extends Service {
         super.onCreate();
         Log.d(TAG, "onCreate:");
         if (mUVCReciver == null) {
-            mUVCReciver = new UVCReciver(getApplicationContext());
+            mUVCReciver = new UVCReciver(this);
         }
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         showNotification("PIService start!");

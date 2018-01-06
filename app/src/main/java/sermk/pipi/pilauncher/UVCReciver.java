@@ -3,6 +3,7 @@ package sermk.pipi.pilauncher;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Surface;
 import android.widget.Toast;
 
@@ -17,26 +18,27 @@ import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+
 /**
  * Created by ser on 31.10.17.
  */
 
 public class UVCReciver extends Thread {
-    private final String TAG = "UVCReciver";
+    private final String TAG = this.getName();
 
-    private Context gContext;
+    //private Context gContext;
 
-    private final Object mSync = new Object();
     private final Object mSyncExit = new Object();
 
 
     static public class Settings {
-        public int width = 0; //.getCaptureWitgh();
-        public int height = 0; //.getCaptureHeight();
-        public int minFps = 0; //.getMinFps();
-        public int maxFps = 0; //.getMaxFps();
-        public int frameformat = 0; //.getFrameFormat();
-        public float bandwightFactor = 0; //.getBandwightFactor();
+        public int width = UVCCamera.DEFAULT_PREVIEW_WIDTH;
+        public int height = UVCCamera.DEFAULT_PREVIEW_HEIGHT;
+        public int minFps = 25;
+        public int maxFps = 30;
+        public int frameformat = UVCCamera.FRAME_FORMAT_YUYV;
+        public float bandwightFactor = 1.0f;
     }
 
     Settings uvcSettings;
@@ -55,26 +57,19 @@ public class UVCReciver extends Thread {
         if (mUSBMonitor != null) {
             mUSBMonitor.register();
         }
-        gContext = context;
-    }
-
-    public void deInit(){
-        if (mUSBMonitor != null) {
-            mUSBMonitor.unregister();
-            mUSBMonitor = null;
-        }
+        //gContext = context;
     }
 
     private final OnDeviceConnectListener mOnDeviceConnectListener = new OnDeviceConnectListener() {
     @Override
     public void onAttach(final UsbDevice device) {
-        Toast.makeText(gContext, "USB_DEVICE_ATTACHED", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(gContext, "USB_DEVICE_ATTACHED", Toast.LENGTH_SHORT).show();
         Logger.v("onAttach");
     }
 
     @Override
     public void onConnect(final UsbDevice device, final UsbControlBlock ctrlBlock, final boolean createNew) {
-        Toast.makeText(gContext, "USB_DEVICE_ONCONNECT", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(gContext, "USB_DEVICE_ONCONNECT", Toast.LENGTH_SHORT).show();
         Logger.v("onConnect");
     }
 
@@ -84,7 +79,7 @@ public class UVCReciver extends Thread {
     }
     @Override
     public void onDettach(final UsbDevice device) {
-        Toast.makeText(gContext, "USB_DEVICE_DETACHED", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(gContext, "USB_DEVICE_DETACHED", Toast.LENGTH_SHORT).show();
         Logger.v("onDettach");
         synchronized(mSyncExit) {
             mSyncExit.notifyAll();
@@ -98,9 +93,8 @@ public class UVCReciver extends Thread {
 
     };
 
-    public void startCapture(final Settings settings,@Nullable final CVResolver.ICallbackPosition callback){
+    public void startCapture(@Nullable final CVResolver.ICallbackPosition callback){
         mCallBackPosition = callback;
-        uvcSettings = settings;
         this.start();
         Logger.v("start UVC thread");
     }
@@ -118,7 +112,6 @@ public class UVCReciver extends Thread {
 
         cvr.setCallback(callBackPosition);
         return true;
-        //this.mCallBackPosition = mCallBackPosition;
     }
 
     void exitRun(){
@@ -130,11 +123,11 @@ public class UVCReciver extends Thread {
 
     @Override
     public void run() {
-        openUVC(uvcSettings);
+        openUVC();
         Logger.v("exit run");
     }
 
-    private boolean openUVC(final Settings settings){
+    private boolean openUVC(){
         if (!mUSBMonitor.isRegistered())
             return false;
         final List<UsbDevice> list = mUSBMonitor.getDeviceList();
@@ -156,43 +149,11 @@ public class UVCReciver extends Thread {
 
         final UsbControlBlock ublock = mUSBMonitor.openDevice(device);
         final UVCCamera camera = new UVCCamera();
-        //todo: try - catch
+        //todo: try - catch - no!
         camera.open(ublock);
-        camera.setStatusCallback(new IStatusCallback() {
-            @Override
-            public void onStatus(final int statusClass, final int event, final int selector,
-                                 final int statusAttribute, final ByteBuffer data) {
-                Toast.makeText(gContext, "onStatus(statusClass=" + statusClass
-                                + "; " +
-                                "event=" + event + "; " +
-                                "selector=" + selector + "; " +
-                                "statusAttribute=" + statusAttribute + "; " +
-                                "data=...)", Toast.LENGTH_SHORT).show();
-                Logger.v("onStatus(statusClass=" + statusClass
-                        + "; " +
-                        "event=" + event + "; " +
-                        "selector=" + selector + "; " +
-                        "statusAttribute=" + statusAttribute + "; " +
-                        "data=...)");
-                    }
-                });
-
-        if (settings == null) return false;
-
-        try {
-            camera.setPreviewDisplay((Surface)null);
-            camera.setPreviewSize(settings.width,settings.height, settings.minFps,
-                    settings.maxFps, settings.frameformat, settings.bandwightFactor);
-        } catch (final IllegalArgumentException e1) {
-            camera.destroy();
-            Logger.e(e1, "camera IllegalArgumentException!");
-            return false;
-        } catch (Exception e) {
-            Logger.e(e,"camera common exaption!");
-            camera.destroy();
+        if(!initCamera(camera)){
             return false;
         }
-
         final CVResolver cvr = new CVResolver(mCallBackPosition);
         inThreadResolver = new WeakReference<CVResolver>(cvr);
 
@@ -219,14 +180,42 @@ public class UVCReciver extends Thread {
         return true;
     }
 
-    CVResolver.ICallbackPosition mCallBackPosition = null;
+    boolean initCamera(final UVCCamera camera){
+        camera.setStatusCallback(new IStatusCallback() {
+            @Override
+            public void onStatus(final int statusClass, final int event, final int selector,
+                                 final int statusAttribute, final ByteBuffer data) {
+                final String status = "onStatus( statusClass= " + statusClass + "; event= " + event
+                    + "; selector= " + selector + "; statusAttribute= " + statusAttribute;
+                Log.v(TAG, status); }
+        });
 
-    final CVResolver.ICallbackPosition defaultCallBackPosition = new CVResolver.ICallbackPosition() {
+        final Settings settings = AllSettings.getInstance().getCurrentSettings().uvcSettings;
+
+        try {
+            camera.setPreviewDisplay((Surface)null);
+            camera.setPreviewSize(settings.width,settings.height, settings.minFps,
+                settings.maxFps, settings.frameformat, settings.bandwightFactor);
+        } catch (final IllegalArgumentException e1) {
+            camera.destroy();
+            Logger.e(e1, "camera IllegalArgumentException!");
+            return false;
+        } catch (Exception e) {
+            Logger.e(e,"camera common exaption!");
+            camera.destroy();
+            return false;
+        }
+        return true;
+    }
+
+    private final CVResolver.ICallbackPosition defaultCallBackPosition = new CVResolver.ICallbackPosition() {
         @Override
         public boolean callbackPosition(final int pos, final CVResolver cvr ) {
-            Logger.v("!");
+            Logger.v("defaultCallBackPosition!");
             return true;
         }
     };
+
+    private CVResolver.ICallbackPosition mCallBackPosition = defaultCallBackPosition;
 
 }
