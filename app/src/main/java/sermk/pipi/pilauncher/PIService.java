@@ -28,7 +28,6 @@ public final class PIService extends Service {
     private NotificationManager mNotificationManager;
 
     static private PIService single = null;
-    private PiHandler pih = null;
 
     static public PIService getInstance(){
         return single;
@@ -44,7 +43,6 @@ public final class PIService extends Service {
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         showNotification("PIService start!");
         single = this;
-        pih = new PiHandler();
     }
 
     @Override
@@ -66,11 +64,11 @@ public final class PIService extends Service {
     }
 
     private void setPositionHandler(){
-        final boolean res = mUVCReciver.setCallBackPositionInRun(pih);
+        final boolean res = mUVCReciver.setCallBackPositionInRun(mBinder);
         Logger.v("set pos callback " + res);
     }
 
-    private void unSetPositionHandler(){
+    private void unSetPositionHandler(){//todo may be not use?
         final boolean res = mUVCReciver.setCallBackPositionInRun(null);
         Logger.v("unset pos callback " + res);
     }
@@ -84,15 +82,13 @@ public final class PIService extends Service {
 
         setPositionHandler();
 
-        //return mMessenger.getBinder();
-        //return pih.getMessenger().getBinder();
         return mBinder;
     }
 
     @Override
     public void onRebind(final Intent intent) {
         Log.d(TAG, "onRebind:" + intent);
-        setPositionHandler();
+        setPositionHandler(); //todo may be not use?
     }
 
     @Override
@@ -120,9 +116,9 @@ public final class PIService extends Service {
         mNotificationManager.notify(NOTIFICATION, notification);
     }
 
-    public void startUVC(final UVCReciver.Settings settings, @Nullable final CVResolver.ICallbackPosition callback){
+    public void startUVC(@Nullable final CVResolver.ICallbackPosition callback){
         if(mUVCReciver != null)
-            mUVCReciver.startCapture(settings, callback);
+            mUVCReciver.startCapture(callback);
     }
 
     public void completeUVC(){
