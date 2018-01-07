@@ -124,10 +124,10 @@
                 android:text="run game" />
 
             <Button
-                android:id="@+id/sendMessage"
+                android:id="@+id/confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="send Message" />
+                android:text="confirm Settings" />
 
         </LinearLayout>
     </LinearLayout>

@@ -36,7 +36,6 @@ public class LauncherAct extends Activity {
 
         Logger.v("start services");
         startService(new Intent(this, PIService.class));
-        ClientWrapper.getInstance().setContext(this);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
             WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |

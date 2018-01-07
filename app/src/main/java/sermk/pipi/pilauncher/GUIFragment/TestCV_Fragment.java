@@ -109,10 +109,10 @@ public class TestCV_Fragment extends Fragment {
             }
         });
 
-        ((Button)rootView.findViewById(R.id.sendMessage)).setOnClickListener(new View.OnClickListener() {
+        ((Button)rootView.findViewById(R.id.confirm)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClientWrapper.getInstance().sendMessage("from pipi","empty", null);
+                AllSettings.getInstance().confirmSettings(getActivity());
             }
         });
 

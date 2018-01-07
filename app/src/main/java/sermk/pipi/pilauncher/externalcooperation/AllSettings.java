@@ -36,6 +36,8 @@ public final class AllSettings {
     private static final String NAME_FILE_ALL_SETTINGS = "all.settings";
     private static final String NAME_FIELD_STRUCT_SETTINGS = "currentSettings";
     private static final String NAME_FILE_MASK = "mask.byte";
+
+    private  static final String subjConfirm = "confirm.settings";
     private SharedPreferences sharedPreferences;
 
     public void setInstance(final Context context){
@@ -120,6 +122,12 @@ public final class AllSettings {
         PiReceiver.sendBroadCastData(context, PiReceiver.ACTION_RECIVER_SET_SETTINGS, json, byteMask);
         PiReceiver.sendBroadCastData(context, PiReceiver.ACTION_RECIVER_SAVE_SETTINGS, null, null);
         return true;
+    }
+
+    public boolean confirmSettings(Context context){
+        final String json = jsonCurrentSettings();
+        return ClientWrapper.sendMessage(context, subjConfirm,
+            json, bytesMask);
     }
 
 }
