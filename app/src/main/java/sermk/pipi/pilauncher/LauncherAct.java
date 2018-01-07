@@ -1,22 +1,30 @@
 package sermk.pipi.pilauncher;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
+import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
-import sermk.pipi.pilauncher.externalcooperation.ClientWrapper;
 import sermk.pipi.pilib.GameRunner;
 
 
 public class LauncherAct extends Activity {
+
+    private final String TAG = this.getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +45,8 @@ public class LauncherAct extends Activity {
         Logger.v("start services");
         startService(new Intent(this, PIService.class));
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-            WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+        EventBus.getDefault().register(this);
+        //standTo();
     }
 
     @Override
@@ -50,8 +55,41 @@ public class LauncherAct extends Activity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onStart() {super.onStart();}
+
+    public enum State {STAND_TO, REST};
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onWakeUpEvent(State state) {
+        Toast.makeText(this, "WaKeUp  " + state, Toast.LENGTH_LONG).show();
+        Log.v(TAG, "status " + state);
+        if(state.equals(State.STAND_TO)){
+            Log.v(TAG, "Wake Up!!!" );
+            standTo();
+        } else {
+            Log.v(TAG, "REST!!!" );
+            rest();
+        }
+    }
+
+    private void standTo(){
+        PowerManager powerManager = ((PowerManager) getSystemService(Context.POWER_SERVICE));
+        PowerManager.WakeLock wake = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
+
+        wake.acquire();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+            WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+    }
+
+    private void rest(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+            WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
     }
 
     @Override
@@ -63,26 +101,5 @@ public class LauncherAct extends Activity {
         return GameRunner.run(this,"sermk.pipi.testbind");
     }
 
-    public boolean runApp_old(){
-        final String packageName = "sermk.pipi.ra";
-        Logger.v(packageName);
-        PackageManager manager = getPackageManager();
-        try {
-            Intent i = manager.getLaunchIntentForPackage(packageName);
-            if (i == null) {
-                Logger.v("i == null");
-                return false;
-                //throw new ActivityNotFoundException();
-            }
-            i.addCategory(Intent.CATEGORY_LAUNCHER);
-            i.setFlags(0);
-            i.putExtra("aaa","111");
-
-            startActivityForResult(i,1);
-            return true;
-        } catch (ActivityNotFoundException e) {
-            return false;
-        }
-    }
 
 }

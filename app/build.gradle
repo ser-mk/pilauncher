@@ -53,5 +53,6 @@ dependencies {
 
     compile 'com.orhanobut:logger:2.1.1'
     compile 'com.google.code.gson:gson:2.8.2'
+    compile 'org.greenrobot:eventbus:3.1.1'
     implementation project(':PiLib')
 }

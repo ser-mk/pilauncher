@@ -13,7 +13,7 @@ import android.util.Log;
 import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.USBMonitor;
 
-import sermk.pipi.pilib.Pinterface;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by echormonov on 20.11.17.
@@ -128,6 +128,7 @@ public final class PIService extends Service {
         public void onAttach(final UsbDevice device) {
             Logger.v("onAttach");
             startUVC(mBinder);
+            EventBus.getDefault().post(LauncherAct.State.STAND_TO);
         }
 
         @Override
@@ -143,6 +144,7 @@ public final class PIService extends Service {
         public void onDettach(final UsbDevice device) {
             Logger.v("onDettach");
             completeUVC();
+            EventBus.getDefault().post(LauncherAct.State.REST);
         }
 
         @Override
