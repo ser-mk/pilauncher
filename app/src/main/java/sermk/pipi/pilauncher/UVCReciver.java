@@ -27,8 +27,6 @@ import sermk.pipi.pilauncher.externalcooperation.AllSettings;
 public class UVCReciver extends Thread {
     private final String TAG = this.getName();
 
-    //private Context gContext;
-
     private final Object mSyncExit = new Object();
 
 
@@ -50,48 +48,11 @@ public class UVCReciver extends Thread {
      */
     private USBMonitor mUSBMonitor;
 
-    public UVCReciver(final Context context) {
+    public UVCReciver(final USBMonitor usbMonitor) {
         super("UVCReciver");
         Logger.v(TAG);
-        this.mUSBMonitor = new USBMonitor(context, mOnDeviceConnectListener);
-        if (mUSBMonitor != null) {
-            mUSBMonitor.register();
-        }
-        //gContext = context;
+        this.mUSBMonitor = usbMonitor;
     }
-
-    private final OnDeviceConnectListener mOnDeviceConnectListener = new OnDeviceConnectListener() {
-    @Override
-    public void onAttach(final UsbDevice device) {
-        //Toast.makeText(gContext, "USB_DEVICE_ATTACHED", Toast.LENGTH_SHORT).show();
-        Logger.v("onAttach");
-    }
-
-    @Override
-    public void onConnect(final UsbDevice device, final UsbControlBlock ctrlBlock, final boolean createNew) {
-        //Toast.makeText(gContext, "USB_DEVICE_ONCONNECT", Toast.LENGTH_SHORT).show();
-        Logger.v("onConnect");
-    }
-
-    @Override
-    public void onDisconnect(final UsbDevice device, final UsbControlBlock ctrlBlock) {
-        Logger.v("onDisconnect");
-    }
-    @Override
-    public void onDettach(final UsbDevice device) {
-        //Toast.makeText(gContext, "USB_DEVICE_DETACHED", Toast.LENGTH_SHORT).show();
-        Logger.v("onDettach");
-        synchronized(mSyncExit) {
-            mSyncExit.notifyAll();
-        }
-    }
-
-    @Override
-    public void onCancel(final UsbDevice device) {
-        Logger.v("onCancel");
-    }
-
-    };
 
     public void startCapture(@Nullable final CVResolver.ICallbackPosition callback){
         mCallBackPosition = callback;

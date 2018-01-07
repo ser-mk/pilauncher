@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.hardware.usb.UsbDevice;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -37,9 +38,10 @@ public final class PIService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate:");
-        if (mUVCReciver == null) {
-            mUVCReciver = new UVCReciver(this);
-        }
+        mUSBMonitor = new USBMonitor(this, mOnDeviceConnectListener);
+        mUSBMonitor.register();
+        mUVCReciver = new UVCReciver(mUSBMonitor);
+
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         showNotification("PIService start!");
         single = this;
@@ -55,12 +57,6 @@ public final class PIService extends Service {
         }
         single = null;
         super.onDestroy();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        //Log.v(TAG,"@@@ onStartCommand" + intent.toString() + String.valueOf(flags) + String.valueOf(startId));
-        return super.onStartCommand(intent, flags, startId);
     }
 
     private void setPositionHandler(){
@@ -118,10 +114,41 @@ public final class PIService extends Service {
 
     public void startUVC(@Nullable final CVResolver.ICallbackPosition callback){
         if(mUVCReciver != null)
-            mUVCReciver.startCapture(callback);
+            if(!mUVCReciver.isAlive()) {
+                mUVCReciver.startCapture(callback);
+            }
     }
 
     public void completeUVC(){
         mUVCReciver.exitRun();
     }
+
+    private final USBMonitor.OnDeviceConnectListener mOnDeviceConnectListener = new USBMonitor.OnDeviceConnectListener() {
+        @Override
+        public void onAttach(final UsbDevice device) {
+            Logger.v("onAttach");
+            startUVC(mBinder);
+        }
+
+        @Override
+        public void onConnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock, final boolean createNew) {
+            Logger.v("onConnect");
+        }
+
+        @Override
+        public void onDisconnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock) {
+            Logger.v("onDisconnect");
+        }
+        @Override
+        public void onDettach(final UsbDevice device) {
+            Logger.v("onDettach");
+            completeUVC();
+        }
+
+        @Override
+        public void onCancel(final UsbDevice device) {
+            Logger.v("onCancel");
+        }
+
+    };
 }
