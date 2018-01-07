@@ -105,6 +105,8 @@ public class CVMaskView extends CVMaskResolver {
 
         canvasResult.drawBitmap(mask,0,0,renderPaint);
 
+        rectOfMask = getViewMask();
+
         if(rectOfMask != null){
             canvasResult.drawRect(rectOfMask,pRectMask);
         }

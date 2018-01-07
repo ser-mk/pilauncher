@@ -50,7 +50,12 @@ public class CVMaskResolver extends ImageView {
     }
 
     public void setMask(Rect mask, byte[] bytes){
-
+        rectMaskByte = mask;
+        if(roiMask != null) {
+            roiMask.release();
+        }
+        roiMask = new Mat(mask.height, mask.width, CvType.CV_8UC1);
+        roiMask.put(0,0,bytes);
     }
 
     @Override
@@ -130,6 +135,14 @@ public class CVMaskResolver extends ImageView {
                 rect.x + rect.width, rect.y + rect.height
         );
         return rectOfMask;
+    }
+
+    protected android.graphics.Rect getViewMask(){
+        android.graphics.Rect rectOfMask = new android.graphics.Rect();
+        rectOfMask.set(rectMaskByte.x, rectMaskByte.y,
+            rectMaskByte.x + rectMaskByte.width,
+            rectMaskByte.y + rectMaskByte.height);
+        return  rectOfMask;
     }
 
 }

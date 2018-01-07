@@ -55,6 +55,7 @@ public final class AllSettings {
     public StructSettings getCurrentSettings(){
         return  currentSettings;
     }
+    public byte[] getBytesMask(){ return  bytesMask; }
 
     public boolean setCurrentSettings( String json, byte[] bytesMask) {
         GsonBuilder builder = new GsonBuilder();

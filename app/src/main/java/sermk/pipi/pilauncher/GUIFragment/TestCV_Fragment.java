@@ -181,6 +181,9 @@ public class TestCV_Fragment extends Fragment {
             Log.v(TAG, "Test CV enable " + isChecked);
             GlobalController app = (GlobalController)getActivity().getApplication();
             if (isChecked) {
+                mPlotPreview.setMask(
+                    AllSettings.getInstance().getCurrentSettings().rectMask,
+                    AllSettings.getInstance().getBytesMask());
                 PIService.getInstance().startUVC(posCallback);
             } else {
                 PIService.getInstance().completeUVC();
