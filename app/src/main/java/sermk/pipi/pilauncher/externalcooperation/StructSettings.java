@@ -1,6 +1,8 @@
 package sermk.pipi.pilauncher.externalcooperation;
 
-import sermk.pipi.pilauncher.PiUtils;
+import org.opencv.core.Rect;
+
+import sermk.pipi.pilauncher.CVResolver;
 import sermk.pipi.pilauncher.UVCReciver;
 
 /**
@@ -8,6 +10,6 @@ import sermk.pipi.pilauncher.UVCReciver;
  */
 
 public class StructSettings {
-    public PiUtils.RectMask rectMask = new PiUtils.RectMask();
+    public Rect rectMask = new Rect();
     public UVCReciver.Settings uvcSettings = new UVCReciver.Settings();
 }

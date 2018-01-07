@@ -8,12 +8,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.serenegiant.usb.UVCCamera;
 
+import org.opencv.core.Rect;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import sermk.pipi.pilauncher.PiUtils;
+import sermk.pipi.pilauncher.CVResolver;
 import sermk.pipi.pilauncher.UVCReciver;
 
 /**
@@ -110,7 +112,7 @@ public final class AllSettings {
     }
 
 
-    public boolean saveMaskInReceiver(Context context, final byte[] byteMask, final PiUtils.RectMask rm){
+    public boolean saveMaskInReceiver(Context context, final byte[] byteMask, final Rect rm){
         currentSettings.rectMask = rm;
         final String json = jsonCurrentSettings();
         Log.v(TAG, "json = " + json);

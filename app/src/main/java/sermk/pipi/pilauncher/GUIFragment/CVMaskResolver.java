@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sermk.pipi.pilauncher.CVResolver;
-import sermk.pipi.pilauncher.PiUtils;
+
 
 /**
  * Created by ser on 02.11.17.
@@ -38,13 +38,8 @@ public class CVMaskResolver extends ImageView {
     protected Bitmap previewBitmap;
     boolean changedPreviewMat = false;
 
-    public PiUtils.RectMask getRectMaskByte() {
-        PiUtils.RectMask ret = new PiUtils.RectMask();
-        ret.x = rectMaskByte.x;
-        ret.y = rectMaskByte.y;
-        ret.width = rectMaskByte.width;
-        ret.height = rectMaskByte.height;
-        return ret;
+    public Rect getRectMaskByte() {
+        return rectMaskByte;
     }
 
     public byte[] getByteArrayMask() {
@@ -52,6 +47,10 @@ public class CVMaskResolver extends ImageView {
             roiMask.channels())];
         roiMask.get(0, 0, return_buff);
         return return_buff;
+    }
+
+    public void setMask(Rect mask, byte[] bytes){
+
     }
 
     @Override
