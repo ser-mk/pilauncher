@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
+import sermk.pipi.pilauncher.GUIFragment.WelcomeFragment;
 import sermk.pipi.pilib.GameRunner;
 
 
@@ -31,7 +32,9 @@ public class LauncherAct extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_standalone);
 
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        /** Problem on T310
+         * this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+         */
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         View decorView = getWindow().getDecorView();
@@ -40,7 +43,8 @@ public class LauncherAct extends Activity {
         decorView.setSystemUiVisibility(uiOptions);
 
         getFragmentManager().beginTransaction()
-                .add(R.id.container, new TestCV_Fragment()).commit();
+                //.add(R.id.container, new TestCV_Fragment()).commit();
+            .add(R.id.container, new WelcomeFragment()).commit();
 
         Logger.v("start services");
         startService(new Intent(this, PIService.class));
