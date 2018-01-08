@@ -3,6 +3,7 @@ package sermk.pipi.pilauncher.GUIFragment;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,6 +35,8 @@ public class PasswordFragment extends Fragment implements View.OnKeyListener {
 
         ((EditText)rootView.findViewById(R.id.password)).setOnKeyListener(this);
 
+        timer.start();
+
         return rootView;
     }
 
@@ -54,6 +57,8 @@ public class PasswordFragment extends Fragment implements View.OnKeyListener {
             return false;
         }
 
+        timer.cancel();
+
         getFragmentManager().beginTransaction()
             .replace(R.id.container, new TestCV_Fragment(), TestCV_Fragment.class.getName())
             .addToBackStack("")
@@ -62,4 +67,30 @@ public class PasswordFragment extends Fragment implements View.OnKeyListener {
         return true;
 
     }
+
+    @Override
+    public void onDetach() {
+        Log.v(TAG, "onDetach");
+        timer.cancel();
+        super.onDetach();
+    }
+
+    private final int TIMEOUT = 20*1000;
+
+    final CountDownTimer timer = new CountDownTimer(TIMEOUT, TIMEOUT){
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.v(TAG, "onTick");
+        }
+
+        @Override
+        public void onFinish() {
+            Log.v(TAG, "finish timer");
+            //todo: check current visible fragment!
+            getFragmentManager().beginTransaction()
+                .replace(R.id.container, new WelcomeFragment(), WelcomeFragment.class.getName())
+                .commit();
+        }
+    };
+
 }
