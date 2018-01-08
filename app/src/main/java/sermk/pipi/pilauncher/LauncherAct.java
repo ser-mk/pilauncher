@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import sermk.pipi.pilauncher.GUIFragment.PasswordFragment;
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
 import sermk.pipi.pilauncher.GUIFragment.WelcomeFragment;
 import sermk.pipi.pilib.GameRunner;
@@ -45,6 +46,7 @@ public class LauncherAct extends Activity {
         getFragmentManager().beginTransaction()
                 //.add(R.id.container, new TestCV_Fragment()).commit();
             .add(R.id.container, new WelcomeFragment()).commit();
+            //.add(R.id.container, new PasswordFragment()).commit();
 
         Logger.v("start services");
         startService(new Intent(this, PIService.class));
