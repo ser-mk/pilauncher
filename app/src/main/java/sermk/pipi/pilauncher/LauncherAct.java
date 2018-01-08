@@ -1,7 +1,9 @@
 package sermk.pipi.pilauncher;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.KeyguardManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -24,7 +26,7 @@ import sermk.pipi.pilauncher.GUIFragment.WelcomeFragment;
 import sermk.pipi.pilib.GameRunner;
 
 
-public class LauncherAct extends Activity {
+public class LauncherAct extends Activity implements Thread.UncaughtExceptionHandler {
 
     private final String TAG = this.getClass().getName();
 
@@ -44,15 +46,17 @@ public class LauncherAct extends Activity {
         decorView.setSystemUiVisibility(uiOptions);
 
         getFragmentManager().beginTransaction()
-                //.add(R.id.container, new TestCV_Fragment()).commit();
-            .add(R.id.container, new WelcomeFragment()).commit();
+                .add(R.id.container, new TestCV_Fragment()).commit();
+        //.add(R.id.container, new WelcomeFragment()).commit();
             //.add(R.id.container, new PasswordFragment()).commit();
 
         Logger.v("start services");
         startService(new Intent(this, PIService.class));
 
         EventBus.getDefault().register(this);
-        //standTo();
+        standTo();
+
+        Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
     @Override
@@ -107,5 +111,21 @@ public class LauncherAct extends Activity {
         return GameRunner.run(this,"sermk.pipi.testbind");
     }
 
+
+
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        Log.e(TAG,"uncaughtException");
+        Intent intent = new Intent(this, LauncherAct.class);
+        intent.putExtra("crash", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+            | Intent.FLAG_ACTIVITY_CLEAR_TASK
+            | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplication().getBaseContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager mgr = (AlarmManager) getApplication().getBaseContext().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        this.finish();
+        System.exit(2);
+    }
 
 }
