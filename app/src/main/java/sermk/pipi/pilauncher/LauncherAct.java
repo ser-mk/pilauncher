@@ -116,6 +116,12 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         Log.e(TAG,"uncaughtException");
+
+        MClient.sendMessage(this,
+            ErrorCollector.subjError(TAG,"uncaughtException"),
+            ErrorCollector.getStackTraceString(e),
+            MClient.EMPTY_BYTES);
+
         Intent intent = new Intent(this, LauncherAct.class);
         intent.putExtra("crash", true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
