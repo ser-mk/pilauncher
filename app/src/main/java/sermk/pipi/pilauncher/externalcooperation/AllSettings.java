@@ -91,10 +91,10 @@ public final class AllSettings {
             inputStream.read(bytes);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return e.toString();
+            return ErrorCollector.getStackTraceString(e);
         } catch (IOException e) {
             e.printStackTrace();
-            return e.toString();
+            return ErrorCollector.getStackTraceString(e);
         }
         return setCurrentSettings(json, bytes);
     }
@@ -107,7 +107,7 @@ public final class AllSettings {
             outputStream.write(bytesMask);
         } catch (Exception e) {
             e.printStackTrace();
-            return e.toString();
+            return ErrorCollector.getStackTraceString(e);
         }
         Log.v(TAG, "save mask in " + NAME_FILE_MASK);
         return ErrorCollector.NO_ERROR;

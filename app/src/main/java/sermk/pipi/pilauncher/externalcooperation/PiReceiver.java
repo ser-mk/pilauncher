@@ -66,7 +66,7 @@ public class PiReceiver extends BroadcastReceiver {
             success = doAction(context, content, bytesArray, action);
         } catch (Exception e){
             e.printStackTrace();
-            EC.addError(e.toString());
+            EC.addError(EC.getStackTraceString(e));
             success = e.toString();
         }
 
