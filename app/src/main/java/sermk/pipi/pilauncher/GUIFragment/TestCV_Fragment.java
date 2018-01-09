@@ -24,9 +24,7 @@ import sermk.pipi.pilauncher.GlobalController;
 import sermk.pipi.pilauncher.PIService;
 import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.LauncherAct;
-import sermk.pipi.pilauncher.UVCReciver;
 import sermk.pipi.pilauncher.externalcooperation.AllSettings;
-import sermk.pipi.pilauncher.externalcooperation.ClientWrapper;
 
 
 /**
@@ -69,7 +67,7 @@ public class TestCV_Fragment extends Fragment {
         mDrawButton = (ToggleButton)rootView.findViewById(R.id.draw_disable);
 
         mPlotPreview = (CVMaskView)rootView.findViewById(R.id.capture_view);
-/**/
+
         posCallbackSeek = (SeekText)rootView.findViewById(R.id.alpha_seek);
         SeekText hDiagSeek = (SeekText)rootView.findViewById(R.id.hdiag_seek);
 
