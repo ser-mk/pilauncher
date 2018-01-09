@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">PiLauncher</string>
     <string name="action_settings">Settings</string>
+    <string name="nameMCpakage">sermk.pipi.mclient</string>
+    <string name="nameMCSService">sermk.pipi.mclient.MCSService</string>
 
-    <string name="ACTION_RECIVER_SET_SETTINGS" >SETTINGS.SET</string>
-    <string name="ACTION_RECIVER_SAVE_SETTINGS" >SETTINGS.SAVE</string>
+    <string name="ACTION_RECIVER_SET_SETTINGS">SETTINGS.SET</string>
+    <string name="ACTION_RECIVER_SAVE_SETTINGS">SETTINGS.SAVE</string>
 </resources>

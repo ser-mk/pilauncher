@@ -17,6 +17,8 @@ import java.io.IOException;
 
 import sermk.pipi.pilauncher.CVResolver;
 import sermk.pipi.pilauncher.UVCReciver;
+import sermk.pipi.pilib.ErrorCollector;
+import sermk.pipi.pilib.MClient;
 
 /**
  * Created by ser on 02.11.17.
@@ -59,26 +61,28 @@ public final class AllSettings {
     }
     public byte[] getBytesMask(){ return  bytesMask; }
 
-    public boolean setCurrentSettings( String json, byte[] bytesMask) {
+    public String setCurrentSettings( String json, byte[] bytesMask) {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         StructSettings tempSettings =  gson.fromJson(json, StructSettings.class);
         if (bytesMask != null){
             this.bytesMask = bytesMask;
         } else {
-            Log.e(TAG, "setted byte mask not exist!");
-            return false;
+            final String err ="setted byte mask not exist!";
+            Log.e(TAG, err);
+            return err;
         }
         if(tempSettings != null ){ // todo check correct subclass!
             this.currentSettings = tempSettings;
         } else {
-            Log.e(TAG, "setted Struct Settings not exist!");
-            return false;
+            final String err = "setted Struct Settings not exist!";
+            Log.e(TAG, err);
+            return err;
         }
-        return true;
+        return ErrorCollector.NO_ERROR;
     }
 
-    private boolean loadSettings(final Context context){
+    private String loadSettings(final Context context){
         final String json = sharedPreferences.getString(NAME_FIELD_STRUCT_SETTINGS, "");
         Log.i(TAG, "load settings : " + json );
         byte[] bytes = new byte[0];
@@ -87,15 +91,15 @@ public final class AllSettings {
             inputStream.read(bytes);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return false;
+            return e.toString();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return e.toString();
         }
         return setCurrentSettings(json, bytes);
     }
 
-    public void saveCurrentSettings(Context context){
+    public String saveCurrentSettings(Context context){
 
         sharedPreferences.edit().putString(NAME_FIELD_STRUCT_SETTINGS, jsonCurrentSettings()).apply();
         try(FileOutputStream outputStream
@@ -103,8 +107,10 @@ public final class AllSettings {
             outputStream.write(bytesMask);
         } catch (Exception e) {
             e.printStackTrace();
+            return e.toString();
         }
         Log.v(TAG, "save mask in " + NAME_FILE_MASK);
+        return ErrorCollector.NO_ERROR;
     }
 
     private String jsonCurrentSettings(){
@@ -126,7 +132,7 @@ public final class AllSettings {
 
     public boolean confirmSettings(Context context){
         final String json = jsonCurrentSettings();
-        return ClientWrapper.sendMessage(context, subjConfirm,
+        return MClient.sendMessage(context, subjConfirm,
             json, bytesMask);
     }
 

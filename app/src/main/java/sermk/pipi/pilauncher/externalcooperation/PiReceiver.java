@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import sermk.pipi.pilauncher.R;
+import sermk.pipi.pilib.ErrorCollector;
+import sermk.pipi.pilib.MClient;
 
 public class PiReceiver extends BroadcastReceiver {
 
@@ -14,10 +16,15 @@ public class PiReceiver extends BroadcastReceiver {
     static String ACTION_RECIVER_SAVE_SETTINGS = "";
     static String ACTION_RECIVER_SET_SETTINGS = "";
 
+//TODO: harcode in manifest((
     public static void init(Context context){
         ACTION_RECIVER_SAVE_SETTINGS = context.getResources().getString(R.string.ACTION_RECIVER_SAVE_SETTINGS);
         ACTION_RECIVER_SET_SETTINGS = context.getResources().getString(R.string.ACTION_RECIVER_SET_SETTINGS);
     }
+
+
+    private final ErrorCollector EC = new ErrorCollector();
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -26,20 +33,20 @@ public class PiReceiver extends BroadcastReceiver {
         Log.v(TAG, "inent: " + intent.toString());
         String action;
         try{
-            action = intent.getAction();
-            action.isEmpty();
+            action = intent.getAction().trim();
         } catch (Exception e){
             action = "wrong action!";
+            EC.addError(action);
             Log.w(TAG, "action is not exist!");
         }
         Log.v(TAG, action);
 
         String content;
         try{
-            content = intent.getStringExtra(Intent.EXTRA_TEXT);
-            content.isEmpty();
+            content = intent.getStringExtra(Intent.EXTRA_TEXT).trim();
         } catch (Exception e){
             content = "wrong content!";
+            EC.addError(content);
             Log.w(TAG, "content is not exist!");
         }
         Log.v(TAG, content);
@@ -53,29 +60,44 @@ public class PiReceiver extends BroadcastReceiver {
             Log.w(TAG, "attached data absent!");
         }
 
-        doAction(context, content, bytesArray, action);
+        String success = ErrorCollector.NO_ERROR;
+
+        try {
+            success = doAction(context, content, bytesArray, action);
+        } catch (Exception e){
+            e.printStackTrace();
+            EC.addError(e.toString());
+            success = e.toString();
+        }
+
+        if(ErrorCollector.NO_ERROR.equals(success)) return;
+
+        Log.v(TAG, EC.error);
+
+        MClient.sendMessage(context, EC.subjError(TAG,action)
+            , EC.error, MClient.EMPTY_BYTES);
     }
 
-    private boolean doAction(Context context, final String content, final byte[] bytesArray, @NonNull final String action){
+    private String doAction(Context context, final String content, final byte[] bytesArray, @NonNull final String action){
         if(action.equals(ACTION_RECIVER_SET_SETTINGS)){
             return setSettings(content, bytesArray);
         } else if (action.equals(ACTION_RECIVER_SAVE_SETTINGS)){
             return saveSettings(context);
         }
 
-        Log.w(TAG, "undefined action!");
+        final String err = "undefined action!";
+        Log.w(TAG, err);
+        EC.addError(err);
 
-        return false;
+        return err;
     }
 
-    private boolean setSettings(final String content, final byte[] bytesArray){
-        AllSettings.getInstance().setCurrentSettings(content, bytesArray);
-        return true;
+    private String setSettings(final String content, final byte[] bytesArray){
+        return AllSettings.getInstance().setCurrentSettings(content, bytesArray);
     }
 
-    private boolean saveSettings(Context context){
-        AllSettings.getInstance().saveCurrentSettings(context);
-        return true;
+    private String saveSettings(Context context){
+        return AllSettings.getInstance().saveCurrentSettings(context);
     }
 
     static void sendBroadCastData(Context context, final String action,
