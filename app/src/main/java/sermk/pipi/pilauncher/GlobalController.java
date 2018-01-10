@@ -25,7 +25,6 @@ public final class GlobalController extends Application {
     public void onCreate() {
         super.onCreate();
         LogOptions.SetupLog();
-        PiReceiver.init(this);
         AllSettings.getInstance().setInstance(this);
         // Required initialization logic here!
     }

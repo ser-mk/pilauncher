@@ -7,21 +7,13 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import sermk.pipi.pilauncher.R;
+import sermk.pipi.pilib.CommandCollection;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
 
 public class PiReceiver extends BroadcastReceiver {
 
     private final String TAG = this.getClass().getName();
-    static String ACTION_RECIVER_SAVE_SETTINGS = "";
-    static String ACTION_RECIVER_SET_SETTINGS = "";
-
-//TODO: harcode in manifest((
-    public static void init(Context context){
-        ACTION_RECIVER_SAVE_SETTINGS = context.getResources().getString(R.string.ACTION_RECIVER_SAVE_SETTINGS);
-        ACTION_RECIVER_SET_SETTINGS = context.getResources().getString(R.string.ACTION_RECIVER_SET_SETTINGS);
-    }
-
 
     private final ErrorCollector EC = new ErrorCollector();
 
@@ -79,9 +71,9 @@ public class PiReceiver extends BroadcastReceiver {
     }
 
     private String doAction(Context context, final String content, final byte[] bytesArray, @NonNull final String action){
-        if(action.equals(ACTION_RECIVER_SET_SETTINGS)){
+        if(action.equals(CommandCollection.ACTION_RECIVER_SET_SETTINGS)){
             return setSettings(content, bytesArray);
-        } else if (action.equals(ACTION_RECIVER_SAVE_SETTINGS)){
+        } else if (action.equals(CommandCollection.ACTION_RECIVER_SAVE_SETTINGS)){
             return saveSettings(context);
         }
 

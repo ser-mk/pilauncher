@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import sermk.pipi.pilauncher.CVResolver;
 import sermk.pipi.pilauncher.UVCReciver;
+import sermk.pipi.pilib.CommandCollection;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
 
@@ -125,8 +126,8 @@ public final class AllSettings {
         currentSettings.rectMask = rm;
         final String json = jsonCurrentSettings();
         Log.v(TAG, "json = " + json);
-        PiReceiver.sendBroadCastData(context, PiReceiver.ACTION_RECIVER_SET_SETTINGS, json, byteMask);
-        PiReceiver.sendBroadCastData(context, PiReceiver.ACTION_RECIVER_SAVE_SETTINGS, null, null);
+        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_SET_SETTINGS, json, byteMask);
+        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_SAVE_SETTINGS, null, null);
         return true;
     }
 

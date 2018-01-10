@@ -62,8 +62,8 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="@string/ACTION_RECIVER_SAVE_SETTINGS" />
-                <action android:name="@string/ACTION_RECIVER_SAVE_SETTINGS" />
+                <action android:name="PI.SETTINGS.SET" />
+                <action android:name="PI.SETTINGS.SAVE" />
             </intent-filter>
         </receiver>
         <receiver
