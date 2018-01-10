@@ -22,6 +22,7 @@ public class PiReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
+        EC.clear();
         Log.v(TAG, "inent: " + intent.toString());
         String action;
         try{
