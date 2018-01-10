@@ -20,7 +20,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Arrays;
 
 import sermk.pipi.pilauncher.GUIFragment.PasswordFragment;
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
@@ -35,7 +34,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
     private final String TAG = this.getClass().getName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //todo buildconfig.DEBUG
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_standalone);
 
@@ -49,16 +48,19 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        getFragmentManager().beginTransaction()
+        if (BuildConfig.DEBUG) {
+            // do something for a debug build
+            getFragmentManager().beginTransaction()
                 .add(R.id.container, new TestCV_Fragment()).commit();
-        //.add(R.id.container, new WelcomeFragment()).commit();
+        } else {
+            getFragmentManager().beginTransaction()
+                .add(R.id.container, new WelcomeFragment()).commit();
             //.add(R.id.container, new PasswordFragment()).commit();
-
+        }
         Logger.v("start services");
         startService(new Intent(this, PIService.class));
 
         EventBus.getDefault().register(this);
-        standTo();
 
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -75,7 +77,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onWakeUpEvent(State state) {
-        Toast.makeText(this, "WaKeUp  " + state, Toast.LENGTH_LONG).show();
+        if (BuildConfig.DEBUG) Toast.makeText(this, "WaKeUp  " + state, Toast.LENGTH_LONG).show();
         Log.v(TAG, "status " + state);
         if(state.equals(State.STAND_TO)){
             Log.v(TAG, "Wake Up!!!" );
@@ -123,8 +125,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
         MClient.sendMessage(this,
             ErrorCollector.subjError(TAG,"uncaughtException"),
-            ErrorCollector.getStackTraceString(e),
-            MClient.EMPTY_BYTES);
+            ErrorCollector.getStackTraceString(e));
 
         Intent intent = new Intent(this, LauncherAct.class);
         intent.putExtra("crash", true);

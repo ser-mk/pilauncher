@@ -67,8 +67,7 @@ public class PiReceiver extends BroadcastReceiver {
 
         Log.v(TAG, EC.error);
 
-        MClient.sendMessage(context, EC.subjError(TAG,action)
-            , EC.error, MClient.EMPTY_BYTES);
+        MClient.sendMessage(context, EC.subjError(TAG,action), EC.error);
     }
 
     private String doAction(Context context, final String content, final byte[] bytesArray, @NonNull final String action){
