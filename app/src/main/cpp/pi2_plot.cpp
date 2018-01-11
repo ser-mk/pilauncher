@@ -30,8 +30,8 @@ void pi2_plot::plotPreviewFrameFast(uvc_frame_t *frame) {
 void pi2_plot::plotPreviewFrame(uvc_frame_t *frame) {
     Mat frameMat = Mat(frame->height, frame->width, CV_8UC2, frame->data);
     Rect rectFrame = Rect(0, 0, frame->width, frame->height);
-    Mat subSubPreview = Mat(pi2_plot::chart(rectFrame));
-    cvtColor(frameMat, subSubPreview, COLOR_YUV2RGB_YUYV);
+    Mat subMatPreview = Mat(pi2_plot::chart(rectFrame));
+    cvtColor(frameMat, subMatPreview, COLOR_YUV2RGB_YUYV);
 }
 
 

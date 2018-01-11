@@ -21,9 +21,11 @@ class pi2_cv {
     static jobject objectCV;
     static jmethodID midCV;
     static cv::Rect maskRect;
+    static const int MAX_NORM_POSITION = 255;
     static uint8_t arrayFromMask[pi2_plot::sizePreview];
     static uint8_t arrayMask[pi2_plot::sizePreview];
     static void calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect);
+    static int normilizePosition(const int position);
 
 public:
 

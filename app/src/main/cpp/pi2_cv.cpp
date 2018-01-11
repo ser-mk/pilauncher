@@ -52,6 +52,11 @@ void pi2_cv::calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect) 
 
 }
 
+__inline int pi2_cv::normilizePosition(const int position) {
+    const int norm = (position * MAX_NORM_POSITION)/maskRect.width;
+    return norm;
+}
+
 struct HistType vertHist;
 struct LearnHType learnHist;
 struct PowerHType powerHist;
@@ -88,10 +93,12 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         }
         pi2_plot::plotPreviewFrame(frame);
     }
-/**/
+    position = normilizePosition(position);
     env->CallVoidMethod(objectCV, midCV,position);
 
 }
+
+
 
 void pi2_cv::setMode(JNIEnv *env, jobject thiz, jint modeWork) {
     if( modeWork==CAPTURE ){
@@ -131,3 +138,4 @@ void pi2_cv::startCV(JNIEnv *env, jobject thiz, jboolean plotiing) {
     }
     LOGI(TAG"succes set startCV! midCV point %p ",midCV);
 }
+

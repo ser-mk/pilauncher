@@ -11,17 +11,21 @@ import sermk.pipi.pilib.Pinterface;
  */
 
 public class PInterface_Impl extends Pinterface.Stub implements CVResolver.ICallbackPosition
-    {
+{
 
     final String TAG = "PInterface_Impl";
     @Override
     public int getPosition() throws RemoteException {
         Log.v(TAG,"getPosition ");
-        return 0;
+        return position;
     }
 
-        @Override
-        public boolean callbackPosition(int pos, CVResolver cvr) {
-            return false;
-        }
+    private int position = 0;
+
+    @Override
+    public boolean callbackPosition(int pos, CVResolver cvr) {
+        Log.v(TAG, "set position " + String.valueOf(pos));
+        position = pos;
+        return true;
     }
+}

@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import com.orhanobut.logger.Logger;
 
 import sermk.pipi.pilauncher.CVResolver;
+import sermk.pipi.pilib.PiBind;
 
 /**
  * Created by echormonov on 01.11.17.
@@ -92,7 +93,7 @@ public class CVMaskView extends CVMaskResolver {
         if(rectOfMask == null)
             return 0;
 
-        final int width = rectOfMask.width();
+        final int width = PiBind.POSITION_MAX;//rectOfMask.width();
         if(position > width)
             return maxValue;
         final int relativePos = (position * maxValue )/ width;
