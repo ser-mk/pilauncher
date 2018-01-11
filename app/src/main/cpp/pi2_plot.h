@@ -45,12 +45,12 @@ struct pi2_plot{
 
     static bool disablePlot;
 
-    static bool isDisablePlot() {
-        return disablePlot;
+    static bool isEnablePlot() {
+        return !disablePlot;
     }
 
-    static void setDisablePlot(const jboolean disable){
-        disablePlot = disable;
+    static void setDisablePlot(jint disable){
+        disablePlot = disable == 1 ? true : false;
     }
 };
 

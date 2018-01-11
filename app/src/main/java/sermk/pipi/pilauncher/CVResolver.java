@@ -42,6 +42,6 @@ public final class CVResolver {
     public static native void setMode(final int mode);
     public void stop(){}
 
-    public static native void setDisablePlot(final boolean disable);
+    public static native void setDisablePlot(int disable);
     public static native void setPlotOption(final long previewMat);
 }

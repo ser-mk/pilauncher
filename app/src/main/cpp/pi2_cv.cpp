@@ -77,7 +77,7 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         }
     }
 
-    if(pi2_plot::isDisablePlot() == true) {
+    if(pi2_plot::isEnablePlot()) {
         pi2_plot::clearAll();
         Rect testRect = Rect(maskRect);
         testRect.y = pi2_plot::heightPreview;
