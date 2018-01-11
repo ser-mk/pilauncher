@@ -36,7 +36,6 @@ public class CVMaskResolver extends ImageView {
 
     private Mat previewRGBMat;
     protected Bitmap previewBitmap;
-    boolean changedPreviewMat = false;
 
     public Rect getRectMaskByte() {
         return rectMaskByte;
@@ -65,7 +64,7 @@ public class CVMaskResolver extends ImageView {
             previewRGBMat.release();
         previewRGBMat = new Mat(h, w, CvType.CV_8UC3);
         previewBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        changedPreviewMat = true;
+        CVResolver.setPlotOption(previewRGBMat.getNativeObjAddr());
     }
 
     protected void clearMask(){
@@ -76,13 +75,7 @@ public class CVMaskResolver extends ImageView {
         roiMask = new Mat(0,0,0);
     }
     public void cvCallback(final int position, final CVResolver cvr){
-        if(changedPreviewMat && (previewRGBMat != null)){
-            changedPreviewMat = false;
-            cvr.setPlotOption(previewRGBMat.getNativeObjAddr());
-        }
-
         cvr.setRectOfMask(rectMaskByte.x, rectMaskByte.y, roiMask.getNativeObjAddr());
-
     }
     protected Bitmap getPreviewBitmap(){
         Utils.matToBitmap(previewRGBMat, previewBitmap);
