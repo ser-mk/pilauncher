@@ -4,9 +4,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -116,7 +118,13 @@ public final class PIService extends Service {
         if(mUVCReciver != null)
             if(!mUVCReciver.isAlive()) {
                 mUVCReciver.startCapture(callback);
-            }
+            } //todo forse release if run!
+        Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        final long time = 11;
+        if(v.hasVibrator()) {
+            Log.v(TAG, "hasVibrator");
+            v.vibrate(time);
+        }
     }
 
     public void completeUVC(){
