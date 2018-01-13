@@ -89,8 +89,8 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
 
     @Override
     public void run() {
-        final int TIMEOUT = 1111;
-        final int TRY_MAX = 3;
+        final long TIMEOUT = getBS().run.TIMEOUT;
+        final int TRY_MAX =  getBS().run.TRY_MAX;
         int try_start = TRY_MAX;
         while (try_start > 0) {
             final State state = openUVC();
@@ -156,9 +156,9 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         return state;
     }
 
-    private static final int INF_WAIT = 0;
+    private static final long INF_WAIT = 0;
 
-    private boolean waitExit(final int millis){
+    private boolean waitExit(final long millis){
         synchronized (mSyncExit) {
             try {
                 if(millis > 0)
@@ -211,17 +211,21 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         return true;
     }
 
+    private BehaviorSettings getBS() {
+        return AllSettings.getInstance().getCurrentSettings().behaviorSettings;
+    }
+
 
     private boolean tranning(final CVResolver cvr){
         countTraningFrame = 0;
-        final int WARMING_UP = 1000;
-        final int TRANNING_TIME = 1111;
-        final int COUNT_MIN = 11;
+        final long WARMING_UP_TIME = getBS().tranning.WARMING_UP_TIME;
+        final long TRANNING_TIME = getBS().tranning.TRANNING_TIME;
+        final int COUNT_MIN = getBS().tranning.COUNT_TRANNING_FRAMES;
 
         cvr.setCallback(this);
 
-        Logger.v( "warming-up start time " + String.valueOf(WARMING_UP));
-        if(!waitExit(WARMING_UP))
+        Logger.v( "warming-up start time " + String.valueOf(WARMING_UP_TIME));
+        if(!waitExit(WARMING_UP_TIME))
             return false;
         Log.v(TAG, "warming-up stop");
 
@@ -245,15 +249,20 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         return true;
     }
 
+    static long lastCaptureDate = 0;
+
     private boolean captureFrameAndSave(final CVResolver cvr){
-        final int firstCount = countTraningFrame;
-        final int ONE_CAPTURE_TIME = 333;
-        long lastCaptureDate = 0;
+        final long CAPTURE_WAIT_TIME = getBS().captureFrame.CAPTURE_WAIT_TIME;
+        final long CAPTURE_FRAME_INTERVAL = getBS().captureFrame.CAPTURE_FRAME_INTERVAL;
+
+        final long lastCaptureAgo = new Date().getTime() - lastCaptureDate;
+        if(lastCaptureAgo < CAPTURE_FRAME_INTERVAL)
+            return false;
 
         Logger.v("start capture Frame");
-
+        final int firstCount = countTraningFrame;
         cvr.getFrame(cvr.CAPTURE_ONE_FRAME_START_TO);
-        if(!waitExit(ONE_CAPTURE_TIME))
+        if(!waitExit(CAPTURE_WAIT_TIME))
             return false;
         if( countTraningFrame == firstCount )
             return true;
@@ -266,7 +275,6 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         }
         lastCaptureDate = new Date().getTime();
         Log.v(TAG, "date : " + new Date() );
-        Log.v(TAG,"msec " + String.valueOf(lastCaptureDate));
         return true;
     }
 

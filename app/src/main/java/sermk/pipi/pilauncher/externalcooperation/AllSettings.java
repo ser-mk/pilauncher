@@ -43,7 +43,7 @@ public final class AllSettings {
     private  static final String subjConfirm = "confirm.settings";
     private SharedPreferences sharedPreferences;
 
-    public void setInstance(final Context context){
+    public void init(final Context context){
         sharedPreferences = context.getSharedPreferences("NAME_FILE_ALL_SETTINGS",Context.MODE_PRIVATE);
         loadSettings(context);
     }
