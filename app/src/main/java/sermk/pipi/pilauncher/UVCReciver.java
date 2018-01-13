@@ -1,16 +1,13 @@
 package sermk.pipi.pilauncher;
 
-import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Surface;
-import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.IStatusCallback;
 import com.serenegiant.usb.USBMonitor;
-import com.serenegiant.usb.USBMonitor.OnDeviceConnectListener;
 import com.serenegiant.usb.USBMonitor.UsbControlBlock;
 import com.serenegiant.usb.UVCCamera;
 
@@ -24,10 +21,16 @@ import sermk.pipi.pilauncher.externalcooperation.AllSettings;
  * Created by ser on 31.10.17.
  */
 
-public class UVCReciver extends Thread {
+public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
     private final String TAG = this.getName();
 
     private final Object mSyncExit = new Object();
+
+    private enum State { USB_MONITOR_ERROR,
+    USB_LIST_EMPTY,
+    CAMERA_OPEN_ERROR,
+        TRANING_ERROR,
+    RELEASE };
 
 
     static public class Settings {
@@ -71,7 +74,8 @@ public class UVCReciver extends Thread {
             return false;
         }
 
-        cvr.setCallback(callBackPosition);
+        mCallBackPosition = callBackPosition;
+        cvr.setCallback(mCallBackPosition);
         return true;
     }
 
@@ -79,22 +83,37 @@ public class UVCReciver extends Thread {
         synchronized(mSyncExit) {
             mSyncExit.notifyAll();
         }
-        mCallBackPosition = defaultCallBackPosition;
+        mCallBackPosition = this;
     }
 
     @Override
     public void run() {
-        openUVC();
+        final int TIMEOUT = 1111;
+        final int TRY_MAX = 3;
+        int try_start = TRY_MAX;
+        while (try_start > 0) {
+            final State state = openUVC();
+            switch (state){
+                case CAMERA_OPEN_ERROR:
+                case TRANING_ERROR:
+                    try {sleep(TIMEOUT);} catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try_start--;
+                    continue;
+            }
+            break;
+        }
         Logger.v("exit run");
     }
 
-    private boolean openUVC(){
+    private State openUVC(){
         if (!mUSBMonitor.isRegistered())
-            return false;
+            return State.USB_MONITOR_ERROR;
         final List<UsbDevice> list = mUSBMonitor.getDeviceList();
         Logger.v("list size: " + String.valueOf(list.size()));
         if (list.size() == 0) {
-            return false;
+            return State.USB_LIST_EMPTY;
         }
         UsbDevice device =  list.get(0);
 
@@ -110,26 +129,50 @@ public class UVCReciver extends Thread {
 
         final UsbControlBlock ublock = mUSBMonitor.openDevice(device);
         final UVCCamera camera = new UVCCamera();
+
+        State state = State.RELEASE;
+
         //todo: try - catch - no!
         camera.open(ublock);
         if(!initCamera(camera)){
-            return false;
-        }
-        final CVResolver cvr = new CVResolver(mCallBackPosition);
-        inThreadResolver = new WeakReference<CVResolver>(cvr);
+            state = State.CAMERA_OPEN_ERROR;
+        } else {
+            final CVResolver cvr = new CVResolver(mCallBackPosition);
+            inThreadResolver = new WeakReference<CVResolver>(cvr);
 
-        camera.startPreview();
+            camera.startPreview();
 
+            if (!tranning(cvr)) {
+                state = State.TRANING_ERROR;
+            } else {
+                waitExit(INF_WAIT);
+            } //tranning - success
+            cvr.stop();
+        } //initCamera - success
+
+        releaseCamera(camera);
+
+        return state;
+    }
+
+    private static final int INF_WAIT = 0;
+
+    private boolean waitExit(final int millis){
         synchronized (mSyncExit) {
             try {
-                mSyncExit.wait();
+                if(millis > 0)
+                    mSyncExit.wait(millis);
+                else
+                    mSyncExit.wait();
             } catch (final InterruptedException e) {
-                Logger.e(e,"exit failed");
+                Logger.e(e, "wait failed");
+                return false;
             }
-        }
+        } //mSyncExit
+        return true;
+    }
 
-        cvr.stop();
-
+    private void releaseCamera(final UVCCamera camera){
         if (camera != null) {
             camera.stopPreview();
             camera.setStatusCallback(null);
@@ -137,8 +180,6 @@ public class UVCReciver extends Thread {
             camera.close();
             camera.destroy();
         }
-
-        return true;
     }
 
     boolean initCamera(final UVCCamera camera){
@@ -169,14 +210,46 @@ public class UVCReciver extends Thread {
         return true;
     }
 
-    private final CVResolver.ICallbackPosition defaultCallBackPosition = new CVResolver.ICallbackPosition() {
-        @Override
-        public boolean callbackPosition(final int pos, final CVResolver cvr ) {
-            Logger.v("defaultCallBackPosition!");
-            return true;
-        }
-    };
 
-    private CVResolver.ICallbackPosition mCallBackPosition = defaultCallBackPosition;
+    private boolean tranning(final CVResolver cvr){
+        countTraningFrame = 0;
+        final int WARMING_UP = 1000;
+        final int TRANNING_TIME = 1111;
+        final int COUNT_MIN = 11;
+
+        cvr.setCallback(this);
+
+        Logger.v( "warming-up start time " + String.valueOf(WARMING_UP));
+        if(!waitExit(WARMING_UP))
+            return false;
+        Log.v(TAG, "warming-up stop");
+
+        Logger.v(  "Start tranning!");
+        cvr.setMode(cvr.MODE_LEARN);
+        if(!waitExit(TRANNING_TIME))
+            return false;
+
+        Logger.v(  "Stop tranning, Start capturing!");
+        cvr.setMode(cvr.MODE_CAPTURE);
+
+        if(countTraningFrame < COUNT_MIN){
+            Log.w(TAG,"callback don't call!");
+            return false;
+        }
+
+        cvr.setCallback(mCallBackPosition);
+        return true;
+    }
+
+    int countTraningFrame = 0;
+
+    @Override
+    public boolean callbackPosition(int pos, CVResolver cvr) {
+        countTraningFrame++;
+        Log.v(TAG,"!");
+        return true;
+    }
+
+    private CVResolver.ICallbackPosition mCallBackPosition = this;
 
 }
