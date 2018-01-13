@@ -62,7 +62,9 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
         EventBus.getDefault().register(this);
 
-        Thread.setDefaultUncaughtExceptionHandler(this);
+        if (!BuildConfig.DEBUG) {
+            Thread.setDefaultUncaughtExceptionHandler(this);
+        }
     }
 
     @Override

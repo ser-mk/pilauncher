@@ -135,7 +135,7 @@ public final class PIService extends Service {
         @Override
         public void onAttach(final UsbDevice device) {
             Logger.v("onAttach");
-            startUVC(mBinder);
+            if (!BuildConfig.DEBUG) startUVC(mBinder);
             EventBus.getDefault().post(LauncherAct.State.STAND_TO);
         }
 
