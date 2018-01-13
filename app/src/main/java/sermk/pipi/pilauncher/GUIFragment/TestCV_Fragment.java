@@ -208,7 +208,7 @@ public class TestCV_Fragment extends Fragment {
             }
 
             final boolean drawDisable = mDrawButton.isChecked();
-            cvr.setDisablePlot(drawDisable ? 1 : 0);
+            cvr.setDisablePlot(drawDisable);
 
             if(drawDisable){
                 return true;

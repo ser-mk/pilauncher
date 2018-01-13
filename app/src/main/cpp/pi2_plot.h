@@ -12,7 +12,7 @@ struct pi2_plot{
 
     static void setPlotOption(JNIEnv *env, jobject thiz, ID_TYPE refMat){
         chart = *reinterpret_cast<cv::Mat*>(refMat);
-        setDisablePlot(false);
+        setDisablePlot(0,0,false);
     }
 
     static cv::Mat chart;
@@ -49,8 +49,8 @@ struct pi2_plot{
         return !disablePlot;
     }
 
-    static void setDisablePlot(jint disable){
-        disablePlot = disable == 1 ? true : false;
+    static void setDisablePlot(JNIEnv *env, jobject thiz, jboolean disable){
+        disablePlot = disable; // == 1 ? true : false;
     }
 };
 
