@@ -79,6 +79,7 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         } else {
             powerHist.calcPower(learnHist, vertHist);
             position = powerHist.calcPosition();
+            position = normilizePosition(position);
         }
     }
 
@@ -93,7 +94,7 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         }
         pi2_plot::plotPreviewFrame(frame);
     }
-    position = normilizePosition(position);
+
     env->CallVoidMethod(objectCV, midCV,position);
 
 }
