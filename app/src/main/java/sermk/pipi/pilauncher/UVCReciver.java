@@ -11,11 +11,14 @@ import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.USBMonitor.UsbControlBlock;
 import com.serenegiant.usb.UVCCamera;
 
+import org.opencv.core.Rect;
+
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.List;
 
+import sermk.pipi.pilauncher.GUIFragment.CVMaskResolver;
 import sermk.pipi.pilauncher.externalcooperation.AllSettings;
 
 /**
@@ -222,6 +225,8 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         final long TRANNING_TIME = getBS().tranning.TRANNING_TIME;
         final int COUNT_MIN = getBS().tranning.COUNT_TRANNING_FRAMES;
 
+        setUpMask(cvr);
+
         cvr.setCallback(this);
 
         Logger.v( "warming-up start time " + String.valueOf(WARMING_UP_TIME));
@@ -249,8 +254,14 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         return true;
     }
 
-    static long lastCaptureDate = 0;
+    private void setUpMask(CVResolver cvr){
+        Rect rect = AllSettings.getInstance().getCurrentSettings().rectMask;
+        final byte[] bytes = AllSettings.getInstance().getBytesMask();
+        final long refMat = CVMaskResolver.createRefMat(rect, bytes);
+        cvr.setRectOfMask(rect.x, rect.y, refMat);
+    }
 
+    private static long lastCaptureDate = 0;
     private boolean captureFrameAndSave(final CVResolver cvr){
         final long CAPTURE_WAIT_TIME = getBS().captureFrame.CAPTURE_WAIT_TIME;
         final long CAPTURE_FRAME_INTERVAL = getBS().captureFrame.CAPTURE_FRAME_INTERVAL;

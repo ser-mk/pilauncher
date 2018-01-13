@@ -38,6 +38,7 @@ void pi2_cv::setRectOfMask(JNIEnv *env, jobject thiz, jint x, jint y, ID_TYPE re
     maskRect = Rect(x, y, m.cols, m.rows);
     uint8_t * pData = m.data;
     memcpy(arrayMask, pData, m.total()*m.elemSize());
+    m.release();    //remember!
 }
 
 void pi2_cv::calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect) {

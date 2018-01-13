@@ -41,6 +41,22 @@ public class CVMaskResolver extends ImageView {
         return rectMaskByte;
     }
 
+    public static byte[] convertMat2BAGRAY(final long ref){
+        Mat capMat = new Mat(ref);
+        Mat bw = new Mat();
+        Imgproc.cvtColor(capMat,bw,Imgproc.COLOR_YUV2GRAY_YUYV,1);
+        byte[] return_buff = new byte[(int) (bw.total() *
+            bw.channels())];
+        bw.get(0, 0, return_buff);
+        return return_buff;
+    }
+
+    public static long createRefMat(Rect rect, final byte[] bytes){
+        Mat mat = new Mat(rect.height, rect.width, CvType.CV_8UC1);
+        mat.put(0,0,bytes);
+        return mat.getNativeObjAddr();
+    }
+
     public byte[] getByteArrayMask() {
         byte[] return_buff = new byte[(int) (roiMask.total() *
             roiMask.channels())];
