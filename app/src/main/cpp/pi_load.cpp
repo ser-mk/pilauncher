@@ -50,6 +50,7 @@ static JNINativeMethod methods[] = {
         { "setMode",                  "(I)V", (void *)pi2_cv::setMode },
         { "setPlotOption",                  "(J)V", (void *)pi2_plot::setPlotOption },
         { "setDisablePlot",                  "(Z)V", (void *)pi2_plot::setDisablePlot },
+        { "getFrame",                  "(I)J", (void *)pi2_cv::getFrame },
 };
 
 #define		NUM_ARRAY_ELEMENTS(p)		((int) sizeof(p) / sizeof(p[0]))

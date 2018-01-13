@@ -17,6 +17,9 @@ public final class CVResolver {
     public final int MODE_CAPTURE = 0;
     public final int MODE_LEARN = 1;
 
+    public final int CAPTURE_ONE_FRAME_START_TO = 0;
+    public final int CAPTURE_ONE_FRAME_RETURN_RESULT = 1;
+
     private ICallbackPosition mICallbackPosition = null;
 
     public CVResolver(@Nullable final ICallbackPosition callback) {
@@ -40,6 +43,7 @@ public final class CVResolver {
 
     public static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
     public static native void setMode(final int mode);
+    public static native long getFrame(final int mode);
     public void stop(){}
 
     public static native void setDisablePlot(boolean disable);

@@ -13,6 +13,7 @@ import com.serenegiant.usb.UVCCamera;
 
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
 
 import sermk.pipi.pilauncher.externalcooperation.AllSettings;
@@ -237,7 +238,35 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
             return false;
         }
 
+        if(!captureFrameAndSave(cvr))
+            return false;
+
         cvr.setCallback(mCallBackPosition);
+        return true;
+    }
+
+    private boolean captureFrameAndSave(final CVResolver cvr){
+        final int firstCount = countTraningFrame;
+        final int ONE_CAPTURE_TIME = 333;
+        long lastCaptureDate = 0;
+
+        Logger.v("start capture Frame");
+
+        cvr.getFrame(cvr.CAPTURE_ONE_FRAME_START_TO);
+        if(!waitExit(ONE_CAPTURE_TIME))
+            return false;
+        if( countTraningFrame == firstCount )
+            return true;
+
+        Logger.v("capture Frame");
+
+        long refFrame = cvr.getFrame(cvr.CAPTURE_ONE_FRAME_RETURN_RESULT);
+        if(refFrame == 0){
+            return true;
+        }
+        lastCaptureDate = new Date().getTime();
+        Log.v(TAG, "date : " + new Date() );
+        Log.v(TAG,"msec " + String.valueOf(lastCaptureDate));
         return true;
     }
 

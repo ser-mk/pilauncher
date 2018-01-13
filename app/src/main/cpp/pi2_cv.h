@@ -15,12 +15,19 @@ class pi2_cv {
         LEARN,
     };
 
+    enum FRAME_CAPTURE_COMMAND {
+      START_TO = 0,
+      RETURN_RESULT,
+    };
+
     static int mode;
 
     static void cvProccessing(JNIEnv *env, uvc_frame_t *frame);
     static jobject objectCV;
     static jmethodID midCV;
     static cv::Rect maskRect;
+    static bool enableSingleCaptureFrame;
+    static cv::Mat captureFrame;
     static const int MAX_NORM_POSITION = 255;
     static uint8_t arrayFromMask[pi2_plot::sizePreview];
     static uint8_t arrayMask[pi2_plot::sizePreview];
@@ -34,6 +41,7 @@ public:
                               jint xsRoi, jint ysRoi, ID_TYPE refMat);
 
     static void setMode(JNIEnv *env, jobject thiz, jint mode);
+    static jlong getFrame(JNIEnv *env, jobject thiz, jint mode);
 };
 
 #endif //GAME_PI2_CV_H

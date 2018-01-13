@@ -15,8 +15,11 @@ uint8_t pi2_cv::arrayMask[pi2_plot::sizePreview] = {0};
 Rect pi2_cv::maskRect;
 int pi2_cv::mode = pi2_cv::CAPTURE;
 
+bool pi2_cv::enableSingleCaptureFrame = false;
+Mat pi2_cv::captureFrame = Mat();
 
-#define TAG "###>"
+
+#define TAG "# native #>"
 
 void HistType::newVerHistArrayYUYV(const uint8_t *array, const Rect &maskRect){
     const size_t sizeHist = static_cast<size_t >(maskRect.width);
@@ -49,7 +52,6 @@ void pi2_cv::calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect) 
             i++;
         }
     }
-
 }
 
 __inline int pi2_cv::normilizePosition(const int position) {
@@ -83,6 +85,11 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         }
     }
 
+    if(enableSingleCaptureFrame){
+        captureFrame = Mat(frame->height, frame->width, CV_8UC2, frame->data);
+        enableSingleCaptureFrame = false;
+    }
+
     if(pi2_plot::isEnablePlot()) {
         pi2_plot::clearAll();
         Rect testRect = Rect(maskRect);
@@ -99,6 +106,16 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
 
 }
 
+jlong pi2_cv::getFrame(JNIEnv *env, jobject thiz, jint mode) {
+    if (mode == START_TO) {
+        enableSingleCaptureFrame = true;
+        return 0;
+    }
+    if (captureFrame.empty()) {
+        return 0;
+    }
+    return ((long)&captureFrame);
+}
 
 
 void pi2_cv::setMode(JNIEnv *env, jobject thiz, jint modeWork) {
