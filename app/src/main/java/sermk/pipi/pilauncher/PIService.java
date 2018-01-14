@@ -17,6 +17,8 @@ import com.orhanobut.logger.Logger;
 import com.serenegiant.usb.USBMonitor;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import sermk.pipi.pilauncher.GUIFragment.CVMaskResolver;
 import sermk.pipi.pilauncher.externalcooperation.AllSettings;
@@ -51,6 +53,7 @@ public final class PIService extends Service {
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         showNotification("PIService start!");
         single = this;
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -118,11 +121,13 @@ public final class PIService extends Service {
         mNotificationManager.notify(NOTIFICATION, notification);
     }
 
-    public void startUVC(@Nullable final CVResolver.ICallbackPosition callback){
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void startUVC(CVResolver.ICallbackPosition callback){
         if(mUVCReciver != null)
             if(!mUVCReciver.isAlive()) {
                 mUVCReciver.startCapture(callback);
-            } //todo forse release if run!
+            } else { //todo forse release if run!
+            }
         Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         final long time = 11;
         if(v.hasVibrator()) {
@@ -131,8 +136,11 @@ public final class PIService extends Service {
         }
     }
 
-    public void completeUVC(){
-        mUVCReciver.exitRun();
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void completeUVC(LauncherAct.State state) {
+        if(state.equals(LauncherAct.State.REST)){
+            mUVCReciver.exitRun();
+        }
     }
 
     private final USBMonitor.OnDeviceConnectListener mOnDeviceConnectListener = new USBMonitor.OnDeviceConnectListener() {
@@ -164,7 +172,6 @@ public final class PIService extends Service {
         @Override
         public void onDettach(final UsbDevice device) {
             Logger.v("onDettach");
-            completeUVC();
             EventBus.getDefault().post(LauncherAct.State.REST);
         }
 
