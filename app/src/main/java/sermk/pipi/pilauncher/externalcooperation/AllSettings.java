@@ -137,4 +137,10 @@ public final class AllSettings {
             json, bytesMask);
     }
 
+    public boolean confirmSettings(Context context, final byte[] frame){
+        final String json = jsonCurrentSettings();
+        return MClient.sendMessage(context, subjConfirm,
+            json, frame);
+    }
+
 }

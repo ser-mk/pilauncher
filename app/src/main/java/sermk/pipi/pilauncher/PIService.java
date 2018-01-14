@@ -17,6 +17,9 @@ import com.serenegiant.usb.USBMonitor;
 
 import org.greenrobot.eventbus.EventBus;
 
+import sermk.pipi.pilauncher.GUIFragment.CVMaskResolver;
+import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+
 /**
  * Created by echormonov on 20.11.17.
  */
@@ -147,6 +150,15 @@ public final class PIService extends Service {
         @Override
         public void onDisconnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock) {
             Logger.v("onDisconnect");
+
+            final long refFrame = mUVCReciver.getRefCaptureFrameMat();
+            if(refFrame == 0)
+                return;
+            final byte[] capture = CVMaskResolver.convertMat2BAGRAY(refFrame);
+            if(AllSettings.getInstance().confirmSettings(
+                PIService.this,capture)){
+                mUVCReciver.markingSuccessCaptureFrameMat();
+            }
         }
         @Override
         public void onDettach(final UsbDevice device) {

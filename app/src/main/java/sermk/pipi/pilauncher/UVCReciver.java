@@ -262,13 +262,21 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
     }
 
     private static long lastCaptureDate = 0;
+    private long refFrame = 0;
+
+    public long getRefCaptureFrameMat(){ return refFrame; }
+    public void markingSuccessCaptureFrameMat(){
+        lastCaptureDate = new Date().getTime();
+        refFrame=0;
+    }
+
     private boolean captureFrameAndSave(final CVResolver cvr){
         final long CAPTURE_WAIT_TIME = getBS().captureFrame.CAPTURE_WAIT_TIME;
         final long CAPTURE_FRAME_INTERVAL = getBS().captureFrame.CAPTURE_FRAME_INTERVAL;
 
         final long lastCaptureAgo = new Date().getTime() - lastCaptureDate;
         if(lastCaptureAgo < CAPTURE_FRAME_INTERVAL)
-            return false;
+            return true;
 
         Logger.v("start capture Frame");
         final int firstCount = countTraningFrame;
@@ -280,11 +288,11 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
 
         Logger.v("capture Frame");
 
-        long refFrame = cvr.getFrame(cvr.CAPTURE_ONE_FRAME_RETURN_RESULT);
+        refFrame = cvr.getFrame(cvr.CAPTURE_ONE_FRAME_RETURN_RESULT);
         if(refFrame == 0){
             return true;
         }
-        lastCaptureDate = new Date().getTime();
+
         Log.v(TAG, "date : " + new Date() );
         return true;
     }

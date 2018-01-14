@@ -44,7 +44,7 @@ public class CVMaskResolver extends ImageView {
     public static byte[] convertMat2BAGRAY(final long ref){
         Mat capMat = new Mat(ref);
         Mat bw = new Mat();
-        Imgproc.cvtColor(capMat,bw,Imgproc.COLOR_YUV2GRAY_YUYV,1);
+        Imgproc.cvtColor(capMat,bw,Imgproc.COLOR_YUV2GRAY_YUYV);
         byte[] return_buff = new byte[(int) (bw.total() *
             bw.channels())];
         bw.get(0, 0, return_buff);

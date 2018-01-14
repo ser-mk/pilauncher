@@ -87,7 +87,8 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
     }
 
     if(enableSingleCaptureFrame){
-        captureFrame = Mat(frame->height, frame->width, CV_8UC2, frame->data);
+        Mat tmp = Mat(frame->height, frame->width, CV_8UC2, frame->data);
+        captureFrame = tmp.clone();
         enableSingleCaptureFrame = false;
     }
 
