@@ -36,12 +36,6 @@ public final class PIService extends Service {
     private UVCReciver mUVCReciver;
     private NotificationManager mNotificationManager;
 
-    static private PIService single = null;
-
-    static public PIService getInstance(){
-        return single;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -52,8 +46,13 @@ public final class PIService extends Service {
 
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         showNotification("PIService start!");
-        single = this;
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        EventBus.getDefault().unregister(this);
+        return super.stopService(name);
     }
 
     @Override
@@ -64,7 +63,6 @@ public final class PIService extends Service {
             mNotificationManager.cancel(NOTIFICATION);
             mNotificationManager = null;
         }
-        single = null;
         super.onDestroy();
     }
 
