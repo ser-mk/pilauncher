@@ -57,8 +57,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
                 .add(R.id.container, new WelcomeFragment()).commit();
             //.add(R.id.container, new PasswordFragment()).commit();
         }
-        Logger.v("start services");
-        startService(new Intent(this, PIService.class));
+        PIService.runTry(this);
 
         EventBus.getDefault().register(this);
 

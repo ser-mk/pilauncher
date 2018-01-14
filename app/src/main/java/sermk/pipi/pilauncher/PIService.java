@@ -1,5 +1,6 @@
 package sermk.pipi.pilauncher;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -173,4 +174,17 @@ public final class PIService extends Service {
         }
 
     };
+
+    public static void runTry(Context context){
+        final String TAG_CONTEXT = context.getClass().getName();
+        ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+            if(PIService.class.getName().equals(service.service.getClassName())) {
+                Log.v(TAG_CONTEXT, "service run");
+                return;
+            }
+        }
+        Log.v(TAG_CONTEXT, "start services!");
+        context.startService(new Intent(context, PIService.class));
+    }
 }
