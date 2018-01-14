@@ -45,12 +45,14 @@ static JNINativeMethod methods[] = {
         { "passRoiRectToCVPIPI",                  "(IIJ)I", (void *) passRoiRectToCVPIPI },
         { "enableLearn",                  "(Z)V", (void *) enableLearn },
 #endif
-        { "startCV",                  "(Z)V", (void *) pi2_cv::startCV },
+        { "startCV",                  "()Z", (void *) pi2_cv::startCV },
         { "setRectOfMask",                  "(IIJ)I", (void *) pi2_cv::setRectOfMask },
         { "setMode",                  "(I)V", (void *)pi2_cv::setMode },
         { "setPlotOption",                  "(J)V", (void *)pi2_plot::setPlotOption },
         { "setDisablePlot",                  "(Z)V", (void *)pi2_plot::setDisablePlot },
         { "getFrame",                  "(I)J", (void *)pi2_cv::getFrame },
+        { "setOptions",                  "(III)V", (void *) pi2_cv::setOptions },
+
 };
 
 #define		NUM_ARRAY_ELEMENTS(p)		((int) sizeof(p) / sizeof(p[0]))

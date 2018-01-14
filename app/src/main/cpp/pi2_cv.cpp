@@ -18,6 +18,10 @@ int pi2_cv::mode = pi2_cv::CAPTURE;
 bool pi2_cv::enableSingleCaptureFrame = false;
 Mat pi2_cv::captureFrame = Mat();
 
+size_t pi2_cv::MAX_PULSE_WIDTH = pi2_plot::widthPreview;
+size_t pi2_cv::MIN_PULSE_WIDTH = 0;
+size_t pi2_cv::GAP_DECREASE_MASK = 50; // 50%1000
+
 
 #define TAG "# native #>"
 
@@ -56,7 +60,7 @@ void pi2_cv::calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect) 
 }
 
 __inline int pi2_cv::normilizePosition(const int position) {
-    const int norm = (position * MAX_NORM_POSITION)/maskRect.width;
+    const int norm = (position * FACTOR_TRANSFER_POSITION)/maskRect.width;
     return norm;
 }
 
@@ -71,19 +75,24 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         return;
     }
 
-    int position = -1;
+    int position = UNDEFINED_POSITION;
 
     if(!maskRect.empty()){
         Rect testRect = Rect(maskRect);
         calcUVC_FrameOfMask(frame,maskRect);
         vertHist.newVerHistArrayYUYV(arrayFromMask,maskRect);
         if( mode == LEARN) {
+            LOGI("learn---");
             learnHist.setMinValue(vertHist);
         } else {
             powerHist.calcPower(learnHist, vertHist);
-            position = powerHist.calcPosition();
-            position = normilizePosition(position);
+            position = powerHist.calcPosition(MAX_PULSE_WIDTH, MIN_PULSE_WIDTH);
+            if(position >= 0) {
+                position = normilizePosition(position);
+            }
         }
+    } else {
+        LOGI("empty +++ ");
     }
 
     if(enableSingleCaptureFrame){
@@ -124,7 +133,7 @@ void pi2_cv::setMode(JNIEnv *env, jobject thiz, jint modeWork) {
     if( modeWork==CAPTURE ){
         if( mode != CAPTURE ){
             LOGI("provisioning for capture");
-            learnHist.mullArray(1,20);
+            learnHist.mullArray(GAP_DECREASE_MASK,DIVIDER_GAP_MASK);
         }
     }
 
@@ -137,13 +146,13 @@ void pi2_cv::setMode(JNIEnv *env, jobject thiz, jint modeWork) {
     mode = modeWork;
 }
 
-void pi2_cv::startCV(JNIEnv *env, jobject thiz, jboolean plotiing) {
+bool pi2_cv::startCV(JNIEnv *env, jobject thiz) {
     LOGI(TAG"startCV");
     UVCPreview::setPass2cv(pi2_cv::cvProccessing);
     jclass clazz = env->GetObjectClass(thiz);
     if (env->IsSameObject(objectCV, thiz)){
         LOGV(TAG"Same CV jobject");
-        return;
+        return false;
     }
     env->DeleteGlobalRef(objectCV);
     objectCV = env->NewGlobalRef(thiz);
@@ -157,5 +166,17 @@ void pi2_cv::startCV(JNIEnv *env, jobject thiz, jboolean plotiing) {
         LOGE(TAG"Can't find plottCV : %p %p", midCV, clazz);
     }
     LOGI(TAG"succes set startCV! midCV point %p ",midCV);
+
+    return true;
+}
+void pi2_cv::setOptions(JNIEnv *env,
+                        jobject thiz,
+                        jint MAX_PULSE_WIDTH,
+                        jint MIN_PULSE_WIDTH,
+                        jint GAP_DECREASE_MASK) {
+    LOGI(TAG"set options %d %d %d",MAX_PULSE_WIDTH, MIN_PULSE_WIDTH, GAP_DECREASE_MASK);
+    pi2_cv::MAX_PULSE_WIDTH = MAX_PULSE_WIDTH;
+    pi2_cv::MIN_PULSE_WIDTH = MIN_PULSE_WIDTH;
+    pi2_cv::GAP_DECREASE_MASK = GAP_DECREASE_MASK;
 }
 

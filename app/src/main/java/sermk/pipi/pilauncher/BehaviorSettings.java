@@ -1,5 +1,7 @@
 package sermk.pipi.pilauncher;
 
+import com.serenegiant.usb.UVCCamera;
+
 /**
  * Created by echormonov on 13.01.18.
  */
@@ -7,7 +9,7 @@ package sermk.pipi.pilauncher;
 public class BehaviorSettings {
     public class Run {
         public long TIMEOUT = 1111;
-        public int TRY_MAX = 3;
+        public int TRY_MAX = 2;
     }
 
     Run run = new Run();
@@ -26,4 +28,12 @@ public class BehaviorSettings {
     }
 
     CaptureFrame captureFrame = new CaptureFrame();
+
+    public class FilterSettings {
+        int MAX_PULSE_WIDTH = 500;
+        int MIN_PULSE_WIDTH = 50;
+        int GAP_DECREASE_MASK = 50; // 1%20
+    }
+
+    FilterSettings filterSettings = new FilterSettings();
 }

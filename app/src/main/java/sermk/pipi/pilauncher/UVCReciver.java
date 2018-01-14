@@ -231,6 +231,9 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         final int COUNT_MIN = getBS().tranning.COUNT_TRANNING_FRAMES;
 
         setUpMask(cvr);
+        cvr.setOptions(getBS().filterSettings.MAX_PULSE_WIDTH,
+            getBS().filterSettings.MIN_PULSE_WIDTH,
+            getBS().filterSettings.GAP_DECREASE_MASK);
 
         cvr.setCallback(this);
 

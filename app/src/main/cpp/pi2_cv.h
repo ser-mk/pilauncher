@@ -28,20 +28,25 @@ class pi2_cv {
     static cv::Rect maskRect;
     static bool enableSingleCaptureFrame;
     static cv::Mat captureFrame;
-    static const int MAX_NORM_POSITION = 255;
     static uint8_t arrayFromMask[pi2_plot::sizePreview];
     static uint8_t arrayMask[pi2_plot::sizePreview];
     static void calcUVC_FrameOfMask(uvc_frame_t *frame, const cv::Rect & maskRect);
     static int normilizePosition(const int position);
 
+    static size_t MAX_PULSE_WIDTH;
+    static size_t MIN_PULSE_WIDTH;
+    static size_t GAP_DECREASE_MASK;
+
 public:
 
-    static void startCV(JNIEnv *env, jobject thiz, jboolean plotiing);
+    static bool startCV(JNIEnv *env, jobject thiz);
     static void setRectOfMask(JNIEnv *env, jobject thiz,
                               jint xsRoi, jint ysRoi, ID_TYPE refMat);
 
     static void setMode(JNIEnv *env, jobject thiz, jint mode);
     static jlong getFrame(JNIEnv *env, jobject thiz, jint mode);
+    static void setOptions(JNIEnv *env, jobject thiz, jint MAX_PULSE_WIDTH,
+                           jint MIN_PULSE_WIDTH, jint GAP_DECREASE_MASK);
 };
 
 #endif //GAME_PI2_CV_H

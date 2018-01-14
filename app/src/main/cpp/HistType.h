@@ -35,6 +35,16 @@ struct LearnHType: HistType {
     }
 };
 
+enum POSITION_STATE {
+  UNDEFINED_POSITION = -1,
+  UNCORRECT_BIG_PULSE = -2,
+  UNCORRECT_LITLE_PULSE = -3,
+};
+
+#define DIVIDER_WITDH 1000
+#define FACTOR_TRANSFER_POSITION 1000
+#define DIVIDER_GAP_MASK 1000
+
 struct PowerHType: HistType {
     void calcPower(const LearnHType & learn, const HistType & signal){
         this->clearHist();
@@ -48,16 +58,38 @@ struct PowerHType: HistType {
         this->currSize = signal.currSize;
     }
 
-    int calcPosition(){
+__inline int calcPosition(const size_t MAX_WIDTH, const size_t MIN_WIDTH){
         uint64 mv = 0;
+        int mw = 0;
+        int width = 0;
         int position = -1;
         for(int i=0; i < this->currSize; i++){
             uint64 val = hist[i];
             if(val > mv){
                 mv = val;
                 position = i;
+                mw = width;
+            }
+
+            if(val > 0){
+                width++;
+            } else {
+                width = 0;
             }
         }
+
+    const size_t MAXW = (this->currSize*MAX_WIDTH)/DIVIDER_WITDH;
+
+    if(mw > MAXW){
+        return UNCORRECT_BIG_PULSE;
+    }
+
+    const size_t MINW = (this->currSize*MIN_WIDTH)/DIVIDER_WITDH;
+
+    if(mw < MINW){
+        return UNCORRECT_LITLE_PULSE;
+    }
+
         return position;
     }
 };

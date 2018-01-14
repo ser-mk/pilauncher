@@ -25,7 +25,7 @@ public final class CVResolver {
     public CVResolver(@Nullable final ICallbackPosition callback) {
         setCallback(callback);
         setMode(MODE_CAPTURE);
-        startCV(false);
+        startCV();
     }
 
     public void setCallback(@Nullable final ICallbackPosition callback) {
@@ -39,7 +39,7 @@ public final class CVResolver {
         this.mICallbackPosition.callbackPosition(position, this);
     }
 
-    public native void startCV(final boolean enable);
+    public native boolean startCV();
 
     public static native int setRectOfMask(final int xsRoi, final int ysRoi, final long refMat);
     public static native void setMode(final int mode);
@@ -48,4 +48,7 @@ public final class CVResolver {
 
     public static native void setDisablePlot(boolean disable);
     public static native void setPlotOption(final long previewMat);
+    public static native void setOptions(final int MAX_PULSE_WIDTH,
+                                         final int MIN_PULSE_WIDTH,
+                                         final int GAP_DECREASE_MASK);
 }
