@@ -88,7 +88,7 @@ public class PasswordFragment extends Fragment implements View.OnKeyListener {
             Log.v(TAG, "finish timer");
             //todo: check current visible fragment!
             getFragmentManager().beginTransaction()
-                .replace(R.id.container, new WelcomeFragment(), WelcomeFragment.class.getName())
+                .replace(R.id.container, new StatusFragment(), StatusFragment.class.getName())
                 .commit();
         }
     };

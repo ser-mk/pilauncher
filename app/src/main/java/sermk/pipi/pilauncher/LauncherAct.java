@@ -2,7 +2,6 @@ package sermk.pipi.pilauncher;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -14,16 +13,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 
-import sermk.pipi.pilauncher.GUIFragment.PasswordFragment;
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
-import sermk.pipi.pilauncher.GUIFragment.WelcomeFragment;
+import sermk.pipi.pilauncher.GUIFragment.StatusFragment;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.GameRunner;
 import sermk.pipi.pilib.MClient;
@@ -54,7 +50,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
                 .add(R.id.container, new TestCV_Fragment()).commit();
         } else {
             getFragmentManager().beginTransaction()
-                .add(R.id.container, new WelcomeFragment()).commit();
+                .add(R.id.container, new StatusFragment()).commit();
             //.add(R.id.container, new PasswordFragment()).commit();
         }
         PIService.runTry(this);
