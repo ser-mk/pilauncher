@@ -78,7 +78,12 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
             return false;
         }
 
-        mCallBackPosition = callBackPosition;
+        if(callBackPosition != null){
+            mCallBackPosition = callBackPosition;
+        } else {
+            mCallBackPosition = this;
+        }
+
         cvr.setCallback(mCallBackPosition);
         return true;
     }

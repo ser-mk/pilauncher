@@ -70,7 +70,7 @@ public final class PIService extends Service {
         Logger.v("set pos callback " + res);
     }
 
-    private void unSetPositionHandler(){//todo may be not use?
+    private void releasePositionHandler(){//todo may be not use?
         final boolean res = mUVCReciver.setCallBackPositionInRun(null);
         Logger.v("unset pos callback " + res);
     }
@@ -96,7 +96,7 @@ public final class PIService extends Service {
     @Override
     public boolean onUnbind(final Intent intent) {
         Log.d(TAG, "onUnbind:" + intent);
-        unSetPositionHandler();
+        releasePositionHandler();
         Log.d(TAG, "onUnbind:finished");
         return true;
     }
