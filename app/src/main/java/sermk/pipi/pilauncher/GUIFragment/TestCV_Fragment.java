@@ -116,6 +116,13 @@ public class TestCV_Fragment extends Fragment {
             }
         });
 
+        ((Button)rootView.findViewById(R.id.clear_settings)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AllSettings.getInstance().clear();
+            }
+        });
+
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -179,7 +186,6 @@ public class TestCV_Fragment extends Fragment {
         @Override
         public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
             Log.v(TAG, "Test CV enable " + isChecked);
-            GlobalController app = (GlobalController)getActivity().getApplication();
             if (isChecked) {
                 mPlotPreview.setMask(
                     AllSettings.getInstance().getCurrentSettings().rectMask,

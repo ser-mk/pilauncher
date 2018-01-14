@@ -129,6 +129,12 @@
                 android:layout_height="wrap_content"
                 android:text="confirm Settings" />
 
+            <Button
+                android:id="@+id/clear_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="clear Settings" />
+
         </LinearLayout>
     </LinearLayout>
 

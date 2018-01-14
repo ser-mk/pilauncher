@@ -83,6 +83,11 @@ public final class AllSettings {
         return ErrorCollector.NO_ERROR;
     }
 
+    public void clear(){
+        Log.v(TAG,"clear all settings!");
+        sharedPreferences.edit().clear().apply();
+    }
+
     private String loadSettings(final Context context){
         final String json = sharedPreferences.getString(NAME_FIELD_STRUCT_SETTINGS, "");
         Log.i(TAG, "load settings : " + json );
