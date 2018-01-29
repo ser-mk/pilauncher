@@ -65,6 +65,7 @@
             <intent-filter>
                 <action android:name="PI.SETTINGS.SET" />
                 <action android:name="PI.SETTINGS.SAVE" />
+                <action android:name="SET_PI_STATUS" />
             </intent-filter>
         </receiver>
         <receiver

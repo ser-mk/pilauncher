@@ -18,6 +18,8 @@ public final class GlobalController extends Application {
 
     private static GlobalController app = null;
 
+    private final String TAG = this.getClass().getName();
+
     // Called when the application is starting, before any other application objects have been created.
     // Overriding this method is totally optional!
     @Override
