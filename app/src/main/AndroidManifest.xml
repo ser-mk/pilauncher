@@ -65,7 +65,6 @@
             <intent-filter>
                 <action android:name="PI.SETTINGS.SET" />
                 <action android:name="PI.SETTINGS.SAVE" />
-                <action android:name="SET_PI_STATUS" />
             </intent-filter>
         </receiver>
         <receiver
@@ -74,6 +73,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="PING" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".externalcooperation.ProblemReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="SET_PI_STATUS" />
             </intent-filter>
         </receiver>
     </application>

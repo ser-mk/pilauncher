@@ -7,6 +7,8 @@ import com.orhanobut.logger.Logger;
 
 import org.opencv.android.OpenCVLoader;
 
+import java.util.HashSet;
+
 import sermk.pipi.pilauncher.externalcooperation.AllSettings;
 
 
@@ -59,5 +61,23 @@ public final class GlobalController extends Application {
             Logger.v("succes opencv load library");
         }
     }
+
+    public static class Problem {
+        private HashSet<String> SetProblem = new HashSet<String>();
+
+        public HashSet<String> problemSet() {
+            return SetProblem;
+        }
+
+        public String getAllStatus(){
+            String ret = new String();
+            for(String s: SetProblem){
+                ret += s;
+            }
+            return ret;
+        }
+    }
+
+    public Problem problem = new Problem();
 
 }
