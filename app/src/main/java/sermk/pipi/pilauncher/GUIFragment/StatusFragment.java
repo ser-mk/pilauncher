@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import sermk.pipi.pilauncher.GlobalController;
 import sermk.pipi.pilauncher.R;
 
 
@@ -24,6 +26,8 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
     }
 
     static int count = 0;
+
+    TextView status;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,9 +45,19 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        status = (TextView)rootView.findViewById(R.id.status);
+
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        GlobalController gb = (GlobalController)getActivity().getApplication().getApplicationContext();
+        final String str = gb.problem.getAllStatus();
+        Log.v(TAG, "status : " + str);
+        status.setText(str);
+    }
 
     @Override
     public void onAttach(Context context) {
