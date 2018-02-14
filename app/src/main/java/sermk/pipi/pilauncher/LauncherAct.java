@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 
+import sermk.pipi.pilauncher.GUIFragment.PasswordFragment;
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
 import sermk.pipi.pilauncher.GUIFragment.StatusFragment;
 import sermk.pipi.pilib.ErrorCollector;
@@ -59,6 +60,20 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
         if (!BuildConfig.DEBUG) {
             Thread.setDefaultUncaughtExceptionHandler(this);
+        }
+    }
+
+    public enum Screen { TestCV, Password, Status};
+
+    public void addFragment(final Screen screen){
+        switch (screen){
+            case Status: getFragmentManager().beginTransaction()
+                .add(R.id.container, new StatusFragment()).commit();
+            case Password:
+                getFragmentManager().beginTransaction()
+                    .add(R.id.container, new PasswordFragment()).commit();
+            case TestCV: getFragmentManager().beginTransaction()
+                .add(R.id.container, new TestCV_Fragment()).commit();
         }
     }
 
