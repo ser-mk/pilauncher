@@ -17,6 +17,8 @@ android {
                 abiFilters 'arm64-v8a'
             }
         }
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -50,9 +52,16 @@ dependencies {
     implementation project(':libuvccamera')
     implementation project(':openCVLibrary330')
     implementation project(':usbCameraCommon')
+    implementation project(':PiLib')
 
     compile 'com.orhanobut:logger:2.1.1'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'org.greenrobot:eventbus:3.1.1'
-    implementation project(':PiLib')
+
+    testImplementation 'junit:junit:4.12'
+    androidTestCompile 'com.android.support:support-annotations:' + rootProject.supportLibVersion;
+    androidTestCompile 'com.android.support.test:runner:' + rootProject.runnerVersion;
+    androidTestCompile 'com.android.support.test:rules:' + rootProject.rulesVersion;
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:' + rootProject.espressoVersion;
+
 }
