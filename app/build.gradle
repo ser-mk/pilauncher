@@ -51,7 +51,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':libuvccamera')
     implementation project(':openCVLibrary330')
-    implementation project(':usbCameraCommon')
     implementation project(':PiLib')
 
     compile 'com.orhanobut:logger:2.1.1'
