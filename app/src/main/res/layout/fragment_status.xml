@@ -7,19 +7,18 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="32sp"
-        android:textColor="@color/RED"
-        />
-
     <ImageView
         android:id="@+id/image_welcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/welcome"
         android:background="@color/BLACK"/>
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/RED"
+        android:textSize="32sp" />
 
 </FrameLayout>
