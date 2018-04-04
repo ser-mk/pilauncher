@@ -74,10 +74,8 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void run() {
                     if(watcher.checkTimeout()){
-                        Log.v(TAG,"checkTimeout!!!!!!!!!!!");
                         connectionStatus.setText(CONNECTION_PROBLEM_TITLE);
                     } else {
-                        Log.v(TAG,"clearComposingText!!!!!!!!!!!");
                         connectionStatus.setText("");
                     }
                 }
