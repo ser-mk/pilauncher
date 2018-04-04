@@ -68,7 +68,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".externalcooperation.PingReceiver"
+            android:name=".externalcooperation.RequestReciever"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
