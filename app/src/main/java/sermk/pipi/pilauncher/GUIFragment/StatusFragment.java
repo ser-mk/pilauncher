@@ -1,7 +1,6 @@
 package sermk.pipi.pilauncher.GUIFragment;
 
 import android.app.FragmentManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -11,14 +10,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import sermk.pipi.pilauncher.GlobalController;
 import sermk.pipi.pilauncher.R;
+import sermk.pipi.pilib.WatchConnectionMClient;
 
 
 public class StatusFragment extends Fragment implements View.OnClickListener {
 
     private static final int COUNT_MAX = 11;
     private final String TAG = this.getClass().getName();
+    private Timer mTimer;
+
+    private final String CONNECTION_PROBLEM_TITLE
+        = "Internet connection problem \r\ncheck Wifi net";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,7 +34,8 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
 
     static int count = 0;
 
-    TextView status;
+    TextView connectionStatus;
+    WatchConnectionMClient watcher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,28 +53,46 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        status = (TextView)rootView.findViewById(R.id.status);
+        connectionStatus = (TextView)rootView.findViewById(R.id.status);
+        watcher = new WatchConnectionMClient(11111, 1111);
 
         return rootView;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        GlobalController gb = (GlobalController)getActivity().getApplication();
-        final String str = gb.problem.getAllStatus();
-        Log.v(TAG, "status : " + str);
-        status.setText(str);
+    public void onStart() {
+        super.onStart();
+        mTimer = new Timer("connection status updating");
+        mTimer.schedule(updateStatusTask, 10L, 100L); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
+    private final TimerTask updateStatusTask =  new TimerTask() { // Определяем задачу
+        @Override
+        public void run() {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(watcher.checkTimeout()){
+                        Log.v(TAG,"checkTimeout!!!!!!!!!!!");
+                        connectionStatus.setText(CONNECTION_PROBLEM_TITLE);
+                    } else {
+                        Log.v(TAG,"clearComposingText!!!!!!!!!!!");
+                        connectionStatus.setText("");
+                    }
+                }
+            });
+        }
+    };
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onStop() {
+        try {
+            mTimer.cancel();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 
     @Override

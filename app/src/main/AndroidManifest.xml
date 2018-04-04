@@ -76,11 +76,11 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".externalcooperation.ProblemReceiver"
+            android:name="sermk.pipi.pilib.WatchConnectionMClient$WatchMCConnectionReciever"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="SET_PI_STATUS" />
+                <action android:name="ACTION_RECIEVER_MCLIENT_CONNECTION_RESULT" />
             </intent-filter>
         </receiver>
     </application>
