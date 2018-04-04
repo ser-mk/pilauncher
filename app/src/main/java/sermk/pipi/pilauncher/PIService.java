@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;
@@ -138,6 +137,7 @@ public final class PIService extends Service {
     public void completeUVC(LauncherAct.State state) {
         if(state.equals(LauncherAct.State.REST)){
             mUVCReciver.exitRun();
+            mBinder.sendingCloseCode();
         }
     }
 

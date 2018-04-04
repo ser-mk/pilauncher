@@ -4,6 +4,7 @@ package sermk.pipi.pilauncher;
 import android.os.RemoteException;
 import android.util.Log;
 
+import sermk.pipi.pilib.PiBind;
 import sermk.pipi.pilib.Pinterface;
 
 /**
@@ -20,12 +21,21 @@ public class PInterface_Impl extends Pinterface.Stub implements CVResolver.ICall
         return position;
     }
 
-    private int position = 0;
+    private int position = PiBind.POSITION_UNDEFINED;
 
     @Override
     public boolean callbackPosition(int pos, CVResolver cvr) {
         Log.v(TAG, "set position " + String.valueOf(pos));
-        position = pos;
+        if(pos < PiBind.POSITION_MIN){
+            position = PiBind.POSITION_UNDEFINED;
+        } else {
+            position = pos;
+        }
         return true;
+    }
+
+    public void sendingCloseCode(){
+        Log.v(TAG, "CLOSE GAME!");
+        position = PiBind.CLOSE_GAME;
     }
 }
