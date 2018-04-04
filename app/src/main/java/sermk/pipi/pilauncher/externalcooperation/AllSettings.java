@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.serenegiant.usb.UVCCamera;
 
 import org.opencv.core.Rect;
 
@@ -15,8 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import sermk.pipi.pilauncher.CVResolver;
-import sermk.pipi.pilauncher.UVCReciver;
 import sermk.pipi.pilib.CommandCollection;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
@@ -131,8 +128,8 @@ public final class AllSettings {
         currentSettings.rectMask = rm;
         final String json = jsonCurrentSettings();
         Log.v(TAG, "json = " + json);
-        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_PILAUNCHER_SET_SETTINGS, json, byteMask);
-        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_PILAUNCHER_SAVE_SETTINGS, null, null);
+        PiSettingsReciever.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_PILAUNCHER_SET_SETTINGS, json, byteMask);
+        PiSettingsReciever.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_PILAUNCHER_SAVE_SETTINGS, null, null);
         return true;
     }
 

@@ -59,7 +59,7 @@
         </service>
 
         <receiver
-            android:name=".externalcooperation.PiReceiver"
+            android:name=".externalcooperation.PiSettingsReciever"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

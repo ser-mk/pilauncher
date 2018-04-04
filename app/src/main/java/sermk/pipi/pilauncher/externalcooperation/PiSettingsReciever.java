@@ -6,13 +6,12 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilib.CommandCollection;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
-import sermk.pipi.pilib.ReciverSkeleton;
+import sermk.pipi.pilib.UniversalReciver;
 
-public class PiReceiver extends BroadcastReceiver {
+public class PiSettingsReciever extends BroadcastReceiver {
 
     private final String TAG = this.getClass().getName();
 
@@ -24,8 +23,8 @@ public class PiReceiver extends BroadcastReceiver {
 
         EC.clear();
 
-        final ReciverSkeleton.ReciverVarible rv
-            = ReciverSkeleton.parseIntent(intent, TAG);
+        final UniversalReciver.ReciverVarible rv
+            = UniversalReciver.parseIntent(intent, TAG);
 
         String error = ErrorCollector.NO_ERROR;
 
@@ -69,7 +68,7 @@ public class PiReceiver extends BroadcastReceiver {
 
     static void sendBroadCastData(Context context, final String action,
                                   final String content, final byte[] data){
-        Intent intent = new Intent(context, PiReceiver.class);
+        Intent intent = new Intent(context, PiSettingsReciever.class);
         intent.setAction(action);
 
         intent.putExtra(Intent.EXTRA_TEXT, content);
