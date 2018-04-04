@@ -13,8 +13,10 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import sermk.pipi.pilauncher.BehaviorSettings;
 import sermk.pipi.pilauncher.GlobalController;
 import sermk.pipi.pilauncher.R;
+import sermk.pipi.pilauncher.externalcooperation.AllSettings;
 import sermk.pipi.pilib.WatchConnectionMClient;
 
 
@@ -54,7 +56,9 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         });
 
         connectionStatus = (TextView)rootView.findViewById(R.id.status);
-        watcher = new WatchConnectionMClient(11111, 1111);
+        final BehaviorSettings options = AllSettings.getInstance().getCurrentSettings().behaviorSettings;
+        watcher = new WatchConnectionMClient(options.TIMEOUT_MS_FAIL_CONNECTION,
+            options.FINE_MS_FAILCONNECTION);
 
         return rootView;
     }
