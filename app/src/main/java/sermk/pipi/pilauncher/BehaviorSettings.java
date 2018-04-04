@@ -36,4 +36,8 @@ public class BehaviorSettings {
     }
 
     FilterSettings filterSettings = new FilterSettings();
+
+    public long TIMEOUT_MS_FAIL_CONNECTION = 1000*100;
+    public long FINE_MS_FAILCONNECTION = 1000;
+
 }
