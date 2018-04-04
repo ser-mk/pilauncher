@@ -131,8 +131,8 @@ public final class AllSettings {
         currentSettings.rectMask = rm;
         final String json = jsonCurrentSettings();
         Log.v(TAG, "json = " + json);
-        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_SET_SETTINGS, json, byteMask);
-        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_SAVE_SETTINGS, null, null);
+        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_PILAUNCHER_SET_SETTINGS, json, byteMask);
+        PiReceiver.sendBroadCastData(context, CommandCollection.ACTION_RECIVER_PILAUNCHER_SAVE_SETTINGS, null, null);
         return true;
     }
 

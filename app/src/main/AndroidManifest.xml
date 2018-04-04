@@ -63,8 +63,8 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="PI.SETTINGS.SET" />
-                <action android:name="PI.SETTINGS.SAVE" />
+                <action android:name="ACTION_RECIVER_PILAUNCHER_SET_SETTINGS" />
+                <action android:name="ACTION_RECIVER_PILAUNCHER_SAVE_SETTINGS" />
             </intent-filter>
         </receiver>
         <receiver
@@ -72,7 +72,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="PING" />
+                <action android:name="ACTION_RECIVER_FOR_ALL_QUERY_SETTINGS" />
             </intent-filter>
         </receiver>
         <receiver

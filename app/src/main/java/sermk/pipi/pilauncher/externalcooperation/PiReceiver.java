@@ -71,9 +71,9 @@ public class PiReceiver extends BroadcastReceiver {
     }
 
     private String doAction(Context context, final String content, final byte[] bytesArray, @NonNull final String action){
-        if(action.equals(CommandCollection.ACTION_RECIVER_SET_SETTINGS)){
+        if(action.equals(CommandCollection.ACTION_RECIVER_PILAUNCHER_SET_SETTINGS)){
             return setSettings(content, bytesArray);
-        } else if (action.equals(CommandCollection.ACTION_RECIVER_SAVE_SETTINGS)){
+        } else if (action.equals(CommandCollection.ACTION_RECIVER_PILAUNCHER_SAVE_SETTINGS)){
             return saveSettings(context);
         }
 
