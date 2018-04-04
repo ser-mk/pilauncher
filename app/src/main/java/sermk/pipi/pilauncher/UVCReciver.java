@@ -97,8 +97,8 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
 
     @Override
     public void run() {
-        final long TIMEOUT = getBS().run.TIMEOUT;
-        final int TRY_MAX =  getBS().run.TRY_MAX;
+        final long TIMEOUT = getBS().TIMEOUT_BETWEEN_TRY_UVC_CONNECTION;
+        final int TRY_MAX =  getBS().TRY_MAX_UVC_CONNECTION;
         int try_start = TRY_MAX;
         while (try_start > 0) {
             final State state = openUVC();
@@ -226,14 +226,14 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
 
     private boolean tranning(final CVResolver cvr){
         countTraningFrame = 0;
-        final long WARMING_UP_TIME = getBS().tranning.WARMING_UP_TIME;
-        final long TRANNING_TIME = getBS().tranning.TRANNING_TIME;
-        final int COUNT_MIN = getBS().tranning.COUNT_TRANNING_FRAMES;
+        final long WARMING_UP_TIME = getBS().WARMING_UP_TIME;
+        final long TRANNING_TIME = getBS().TRANNING_TIME;
+        final int COUNT_MIN = getBS().COUNT_TRANNING_FRAMES;
 
         setUpMask(cvr);
-        cvr.setOptions(getBS().filterSettings.MAX_PULSE_WIDTH,
-            getBS().filterSettings.MIN_PULSE_WIDTH,
-            getBS().filterSettings.GAP_DECREASE_MASK);
+        cvr.setOptions(getBS().MAX_PULSE_WIDTH,
+            getBS().MIN_PULSE_WIDTH,
+            getBS().GAP_DECREASE_MASK);
 
         cvr.setCallback(this);
 
@@ -279,8 +279,8 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
     }
 
     private boolean captureFrameAndSave(final CVResolver cvr){
-        final long CAPTURE_WAIT_TIME = getBS().captureFrame.CAPTURE_WAIT_TIME;
-        final long CAPTURE_FRAME_INTERVAL = getBS().captureFrame.CAPTURE_FRAME_INTERVAL;
+        final long CAPTURE_WAIT_TIME = getBS().CAPTURE_WAIT_TIME;
+        final long CAPTURE_FRAME_INTERVAL = getBS().CAPTURE_FRAME_INTERVAL;
 
         final long lastCaptureAgo = new Date().getTime() - lastCaptureDate;
         if(lastCaptureAgo < CAPTURE_FRAME_INTERVAL)
