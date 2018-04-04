@@ -53,7 +53,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        GlobalController gb = (GlobalController)getActivity().getApplication().getApplicationContext();
+        GlobalController gb = (GlobalController)getActivity().getApplication();
         final String str = gb.problem.getAllStatus();
         Log.v(TAG, "status : " + str);
         status.setText(str);
