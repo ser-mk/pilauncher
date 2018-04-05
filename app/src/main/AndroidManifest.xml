@@ -39,16 +39,6 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <!--
-        <service
-            android:name="sermk.pipi.game.deprecated.NotifyService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="sermk.pipi.game.NotifyService"></action>
-            </intent-filter>
-        </service>
-        -->
         <service
             android:name=".PIService"
             android:enabled="true"
