@@ -219,7 +219,7 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
         return true;
     }
 
-    private BehaviorSettings getBS() {
+    static private BehaviorSettings getBS() {
         return AllSettings.getInstance().getCurrentSettings().behaviorSettings;
     }
 
@@ -271,11 +271,19 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
 
     private static long lastCaptureDate = 0;
     private long refFrame = 0;
+    public static final long MIN_CAPTURE_FRAME_INTERVAL = 0;
+
+    public static void clear_CAPTURE_FRAME_INTERVAL_PREV(){
+        getBS().CAPTURE_FRAME_INTERVAL = MIN_CAPTURE_FRAME_INTERVAL;
+    }
 
     public long getRefCaptureFrameMat(){ return refFrame; }
     public void markingSuccessCaptureFrameMat(){
         lastCaptureDate = new Date().getTime();
         refFrame=0;
+        if (getBS().CAPTURE_FRAME_INTERVAL == MIN_CAPTURE_FRAME_INTERVAL){
+            getBS().CAPTURE_FRAME_INTERVAL = getBS().CAPTURE_FRAME_INTERVAL_PREV;
+        }
     }
 
     private boolean captureFrameAndSave(final CVResolver cvr){

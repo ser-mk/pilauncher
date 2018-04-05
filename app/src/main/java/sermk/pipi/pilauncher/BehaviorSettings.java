@@ -13,6 +13,7 @@ public class BehaviorSettings {
     final public int COUNT_TRANNING_FRAMES = 11;
 
     final public long CAPTURE_WAIT_TIME = 333;
+    final public long CAPTURE_FRAME_INTERVAL_PREV = 1000*60*60*3;
     public long CAPTURE_FRAME_INTERVAL = 1000*60*60*3;
 
     final public int MAX_PULSE_WIDTH = 500;

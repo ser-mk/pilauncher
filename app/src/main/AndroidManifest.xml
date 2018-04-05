@@ -73,6 +73,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="ACTION_RECIVER_FOR_ALL_QUERY_SETTINGS" />
+                <action android:name="ACTION_RECIVER_CLEAR_CAPTURE_FRAME_INTERVAL" />
             </intent-filter>
         </receiver>
         <receiver

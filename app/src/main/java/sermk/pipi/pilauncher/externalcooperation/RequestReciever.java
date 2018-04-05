@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import sermk.pipi.pilauncher.UVCReciver;
 import sermk.pipi.pilib.CommandCollection;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
@@ -41,12 +42,14 @@ public class RequestReciever extends BroadcastReceiver {
         MClient.sendMessage(context, EC.subjError(TAG, rv.action), EC.error);
     }
 
-    private String doAction(Context context, final String action){
-        if (!CommandCollection.ACTION_RECIVER_FOR_ALL_QUERY_SETTINGS.equals(action)){
+    private String doAction(Context context, final String action) {
+        if (CommandCollection.ACTION_RECIVER_FOR_ALL_QUERY_SETTINGS.equals(action)) {
+            AllSettings.getInstance().confirmSettings(context);
+        } else if(CommandCollection.ACTION_RECIVER_CLEAR_CAPTURE_FRAME_INTERVAL.equals(action)){
+            UVCReciver.clear_CAPTURE_FRAME_INTERVAL_PREV();
+        } else {
             return "Undefined action!";
         }
-
-        AllSettings.getInstance().confirmSettings(context);
 
         return ErrorCollector.NO_ERROR;
     }
