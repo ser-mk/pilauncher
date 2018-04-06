@@ -15,14 +15,11 @@ import android.widget.ToggleButton;
 import com.serenegiant.utils.CpuMonitor;
 import com.serenegiant.utils.FpsCounter;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import sermk.pipi.pilauncher.CVResolver;
-import sermk.pipi.pilauncher.GlobalController;
 import sermk.pipi.pilauncher.PIService;
 import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.LauncherAct;
@@ -190,9 +187,9 @@ public class TestCV_Fragment extends Fragment {
                 mPlotPreview.setMask(
                     AllSettings.getInstance().getCurrentSettings().rectMask,
                     AllSettings.getInstance().getBytesMask());
-                EventBus.getDefault().post(posCallback);
+                PIService.startUVCwithCallbackPosition(posCallback);
             } else {
-                EventBus.getDefault().post(LauncherAct.State.REST);
+                PIService.external_completeUVC();
             }
         }
     };

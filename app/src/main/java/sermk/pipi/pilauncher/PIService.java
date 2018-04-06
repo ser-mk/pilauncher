@@ -118,6 +118,10 @@ public final class PIService extends Service {
         mNotificationManager.notify(NOTIFICATION, notification);
     }
 
+    public static void startUVCwithCallbackPosition(CVResolver.ICallbackPosition callback){
+        EventBus.getDefault().post(callback);
+    }
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void startUVC(CVResolver.ICallbackPosition callback){
         if(mUVCReciver != null)
@@ -133,12 +137,16 @@ public final class PIService extends Service {
         }
     }
 
+    private enum STOP_UVC_TYPE {STOP}
+
+    public static void external_completeUVC(){
+        EventBus.getDefault().post(STOP_UVC_TYPE.STOP);
+    }
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void completeUVC(LauncherAct.State state) {
-        if(state.equals(LauncherAct.State.REST)){
+    public void completeUVC(STOP_UVC_TYPE stop) {
             mUVCReciver.exitRun();
             mBinder.sendingCloseCode();
-        }
     }
 
     private final USBMonitor.OnDeviceConnectListener mOnDeviceConnectListener = new USBMonitor.OnDeviceConnectListener() {
@@ -146,7 +154,7 @@ public final class PIService extends Service {
         public void onAttach(final UsbDevice device) {
             Logger.v("onAttach");
             if (!BuildConfig.DEBUG) startUVC(mBinder);
-            EventBus.getDefault().post(LauncherAct.State.STAND_TO);
+            LauncherAct.lightOn();
         }
 
         @Override
@@ -170,7 +178,7 @@ public final class PIService extends Service {
         @Override
         public void onDettach(final UsbDevice device) {
             Logger.v("onDettach");
-            EventBus.getDefault().post(LauncherAct.State.REST);
+            LauncherAct.lightOff();
         }
 
         @Override

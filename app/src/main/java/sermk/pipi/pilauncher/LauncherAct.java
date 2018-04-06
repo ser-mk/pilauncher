@@ -83,10 +83,15 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         super.onStop();
     }
 
-    @Override
-    protected void onStart() {super.onStart();}
+    static public void lightOn(){
+        EventBus.getDefault().post(State.STAND_TO);
+    }
 
-    public enum State {STAND_TO, REST};
+    static public void lightOff(){
+        EventBus.getDefault().post(State.REST);
+    }
+
+    private enum State {STAND_TO, REST};
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onWakeUpEvent(State state) {
@@ -127,7 +132,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
     }
 
     public boolean runApp() {
-        return GameRunner.run(this,"sermk.pipi.testbind");
+        return GameRunner.run(this,"ser.pipi.piball");
     }
 
 
