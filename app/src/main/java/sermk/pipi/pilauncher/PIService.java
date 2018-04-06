@@ -129,6 +129,16 @@ public final class PIService extends Service {
                 mUVCReciver.startCapture(callback);
             } else { //todo forse release if run!
             }
+
+    }
+
+    private enum SIGNAL_VIBRATION {SIGNAL}
+
+    public static void external_trySignalVibration(){
+        EventBus.getDefault().post(SIGNAL_VIBRATION.SIGNAL);
+    }
+
+    public void trySignalVibration(){
         Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         final long time = 11;
         if(v.hasVibrator()) {
