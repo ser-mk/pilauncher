@@ -25,4 +25,5 @@ public class BehaviorSettings {
     final public long TIMEOUT_MS_FAIL_CONNECTION = 1000*100;
     final public long FINE_MS_FAIL_CONNECTION = 1000;
 
+    final public String NAME_GAME_APP = "ser.pipi.piball";
 }

@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import sermk.pipi.pilauncher.GUIFragment.PasswordFragment;
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
 import sermk.pipi.pilauncher.GUIFragment.StatusFragment;
+import sermk.pipi.pilauncher.externalcooperation.AllSettings;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.GameRunner;
 import sermk.pipi.pilib.MClient;
@@ -132,7 +133,8 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
     }
 
     public boolean runApp() {
-        return GameRunner.run(this,"ser.pipi.piball");
+        final String NAME_GAME_APP = AllSettings.getInstance().getCurrentSettings().behaviorSettings.NAME_GAME_APP;
+        return GameRunner.run(this,NAME_GAME_APP);
     }
 
 
