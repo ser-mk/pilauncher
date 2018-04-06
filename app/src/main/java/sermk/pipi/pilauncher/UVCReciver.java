@@ -113,6 +113,9 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
             }
             break;
         }
+        if(try_start == 0){
+            PIService.external_trySignalVibration();
+        }
         Logger.v("exit run");
     }
 
