@@ -16,6 +16,8 @@ public class BehaviorSettings {
     final public long CAPTURE_FRAME_INTERVAL_PREV = 1000*60*60*3;
     public long CAPTURE_FRAME_INTERVAL = 1000*60*60*3;
 
+    final public long VIBRATE_TIME_MS = 2*1000;
+
     final public int MAX_PULSE_WIDTH = 500;
     final public int MIN_PULSE_WIDTH = 50;
     final public int GAP_DECREASE_MASK = 50; // 1%20

@@ -138,9 +138,10 @@ public final class PIService extends Service {
         EventBus.getDefault().post(SIGNAL_VIBRATION.SIGNAL);
     }
 
-    public void trySignalVibration(){
+    @Subscribe
+    public void trySignalVibration(SIGNAL_VIBRATION signal){
         Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-        final long time = 11;
+        final long time = AllSettings.getInstance().getCurrentSettings().behaviorSettings.VIBRATE_TIME_MS;
         if(v.hasVibrator()) {
             Log.v(TAG, "hasVibrator");
             v.vibrate(time);
