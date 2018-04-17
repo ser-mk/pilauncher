@@ -39,7 +39,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         /** Problem on T310
          * this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
          */
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
 
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
