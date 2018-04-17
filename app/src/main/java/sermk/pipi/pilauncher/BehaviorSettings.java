@@ -18,9 +18,9 @@ public class BehaviorSettings {
 
     final public long VIBRATE_TIME_MS = 2*1000;
 
-    final public int MAX_PULSE_WIDTH = 500;
-    final public int MIN_PULSE_WIDTH = 50;
-    final public int GAP_DECREASE_MASK = 50; // 1%20
+    final public int MAX_PULSE_WIDTH = 500; //from 1000
+    final public int MIN_PULSE_WIDTH = 50; // from 1000
+    final public int GAP_DECREASE_MASK = 50; // 1%20 from 1000
 
     final public long TIMEOUT_MS_FAIL_CONNECTION = 1000*100;
     final public long FINE_MS_FAIL_CONNECTION = 1000;
