@@ -116,7 +116,7 @@ public class TestCV_Fragment extends Fragment {
         ((Button)rootView.findViewById(R.id.clear_settings)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AllSettings.getInstance().clear();
+                AllSettings.getInstance().clear(getActivity());
             }
         });
 

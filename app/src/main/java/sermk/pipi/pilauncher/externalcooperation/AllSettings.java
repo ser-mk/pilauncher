@@ -17,6 +17,7 @@ import java.io.IOException;
 import sermk.pipi.pilib.CommandCollection;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
+import sermk.pipi.pilib.PiUtils;
 
 /**
  * Created by ser on 02.11.17.
@@ -29,19 +30,11 @@ public final class AllSettings {
     private StructSettings currentSettings = new StructSettings();
     private byte[] bytesMask = new byte[0];
 
-    static String NAME_MC_PACKAGE(){return "sermk.pipi.mclient";}
-    static String NAME_MCS_SERVICE(){return "sermk.pipi.mlib.MTransmitterService";}
-    static String NAME_STRING_FIELD(){ return "STRING_FIELD";}
-
-    private static final String NAME_FILE_ALL_SETTINGS = "all.settings";
-    private static final String NAME_FIELD_STRUCT_SETTINGS = "currentSettings";
     private static final String NAME_FILE_MASK = "mask.byte";
 
     private  static final String subjConfirm = "confirm.settings";
-    private SharedPreferences sharedPreferences;
 
     public void init(final Context context){
-        sharedPreferences = context.getSharedPreferences("NAME_FILE_ALL_SETTINGS",Context.MODE_PRIVATE);
         loadSettings(context);
     }
 
@@ -80,13 +73,13 @@ public final class AllSettings {
         return ErrorCollector.NO_ERROR;
     }
 
-    public void clear(){
+    public void clear(final Context context){
         Log.v(TAG,"clear all settings!");
-        sharedPreferences.edit().clear().apply();
+        PiUtils.clearJson(context);
     }
 
     private String loadSettings(final Context context){
-        final String json = sharedPreferences.getString(NAME_FIELD_STRUCT_SETTINGS, "");
+        final String json = PiUtils.getJsonFromShared(context);
         Log.i(TAG, "load settings : " + json );
         byte[] bytes = new byte[0];
         try(FileInputStream inputStream = context.openFileInput(NAME_FILE_MASK)){
@@ -104,7 +97,7 @@ public final class AllSettings {
 
     public String saveCurrentSettings(Context context){
 
-        sharedPreferences.edit().putString(NAME_FIELD_STRUCT_SETTINGS, jsonCurrentSettings()).apply();
+        PiUtils.saveJson(context,jsonCurrentSettings());
         try(FileOutputStream outputStream
                 = context.openFileOutput(NAME_FILE_MASK, Context.MODE_PRIVATE) ) {
             outputStream.write(bytesMask);
