@@ -11,7 +11,7 @@ import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
 import sermk.pipi.pilib.UniversalReciver;
 
-public class PiSettingsReciever extends BroadcastReceiver {
+public class SettingsReciever extends BroadcastReceiver {
 
     private final String TAG = this.getClass().getName();
 
@@ -68,7 +68,7 @@ public class PiSettingsReciever extends BroadcastReceiver {
 
     static void sendBroadCastData(Context context, final String action,
                                   final String content, final byte[] data){
-        Intent intent = new Intent(context, PiSettingsReciever.class);
+        Intent intent = new Intent(context, SettingsReciever.class);
         intent.setAction(action);
 
         intent.putExtra(Intent.EXTRA_TEXT, content);
