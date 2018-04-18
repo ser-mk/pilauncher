@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 import sermk.pipi.pilauncher.BehaviorSettings;
 import sermk.pipi.pilauncher.R;
-import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 import sermk.pipi.pilib.WatchConnectionMClient;
 
 
@@ -55,7 +55,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         });
 
         connectionStatus = (TextView)rootView.findViewById(R.id.status);
-        final BehaviorSettings options = AllSettings.getInstance().getCurrentSettings().behaviorSettings;
+        final BehaviorSettings options = PiSettings.getInstance().getCurrentSettings().behaviorSettings;
         watcher = new WatchConnectionMClient(options.TIMEOUT_MS_FAIL_CONNECTION,
             options.FINE_MS_FAIL_CONNECTION);
 

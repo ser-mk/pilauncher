@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import sermk.pipi.pilauncher.GUIFragment.CVMaskResolver;
-import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 
 /**
  * Created by echormonov on 20.11.17.
@@ -141,7 +141,7 @@ public final class PIService extends Service {
     @Subscribe
     public void trySignalVibration(SIGNAL_VIBRATION signal){
         Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-        final long time = AllSettings.getInstance().getCurrentSettings().behaviorSettings.VIBRATE_TIME_MS;
+        final long time = PiSettings.getInstance().getCurrentSettings().behaviorSettings.VIBRATE_TIME_MS;
         if(v.hasVibrator()) {
             Log.v(TAG, "hasVibrator");
             v.vibrate(time);
@@ -181,7 +181,7 @@ public final class PIService extends Service {
             if(refFrame == 0)
                 return;
             final byte[] capture = CVMaskResolver.convertMat2BAGRAY(refFrame);
-            if(AllSettings.getInstance().confirmSettings(
+            if(PiSettings.getInstance().confirmSettings(
                 PIService.this,capture)){
                 mUVCReciver.markingSuccessCaptureFrameMat();
             }

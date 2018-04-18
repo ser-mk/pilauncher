@@ -1,7 +1,6 @@
 package sermk.pipi.pilauncher.externalcooperation;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -14,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import sermk.pipi.pilauncher.BehaviorSettings;
+import sermk.pipi.pilauncher.UVCReciver;
 import sermk.pipi.pilib.CommandCollection;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
@@ -23,11 +24,17 @@ import sermk.pipi.pilib.PiUtils;
  * Created by ser on 02.11.17.
  */
 
-public final class AllSettings {
+public final class PiSettings {
 
     final private String TAG = this.getClass().getName();
 
-    private StructSettings currentSettings = new StructSettings();
+    public class Settings {
+        public Rect rectMask = new Rect();
+        public UVCReciver.Settings uvcSettings = new UVCReciver.Settings();
+        public BehaviorSettings behaviorSettings = new BehaviorSettings();
+    }
+
+    private Settings currentSettings = new Settings();
     private byte[] bytesMask = new byte[0];
 
     private static final String NAME_FILE_MASK = "mask.byte";
@@ -38,16 +45,16 @@ public final class AllSettings {
         loadSettings(context);
     }
 
-    private static AllSettings instance = null;
+    private static PiSettings instance = null;
 
-    static public AllSettings getInstance(){
+    static public PiSettings getInstance(){
         if (instance == null){
-            instance = new AllSettings();
+            instance = new PiSettings();
         }
         return instance;
     }
 
-    public StructSettings getCurrentSettings(){
+    public Settings getCurrentSettings(){
         return  currentSettings;
     }
     public byte[] getBytesMask(){ return  bytesMask; }
@@ -55,19 +62,22 @@ public final class AllSettings {
     public String setCurrentSettings( String json, byte[] bytesMask) {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        StructSettings tempSettings =  gson.fromJson(json, StructSettings.class);
         if (bytesMask != null){
             this.bytesMask = bytesMask;
         } else {
             final String err ="setted byte mask not exist!";
+            this.bytesMask = new byte[0];
             Log.e(TAG, err);
             return err;
         }
-        if(tempSettings != null ){ // todo check correct subclass!
-            this.currentSettings = tempSettings;
+
+        final Settings temp = new Gson().fromJson(json, Settings.class);
+        if(!PiUtils.checkHasNullPublicField(temp, Settings.class)){
+            this.currentSettings = temp;
         } else {
-            final String err = "setted Struct Settings not exist!";
+            final String err = "setted Struct Settings has null object!";
             Log.e(TAG, err);
+            this.currentSettings = new Settings();
             return err;
         }
         return ErrorCollector.NO_ERROR;

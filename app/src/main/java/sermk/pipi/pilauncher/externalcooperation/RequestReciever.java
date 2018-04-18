@@ -44,7 +44,7 @@ public class RequestReciever extends BroadcastReceiver {
 
     private String doAction(Context context, final String action) {
         if (CommandCollection.ACTION_RECIVER_FOR_ALL_QUERY_SETTINGS.equals(action)) {
-            AllSettings.getInstance().confirmSettings(context);
+            PiSettings.getInstance().confirmSettings(context);
         } else if(CommandCollection.ACTION_RECIVER_CLEAR_CAPTURE_FRAME_INTERVAL.equals(action)){
             UVCReciver.clear_CAPTURE_FRAME_INTERVAL_PREV();
         } else {

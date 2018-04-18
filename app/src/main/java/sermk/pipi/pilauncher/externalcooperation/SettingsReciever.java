@@ -59,11 +59,11 @@ public class SettingsReciever extends BroadcastReceiver {
     }
 
     private String setSettings(final String content, final byte[] bytesArray){
-        return AllSettings.getInstance().setCurrentSettings(content, bytesArray);
+        return PiSettings.getInstance().setCurrentSettings(content, bytesArray);
     }
 
     private String saveSettings(Context context){
-        return AllSettings.getInstance().saveCurrentSettings(context);
+        return PiSettings.getInstance().saveCurrentSettings(context);
     }
 
     static void sendBroadCastData(Context context, final String action,

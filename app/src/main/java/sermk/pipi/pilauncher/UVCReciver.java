@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import sermk.pipi.pilauncher.GUIFragment.CVMaskResolver;
-import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 
 /**
  * Created by ser on 31.10.17.
@@ -204,7 +204,7 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
                 Log.v(TAG, status); }
         });
 
-        final Settings settings = AllSettings.getInstance().getCurrentSettings().uvcSettings;
+        final Settings settings = PiSettings.getInstance().getCurrentSettings().uvcSettings;
 
         try {
             camera.setPreviewDisplay((Surface)null);
@@ -223,7 +223,7 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
     }
 
     static private BehaviorSettings getBS() {
-        return AllSettings.getInstance().getCurrentSettings().behaviorSettings;
+        return PiSettings.getInstance().getCurrentSettings().behaviorSettings;
     }
 
 
@@ -266,8 +266,8 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
     }
 
     private void setUpMask(CVResolver cvr){
-        Rect rect = AllSettings.getInstance().getCurrentSettings().rectMask;
-        final byte[] bytes = AllSettings.getInstance().getBytesMask();
+        Rect rect = PiSettings.getInstance().getCurrentSettings().rectMask;
+        final byte[] bytes = PiSettings.getInstance().getBytesMask();
         final long refMat = CVMaskResolver.createRefMat(rect, bytes);
         cvr.setRectOfMask(rect.x, rect.y, refMat);
     }

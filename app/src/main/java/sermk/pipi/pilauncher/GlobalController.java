@@ -9,7 +9,7 @@ import org.opencv.android.OpenCVLoader;
 
 import java.util.HashSet;
 
-import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 
 
 /**
@@ -28,7 +28,7 @@ public final class GlobalController extends Application {
     public void onCreate() {
         super.onCreate();
         LogOptions.SetupLog();
-        AllSettings.getInstance().init(this);
+        PiSettings.getInstance().init(this);
         // Required initialization logic here!
     }
 

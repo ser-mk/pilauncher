@@ -23,7 +23,7 @@ import sermk.pipi.pilauncher.CVResolver;
 import sermk.pipi.pilauncher.PIService;
 import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.LauncherAct;
-import sermk.pipi.pilauncher.externalcooperation.AllSettings;
+import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 
 
 /**
@@ -101,7 +101,7 @@ public class TestCV_Fragment extends Fragment {
         ((Button)rootView.findViewById(R.id.save_mask)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AllSettings.getInstance().saveMaskInReceiver(getActivity(),
+                PiSettings.getInstance().saveMaskInReceiver(getActivity(),
                     mPlotPreview.getByteArrayMask(), mPlotPreview.getRectMaskByte());
             }
         });
@@ -109,14 +109,14 @@ public class TestCV_Fragment extends Fragment {
         ((Button)rootView.findViewById(R.id.confirm)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AllSettings.getInstance().confirmSettings(getActivity());
+                PiSettings.getInstance().confirmSettings(getActivity());
             }
         });
 
         ((Button)rootView.findViewById(R.id.clear_settings)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AllSettings.getInstance().clear(getActivity());
+                PiSettings.getInstance().clear(getActivity());
             }
         });
 
@@ -185,8 +185,8 @@ public class TestCV_Fragment extends Fragment {
             Log.v(TAG, "Test CV enable " + isChecked);
             if (isChecked) {
                 mPlotPreview.setMask(
-                    AllSettings.getInstance().getCurrentSettings().rectMask,
-                    AllSettings.getInstance().getBytesMask());
+                    PiSettings.getInstance().getCurrentSettings().rectMask,
+                    PiSettings.getInstance().getBytesMask());
                 PIService.startUVCwithCallbackPosition(posCallback);
             } else {
                 PIService.external_completeUVC();
