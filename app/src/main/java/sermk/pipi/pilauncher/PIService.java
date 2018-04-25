@@ -124,6 +124,7 @@ public final class PIService extends Service {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void startUVC(CVResolver.ICallbackPosition callback){
+        mBinder.clearPosition();
         if(mUVCReciver != null)
             if(!mUVCReciver.isAlive()) {
                 mUVCReciver.startCapture(callback);
