@@ -190,6 +190,7 @@ public final class PIService extends Service {
         public void onDettach(final UsbDevice device) {
             Logger.v("onDettach");
             LauncherAct.lightOff();
+            external_completeUVC();
         }
 
         @Override
