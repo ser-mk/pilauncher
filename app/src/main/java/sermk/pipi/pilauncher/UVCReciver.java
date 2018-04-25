@@ -150,6 +150,7 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
             state = State.CAMERA_OPEN_ERROR;
         } else {
             final CVResolver cvr = new CVResolver(mCallBackPosition);
+            cvr.setDisablePlot(true);
             inThreadResolver = new WeakReference<CVResolver>(cvr);
 
             camera.startPreview();
