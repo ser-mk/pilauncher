@@ -28,7 +28,7 @@ public final class PiSettings {
 
     final private String TAG = this.getClass().getName();
 
-    public class Settings {
+    public static class Settings {
         public Rect rectMask = new Rect();
         public UVCReciver.Settings uvcSettings = new UVCReciver.Settings();
         public BehaviorSettings behaviorSettings = new BehaviorSettings();
