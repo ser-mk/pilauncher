@@ -1,8 +1,6 @@
 package sermk.pipi.pilauncher;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -31,6 +29,8 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
     private final String TAG = this.getClass().getName();
 
+    private final String TEST_INTENT_FIELD = "test";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) { //todo buildconfig.DEBUG
         super.onCreate(savedInstanceState);
@@ -46,14 +46,15 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        if (BuildConfig.DEBUG) {
+        final boolean test = this.getIntent().getBooleanExtra(TEST_INTENT_FIELD, false);
+
+        if (test) {
             // do something for a debug build
             getFragmentManager().beginTransaction()
                 .add(R.id.container, new TestCV_Fragment()).commit();
         } else {
             getFragmentManager().beginTransaction()
                 .add(R.id.container, new StatusFragment()).commit();
-            //.add(R.id.container, new PasswordFragment()).commit();
         }
         PIService.runTry(this);
 
