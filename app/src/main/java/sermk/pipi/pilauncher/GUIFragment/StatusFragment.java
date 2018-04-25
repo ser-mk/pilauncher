@@ -56,7 +56,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
 
         connectionStatus = (TextView)rootView.findViewById(R.id.status);
         final BehaviorSettings options = PiSettings.getInstance().getCurrentSettings().behaviorSettings;
-        watcher = new WatchConnectionMClient(options.TIMEOUT_MS_FAIL_CONNECTION,
+        watcher = new WatchConnectionMClient(getActivity(),options.TIMEOUT_MS_FAIL_CONNECTION,
             options.FINE_MS_FAIL_CONNECTION);
 
         return rootView;
