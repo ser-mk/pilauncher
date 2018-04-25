@@ -59,9 +59,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
         EventBus.getDefault().register(this);
 
-        if (!BuildConfig.DEBUG) {
-            Thread.setDefaultUncaughtExceptionHandler(this);
-        }
+        Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
     public enum Screen { TestCV, Password, Status};
@@ -146,7 +144,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         MClient.sendMessage(this,
             ErrorCollector.subjError(TAG,"uncaughtException"),
             ErrorCollector.getStackTraceString(e));
-
+    /*
         Intent intent = new Intent(this, LauncherAct.class);
         intent.putExtra("crash", true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -155,6 +153,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplication().getBaseContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) getApplication().getBaseContext().getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        */
         this.finish();
         System.exit(2);
     }
