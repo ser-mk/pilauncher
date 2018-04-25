@@ -1,6 +1,7 @@
 package sermk.pipi.pilauncher.GUIFragment;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -55,11 +56,16 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         });
 
         connectionStatus = (TextView)rootView.findViewById(R.id.status);
-        final BehaviorSettings options = PiSettings.getInstance().getCurrentSettings().behaviorSettings;
-        watcher = new WatchConnectionMClient(getActivity(),options.TIMEOUT_MS_FAIL_CONNECTION,
-            options.FINE_MS_FAIL_CONNECTION);
+
+        watcher = getWatcherMC(getActivity());
 
         return rootView;
+    }
+
+    public static WatchConnectionMClient getWatcherMC(Context context){
+        final BehaviorSettings options = PiSettings.getInstance().getCurrentSettings().behaviorSettings;
+        return new WatchConnectionMClient(context,options.TIMEOUT_MS_FAIL_CONNECTION,
+            options.FINE_MS_FAIL_CONNECTION);
     }
 
     @Override
