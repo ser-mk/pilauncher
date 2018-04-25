@@ -20,8 +20,8 @@ import sermk.pipi.pilauncher.GUIFragment.PasswordFragment;
 import sermk.pipi.pilauncher.GUIFragment.TestCV_Fragment;
 import sermk.pipi.pilauncher.GUIFragment.StatusFragment;
 import sermk.pipi.pilauncher.externalcooperation.PiSettings;
+import sermk.pipi.pilib.AppRunner;
 import sermk.pipi.pilib.ErrorCollector;
-import sermk.pipi.pilib.GameRunner;
 import sermk.pipi.pilib.MClient;
 
 
@@ -128,12 +128,19 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        GameRunner.onGameResult(requestCode,resultCode,data);
+        AppRunner.onGameResult(requestCode,resultCode,data);
     }
 
     public boolean runApp() {
-        final String NAME_GAME_APP = PiSettings.getInstance().getCurrentSettings().behaviorSettings.NAME_GAME_APP;
-        return GameRunner.run(this,NAME_GAME_APP);
+        final String NAME_GAME_PACKAGE = PiSettings.getInstance().
+            getCurrentSettings().behaviorSettings.NAME_GAME_PACKAGE;
+        final String NAME_GAME_ACTIVITY = PiSettings.getInstance().
+            getCurrentSettings().behaviorSettings.NAME_GAME_ACTIVITY;
+        if (!AppRunner.run(this,NAME_GAME_PACKAGE,NAME_GAME_ACTIVITY)){
+            Toast.makeText(this, "not found game", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
 
