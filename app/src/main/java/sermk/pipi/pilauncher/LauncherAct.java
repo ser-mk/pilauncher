@@ -1,6 +1,7 @@
 package sermk.pipi.pilauncher;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -23,6 +24,7 @@ import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 import sermk.pipi.pilib.AppRunner;
 import sermk.pipi.pilib.ErrorCollector;
 import sermk.pipi.pilib.MClient;
+import sermk.pipi.pilib.WatchConnectionMClient;
 
 
 public class LauncherAct extends Activity implements Thread.UncaughtExceptionHandler {
@@ -131,7 +133,30 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         AppRunner.onGameResult(requestCode,resultCode,data);
     }
 
-    public boolean runApp() {
+
+    public static void tryStartGame(){
+        EventBus.getDefault().post(RUN_APP.START);
+    }
+
+    private enum RUN_APP {START};
+
+    @Subscribe
+    public void tryRunGame(RUN_APP start){
+        if (StatusFragment.getWatcherMC(this).checkTimeout()){
+            Toast.makeText(this, "connection problem", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Fragment currFragment = getFragmentManager().findFragmentById(R.id.container);
+        if(currFragment instanceof StatusFragment){
+            runGame();
+            return;
+        }
+
+        Log.i(TAG, "unvalible start game!");
+    }
+
+    public boolean runGame() {
         final String NAME_GAME_PACKAGE = PiSettings.getInstance().
             getCurrentSettings().behaviorSettings.NAME_GAME_PACKAGE;
         final String NAME_GAME_ACTIVITY = PiSettings.getInstance().

@@ -94,7 +94,7 @@ public class TestCV_Fragment extends Fragment {
         ((Button)rootView.findViewById(R.id.start_app)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((LauncherAct)getActivity()).runApp();
+                ((LauncherAct)getActivity()).runGame();
             }
         });
 
