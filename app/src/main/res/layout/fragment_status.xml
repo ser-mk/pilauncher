@@ -11,7 +11,7 @@
         android:id="@+id/image_welcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/welcome"
+        android:src="@drawable/lets"
         android:background="@color/BLACK"/>
 
     <TextView
