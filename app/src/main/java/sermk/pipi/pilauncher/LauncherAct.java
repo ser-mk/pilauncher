@@ -97,13 +97,14 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onWakeUpEvent(State state) {
-        if (BuildConfig.DEBUG) Toast.makeText(this, "WaKeUp  " + state, Toast.LENGTH_LONG).show();
         Log.v(TAG, "status " + state);
         if(state.equals(State.STAND_TO)){
             Log.v(TAG, "Wake Up!!!" );
+            Toast.makeText(this, "player came", Toast.LENGTH_LONG).show();
             standTo();
         } else {
             Log.v(TAG, "REST!!!" );
+            Toast.makeText(this, "player left", Toast.LENGTH_LONG).show();
             rest();
         }
     }
