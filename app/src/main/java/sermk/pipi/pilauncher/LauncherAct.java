@@ -191,4 +191,17 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         System.exit(2);
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.v(TAG,"onBackPressed");
+        Fragment currFragment = getFragmentManager().findFragmentById(R.id.container);
+        if(currFragment instanceof StatusFragment){
+            getFragmentManager().beginTransaction()
+                .replace(R.id.container, new PasswordFragment())
+                .addToBackStack("")
+                .commit();
+            return;
+        }
+        super.onBackPressed();
+    }
 }
