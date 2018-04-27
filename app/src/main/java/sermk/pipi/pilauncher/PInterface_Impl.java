@@ -17,7 +17,7 @@ public class PInterface_Impl extends Pinterface.Stub implements CVResolver.ICall
     final String TAG = "PInterface_Impl";
     @Override
     public int getPosition() throws RemoteException {
-        Log.v(TAG,"getPosition ");
+        //Log.v(TAG,"getPosition " + position);
         return position;
     }
 
@@ -25,7 +25,7 @@ public class PInterface_Impl extends Pinterface.Stub implements CVResolver.ICall
 
     @Override
     public boolean callbackPosition(int pos, CVResolver cvr) {
-        Log.v(TAG, "set position " + String.valueOf(pos));
+        //Log.v(TAG, "set position " + String.valueOf(pos));
         if(pos < PiBind.POSITION_MIN){
             position = PiBind.POSITION_UNDEFINED;
         } else {

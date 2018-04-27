@@ -322,7 +322,7 @@ public class UVCReciver extends Thread implements CVResolver.ICallbackPosition {
     @Override
     public boolean callbackPosition(int pos, CVResolver cvr) {
         countTraningFrame++;
-        Log.v(TAG,"!");
+        //Log.v(TAG,"!");
         return true;
     }
 
