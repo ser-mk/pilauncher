@@ -5,16 +5,16 @@ package sermk.pipi.pilauncher;
  */
 
 public class BehaviorSettings {
-    final public long TIMEOUT_BETWEEN_TRY_UVC_CONNECTION = 1111;
+    final public long TIMEOUT_BETWEEN_TRY_UVC_CONNECTION = 1000;
     final public int TRY_MAX_UVC_CONNECTION = 2;
 
-    final public long WARMING_UP_TIME = 1111;
-    final public long TRANNING_TIME = 1111;
-    final public int COUNT_TRANNING_FRAMES = 11;
+    final public long WARMING_UP_TIME = 1000;
+    final public long TRANNING_TIME = 1000;
+    final public int COUNT_TRANNING_FRAMES = 10;
 
-    final public long CAPTURE_WAIT_TIME = 333;
-    final public long CAPTURE_FRAME_INTERVAL_PREV = 1000*60*60*3;
-    public long CAPTURE_FRAME_INTERVAL = 1000*60*60*3;
+    final public long CAPTURE_WAIT_TIME = 300;
+    final public long CAPTURE_FRAME_INTERVAL_PREV = 1000*60*60*12;
+    public long CAPTURE_FRAME_INTERVAL = 1000*60*60*12;
 
     final public long VIBRATE_TIME_MS = 2*1000;
 
@@ -22,7 +22,7 @@ public class BehaviorSettings {
     final public int MIN_PULSE_WIDTH = 50; // from 1000
     final public int GAP_DECREASE_MASK = 50; // 1%20 from 1000
 
-    final public long TIMEOUT_MS_FAIL_CONNECTION = 1000*100;
+    final public long TIMEOUT_MS_FAIL_CONNECTION = 1000*60*10;
     final public long FINE_MS_FAIL_CONNECTION = 1000;
 
     final public String NAME_GAME_PACKAGE = "ser.pipi.piball";
