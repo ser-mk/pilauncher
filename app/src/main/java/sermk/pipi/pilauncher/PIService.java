@@ -172,6 +172,7 @@ public final class PIService extends Service {
         @Override
         public void onConnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock, final boolean createNew) {
             Logger.v("onConnect");
+            LauncherAct.tryStartGame();
         }
 
         @Override
