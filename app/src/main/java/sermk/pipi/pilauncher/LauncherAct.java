@@ -60,8 +60,6 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         }
         PIService.runTry(this);
 
-        EventBus.getDefault().register(this);
-
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
@@ -77,6 +75,19 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
             case TestCV: getFragmentManager().beginTransaction()
                 .add(R.id.container, new TestCV_Fragment()).commit();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        standTo();
+        EventBus.getDefault().register(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        standTo();
+        super.onResume();
     }
 
     @Override
