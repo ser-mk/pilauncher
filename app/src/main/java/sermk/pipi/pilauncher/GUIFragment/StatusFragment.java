@@ -15,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import sermk.pipi.pilauncher.BehaviorSettings;
+import sermk.pipi.pilauncher.LauncherAct;
 import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 import sermk.pipi.pilib.WatchConnectionMClient;
@@ -105,6 +106,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Log.v(TAG,"onClick");
+        /*
         count+=1;
         if(count < COUNT_MAX) return;
 
@@ -113,5 +115,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
             .replace(R.id.container, new PasswordFragment(), PasswordFragment.class.getName())
             .addToBackStack("")
             .commit();
+            */
+        LauncherAct.tryStartGame();
     }
 }
