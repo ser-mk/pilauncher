@@ -155,7 +155,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
     @Subscribe
     public void tryRunGame(RUN_APP start){
         if (StatusFragment.getWatcherMC(this).checkTimeout()){
-            Toast.makeText(this, "connection problem", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "WIFI connection problem", Toast.LENGTH_LONG).show();
             return;
         }
 
