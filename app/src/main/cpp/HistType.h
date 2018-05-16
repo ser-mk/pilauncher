@@ -58,9 +58,9 @@ struct PowerHType: HistType {
         this->currSize = signal.currSize;
     }
 
-__inline int calcPosition(const size_t MAX_WIDTH, const size_t MIN_WIDTH){
-        uint64 mv = 0;
-        int mw = 0;
+__inline int calcPosition(int & refWidth,const size_t MAX_WIDTH, const size_t MIN_WIDTH){
+        uint64 mv = 0; //max value
+        int mw = 0;     //width of max value
         int width = 0;
         int position = -1;
         for(int i=0; i < this->currSize; i++){
@@ -77,6 +77,8 @@ __inline int calcPosition(const size_t MAX_WIDTH, const size_t MIN_WIDTH){
                 width = 0;
             }
         }
+
+    refWidth = mw;
 
     const size_t MAXW = (this->currSize*MAX_WIDTH)/DIVIDER_WITDH;
 

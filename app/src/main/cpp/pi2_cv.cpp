@@ -76,6 +76,7 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
     }
 
     int position = UNDEFINED_POSITION;
+    int width = 0;
 
     if(!maskRect.empty()){
         Rect testRect = Rect(maskRect);
@@ -86,7 +87,7 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
             learnHist.setMinValue(vertHist);
         } else {
             powerHist.calcPower(learnHist, vertHist);
-            position = powerHist.calcPosition(MAX_PULSE_WIDTH, MIN_PULSE_WIDTH);
+            position = powerHist.calcPosition(width,MAX_PULSE_WIDTH, MIN_PULSE_WIDTH);
             if(position >= 0) {
                 position = normilizePosition(position);
             }
@@ -113,7 +114,7 @@ void pi2_cv::cvProccessing(JNIEnv *env, uvc_frame_t *frame) {
         pi2_plot::plotPreviewFrame(frame);
     }
 
-    env->CallVoidMethod(objectCV, midCV,position);
+    env->CallVoidMethod(objectCV, midCV, position, width);
 
 }
 
@@ -157,7 +158,7 @@ bool pi2_cv::startCV(JNIEnv *env, jobject thiz) {
     env->DeleteGlobalRef(objectCV);
     objectCV = env->NewGlobalRef(thiz);
     if (LIKELY(clazz)) {
-        midCV = env->GetMethodID(clazz, "plottCV","(I)V");
+        midCV = env->GetMethodID(clazz, "plottCV","(II)V");
     } else {
         LOGW(TAG"failed to get object class");
     }

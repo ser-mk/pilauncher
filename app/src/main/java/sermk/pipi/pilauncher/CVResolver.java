@@ -1,6 +1,7 @@
 package sermk.pipi.pilauncher;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by echormonov on 31.10.17.
@@ -32,7 +33,8 @@ public final class CVResolver {
         this.mICallbackPosition = callback;
     }
 
-    private void plottCV(final int position){
+    private void plottCV(final int position, final int width){
+        Log.i(TAG,"width " + width);
         if(this.mICallbackPosition == null){
             return;
         }
