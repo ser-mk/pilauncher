@@ -79,14 +79,15 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
     @Override
     protected void onStart() {
-        standTo();
+        //standTo();
         EventBus.getDefault().register(this);
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        standTo();
+        //standTo();
+        rest();
         super.onResume();
     }
 
