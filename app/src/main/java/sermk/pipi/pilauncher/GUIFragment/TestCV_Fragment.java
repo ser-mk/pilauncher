@@ -47,6 +47,7 @@ public class TestCV_Fragment extends Fragment {
     private CVMaskView mPlotPreview;
     SeekText posCallbackSeek;
     TextView text_hdiag_seek;
+    TextView text_width_pulse_seek;
 
     TextView cpuView;
     TextView fpsView;
@@ -72,13 +73,14 @@ public class TestCV_Fragment extends Fragment {
 
         mPlotPreview = (CVMaskView)rootView.findViewById(R.id.capture_view);
 
-        posCallbackSeek = (SeekText)rootView.findViewById(R.id.alpha_seek);
+        posCallbackSeek = (SeekText)rootView.findViewById(R.id.pos_seek);
         SeekText hDiagSeek = (SeekText)rootView.findViewById(R.id.hdiag_seek);
 
-        TextView text_alpha_seek = (TextView)rootView.findViewById(R.id.text_alpha_seek);
+        TextView text_pos_seek = (TextView)rootView.findViewById(R.id.text_pos_seek);
+        text_width_pulse_seek = (TextView)rootView.findViewById(R.id.text_width_pulse_seek);
         text_hdiag_seek = (TextView)rootView.findViewById(R.id.text_hdiag_seek);
 
-        posCallbackSeek.setTv(text_alpha_seek);
+        posCallbackSeek.setTv(text_pos_seek);
 
         hDiagSeek.setTv(text_hdiag_seek);
 
@@ -254,6 +256,13 @@ public class TestCV_Fragment extends Fragment {
                 posCallbackSeek.setProgress(seek);
                 Log.v(TAG,"p=" + String.valueOf(position));
             }
+
+            getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                text_width_pulse_seek.setText(String.valueOf(width));
+                                            }
+                                        });
 
             mFpsCounter.count();
 

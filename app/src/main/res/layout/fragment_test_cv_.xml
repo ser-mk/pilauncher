@@ -33,17 +33,28 @@
         android:orientation="horizontal">
 
         <sermk.pipi.pilauncher.GUIFragment.SeekText
-            android:id="@+id/alpha_seek"
+            android:id="@+id/pos_seek"
             android:layout_width="@dimen/capture_wight"
             android:layout_height="wrap_content"
             android:max="@integer/max_alpha"
             android:progress="@integer/progress_alpha" />
 
         <TextView
-            android:id="@+id/text_alpha_seek"
+            android:id="@+id/text_pos_seek"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/progress_alpha" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/text_width_pulse_seek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
     </LinearLayout>
 
     <LinearLayout
