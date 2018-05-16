@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -53,6 +55,9 @@ public class TestCV_Fragment extends Fragment {
     private FpsCounter mFpsCounter;
     private Timer mTimer;
 
+    private EditText minWidthET;
+    private EditText maxWidthET;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,6 +93,15 @@ public class TestCV_Fragment extends Fragment {
         cpuView = (TextView)rootView.findViewById(R.id.cpu_view);
         fpsView = (TextView)rootView.findViewById(R.id.fps_view);
 
+        minWidthET = (EditText)rootView.findViewById(R.id.min_widht_pulse_ET);
+        maxWidthET = (EditText)rootView.findViewById(R.id.max_widht_pulse_ET);
+
+        getActivity().getWindow().
+            setSoftInputMode(WindowManager.
+                LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        initUISettings();
+
         mFpsCounter = new FpsCounter();
         mFpsCounter.reset();
 
@@ -101,8 +115,7 @@ public class TestCV_Fragment extends Fragment {
         ((Button)rootView.findViewById(R.id.save_mask)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PiSettings.getInstance().saveMaskInReceiver(getActivity(),
-                    mPlotPreview.getByteArrayMask(), mPlotPreview.getRectMaskByte());
+                saveSettings();
             }
         });
 
@@ -122,6 +135,45 @@ public class TestCV_Fragment extends Fragment {
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    private int intervalValue(String val_str, int min, int max){
+        int val = min;
+        try {
+            val = Integer.valueOf(val_str);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(val < min) val = min;
+        if(val > max) val = max;
+
+        return val;
+    }
+
+    private void initUISettings(){
+        final int min = PiSettings.getInstance().getCurrentSettings().behaviorSettings.MIN_PULSE_WIDTH;
+        minWidthET.setText(String.valueOf(min));
+
+        final int max = PiSettings.getInstance().getCurrentSettings().behaviorSettings.MAX_PULSE_WIDTH;
+        maxWidthET.setText(String.valueOf(max));
+    }
+
+    private void saveSettings(){
+        final int min = intervalValue(minWidthET.getText().toString(), 0,500);
+        final int max = intervalValue(maxWidthET.getText().toString(), min + 1, 1000);
+
+        PiSettings.getInstance().getCurrentSettings().
+            behaviorSettings.MAX_PULSE_WIDTH = max;
+
+        PiSettings.getInstance().getCurrentSettings().
+            behaviorSettings.MIN_PULSE_WIDTH = min;
+
+        PiSettings.getInstance().saveCurrentSettings(getActivity());
+
+        PiSettings.getInstance().saveMaskInReceiver(getActivity(),
+            mPlotPreview.getByteArrayMask(), mPlotPreview.getRectMaskByte());
+
     }
 
     @Override

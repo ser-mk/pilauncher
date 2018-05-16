@@ -135,6 +135,21 @@
                 android:layout_height="wrap_content"
                 android:text="clear Settings" />
 
+            <EditText
+                android:id="@+id/min_widht_pulse_ET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:selectAllOnFocus="false" />
+            <EditText
+                android:id="@+id/max_widht_pulse_ET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:selectAllOnFocus="false" />
+
         </LinearLayout>
     </LinearLayout>
 
