@@ -57,7 +57,7 @@ public final class PiHandler extends Handler implements CVResolver.ICallbackPosi
 
     private Messenger replyTo = null;
     @Override
-    public boolean callbackPosition(int pos, CVResolver cvr){
+    public boolean callbackPosition(int pos, final int width, CVResolver cvr){
         position = pos;
         return true;
     }

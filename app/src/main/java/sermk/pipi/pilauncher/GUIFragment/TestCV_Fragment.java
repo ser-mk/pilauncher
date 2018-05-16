@@ -248,7 +248,7 @@ public class TestCV_Fragment extends Fragment {
 
     final CVResolver.ICallbackPosition posCallback = new CVResolver.ICallbackPosition() {
         @Override
-        public boolean callbackPosition(final int position, final CVResolver cvr) {
+        public boolean callbackPosition(final int position, final int width, final CVResolver cvr) {
             if(position > 0){
                 final int seek = mPlotPreview.relativePosition(position,posCallbackSeek.getMax());
                 posCallbackSeek.setProgress(seek);

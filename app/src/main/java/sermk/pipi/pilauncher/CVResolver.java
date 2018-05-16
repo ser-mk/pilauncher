@@ -10,7 +10,7 @@ import android.util.Log;
 public final class CVResolver {
 
     public interface ICallbackPosition {
-        public boolean callbackPosition(final int pos, final CVResolver cvr);
+        boolean callbackPosition(final int pos, final int width, final CVResolver cvr);
     }
 
     private final String TAG = "CVResolver";
@@ -38,7 +38,7 @@ public final class CVResolver {
         if(this.mICallbackPosition == null){
             return;
         }
-        this.mICallbackPosition.callbackPosition(position, this);
+        this.mICallbackPosition.callbackPosition(position, width, this);
     }
 
     public native boolean startCV();

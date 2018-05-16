@@ -24,7 +24,7 @@ public class PInterface_Impl extends Pinterface.Stub implements CVResolver.ICall
     private int position = PiBind.POSITION_UNDEFINED;
 
     @Override
-    public boolean callbackPosition(int pos, CVResolver cvr) {
+    public boolean callbackPosition(int pos, final int width, CVResolver cvr) {
         //Log.v(TAG, "set position " + String.valueOf(pos));
         if(pos < PiBind.POSITION_MIN){
             position = PiBind.POSITION_UNDEFINED;
