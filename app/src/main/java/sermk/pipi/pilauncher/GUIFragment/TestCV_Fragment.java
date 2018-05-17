@@ -2,6 +2,7 @@ package sermk.pipi.pilauncher.GUIFragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import sermk.pipi.pilauncher.PIService;
 import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.LauncherAct;
 import sermk.pipi.pilauncher.externalcooperation.PiSettings;
+import sermk.pipi.pilauncher.externalcooperation.SettingsReciever;
+import sermk.pipi.pilib.CommandCollection;
 
 
 /**
@@ -132,6 +135,15 @@ public class TestCV_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 PiSettings.getInstance().clear(getActivity());
+            }
+        });
+
+        ((Button)rootView.findViewById(R.id.not_start)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(CommandCollection.ACTION_RECIVER_DPC_NOT_START_COSU_ONE);
+                getActivity().sendBroadcast(intent);
             }
         });
 

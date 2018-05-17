@@ -146,6 +146,12 @@
                 android:layout_height="wrap_content"
                 android:text="clear Settings" />
 
+            <Button
+                android:id="@+id/not_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="not start" />
+
             <EditText
                 android:id="@+id/min_widht_pulse_ET"
                 android:layout_width="match_parent"
