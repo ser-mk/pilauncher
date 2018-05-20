@@ -73,11 +73,11 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         mTimer = new Timer("connection status updating");
-        mTimer.schedule(updateStatusTask, 10L, 100L); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
+        mTimer.schedule(new UpdateStatusTask(), 10L, 100L); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
 
     }
 
-    private final TimerTask updateStatusTask =  new TimerTask() { // Определяем задачу
+    private class UpdateStatusTask extends TimerTask { // Определяем задачу
         @Override
         public void run() {
             getActivity().runOnUiThread(new Runnable() {
@@ -91,12 +91,13 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
-    };
+    }
 
     @Override
     public void onStop() {
         try {
             mTimer.cancel();
+            mTimer.purge();
         } catch (Exception e) {
             e.printStackTrace();
         }
