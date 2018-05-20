@@ -11,11 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import sermk.pipi.pilauncher.BehaviorSettings;
 import sermk.pipi.pilauncher.LauncherAct;
+import sermk.pipi.pilauncher.PIService;
 import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 import sermk.pipi.pilib.WatchConnectionMClient;
@@ -39,6 +44,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
 
     TextView connectionStatus;
     WatchConnectionMClient watcher;
+    ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,7 +52,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         final View rootView =  inflater.inflate(R.layout.fragment_status, container, false);
 
-        ((ImageView)rootView.findViewById(R.id.image_welcome)).setOnClickListener(this);
+        imageView = (ImageView)rootView.findViewById(R.id.image_welcome); //.setOnClickListener(this);
         count = 0;
 
         getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -73,11 +79,11 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         mTimer = new Timer("connection status updating");
-        mTimer.schedule(new UpdateStatusTask(), 10L, 100L); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
-
+        mTimer.schedule(new UpdateStatusTask(), 10L, 100L);
+        EventBus.getDefault().register(this);
     }
 
-    private class UpdateStatusTask extends TimerTask { // Определяем задачу
+    private class UpdateStatusTask extends TimerTask {
         @Override
         public void run() {
             getActivity().runOnUiThread(new Runnable() {
@@ -93,6 +99,15 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showInfoConnection(PIService.CONNECTION_USB_INFO info){
+        Log.i(TAG, "info " + info);
+        if(info == PIService.CONNECTION_USB_INFO.CONNECTED)
+            imageView.setImageResource(R.drawable.start_game);
+        else
+            imageView.setImageResource(R.drawable.lets);
+    }
+
     @Override
     public void onStop() {
         try {
@@ -101,6 +116,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
