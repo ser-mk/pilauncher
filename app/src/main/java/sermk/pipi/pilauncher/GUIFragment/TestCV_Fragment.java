@@ -3,6 +3,7 @@ package sermk.pipi.pilauncher.GUIFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,10 @@ import android.widget.ToggleButton;
 
 import com.serenegiant.utils.CpuMonitor;
 import com.serenegiant.utils.FpsCounter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Locale;
 import java.util.Timer;
@@ -44,7 +49,7 @@ public class TestCV_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private ToggleButton mPreviewButton;
+    private ToggleButton mStartStopButton;
     private ToggleButton mLearnButton;
     private ToggleButton mDrawButton;
     private CVMaskView mPlotPreview;
@@ -68,8 +73,8 @@ public class TestCV_Fragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_test_cv_, container, false);
 
-        ((ToggleButton)rootView.findViewById(R.id.start_test))
-            .setOnCheckedChangeListener(runAndStopUVC_listener);
+        mStartStopButton = (ToggleButton)rootView.findViewById(R.id.start_test);
+        mStartStopButton.setOnCheckedChangeListener(runAndStopUVC_listener);
 
         mLearnButton = (ToggleButton)rootView.findViewById(R.id.learn_enable);
         mDrawButton = (ToggleButton)rootView.findViewById(R.id.draw_disable);
@@ -146,6 +151,8 @@ public class TestCV_Fragment extends Fragment {
                 getActivity().sendBroadcast(intent);
             }
         });
+
+        EventBus.getDefault().register(this);
 
         // Inflate the layout for this fragment
         return rootView;
@@ -299,4 +306,19 @@ public class TestCV_Fragment extends Fragment {
 
         }
     };
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void showInfoConnection(PIService.CONNECTION_USB_INFO info){
+        Log.i(TAG, "info " + info);
+        if(info == PIService.CONNECTION_USB_INFO.CONNECTED)
+            mStartStopButton.setBackgroundColor(Color.GREEN);
+        else
+            mStartStopButton.setBackgroundColor(Color.WHITE);
+    }
 }
