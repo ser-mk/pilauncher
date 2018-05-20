@@ -161,17 +161,20 @@ public final class PIService extends Service {
             mBinder.sendingCloseCode();
     }
 
+    public enum CONNECTION_USB_INFO {CONNECTED, DISCONNECTED}
+
     private final USBMonitor.OnDeviceConnectListener mOnDeviceConnectListener = new USBMonitor.OnDeviceConnectListener() {
         @Override
         public void onAttach(final UsbDevice device) {
-            Logger.v("onAttach");
+            Logger.i("onAttach");
             startUVC(mBinder);
             LauncherAct.lightOn();
+            EventBus.getDefault().post(CONNECTION_USB_INFO.CONNECTED);
         }
 
         @Override
         public void onConnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock, final boolean createNew) {
-            Logger.v("onConnect");
+            Logger.i("onConnect");
             LauncherAct.tryStartGame();
         }
 
@@ -193,6 +196,7 @@ public final class PIService extends Service {
             Logger.v("onDettach");
             LauncherAct.lightOff();
             external_completeUVC();
+            EventBus.getDefault().post(CONNECTION_USB_INFO.DISCONNECTED);
         }
 
         @Override
