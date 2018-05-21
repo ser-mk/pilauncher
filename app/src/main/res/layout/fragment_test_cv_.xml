@@ -135,6 +135,12 @@
                 android:text="run game" />
 
             <Button
+                android:id="@+id/start_mclient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="run mc" />
+
+            <Button
                 android:id="@+id/confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

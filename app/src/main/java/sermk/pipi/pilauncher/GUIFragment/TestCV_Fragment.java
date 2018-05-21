@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.serenegiant.utils.CpuMonitor;
@@ -33,6 +34,7 @@ import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.LauncherAct;
 import sermk.pipi.pilauncher.externalcooperation.PiSettings;
 import sermk.pipi.pilib.CommandCollection;
+import sermk.pipi.pilib.MClient;
 
 
 /**
@@ -118,6 +120,13 @@ public class TestCV_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((LauncherAct)getActivity()).runGame();
+            }
+        });
+
+        ((Button)rootView.findViewById(R.id.start_mclient)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!MClient.runMC(getActivity())) Toast.makeText(getActivity(), "not found mclient", Toast.LENGTH_LONG).show();
             }
         });
 
