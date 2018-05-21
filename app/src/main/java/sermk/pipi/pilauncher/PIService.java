@@ -163,13 +163,18 @@ public final class PIService extends Service {
 
     public enum CONNECTION_USB_INFO {CONNECTED, DISCONNECTED}
 
+    private static CONNECTION_USB_INFO statusUSB = CONNECTION_USB_INFO.DISCONNECTED;
+
+    public static CONNECTION_USB_INFO getStatusUSB(){return  statusUSB;}
+
     private final USBMonitor.OnDeviceConnectListener mOnDeviceConnectListener = new USBMonitor.OnDeviceConnectListener() {
         @Override
         public void onAttach(final UsbDevice device) {
             Logger.i("onAttach");
             startUVC(mBinder);
             LauncherAct.lightOn();
-            EventBus.getDefault().post(CONNECTION_USB_INFO.CONNECTED);
+            statusUSB = CONNECTION_USB_INFO.CONNECTED;
+            EventBus.getDefault().post(statusUSB);
         }
 
         @Override
@@ -196,7 +201,8 @@ public final class PIService extends Service {
             Logger.v("onDettach");
             LauncherAct.lightOff();
             external_completeUVC();
-            EventBus.getDefault().post(CONNECTION_USB_INFO.DISCONNECTED);
+            statusUSB = CONNECTION_USB_INFO.DISCONNECTED;
+            EventBus.getDefault().post(statusUSB);
         }
 
         @Override
