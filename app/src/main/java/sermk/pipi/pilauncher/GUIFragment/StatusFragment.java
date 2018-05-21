@@ -11,10 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -80,7 +76,6 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         mTimer = new Timer("connection status updating");
         mTimer.schedule(new UpdateStatusTask(), 10L, 100L);
-        EventBus.getDefault().register(this);
     }
 
     private class UpdateStatusTask extends TimerTask {
@@ -94,18 +89,13 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
                     } else {
                         connectionStatus.setText("");
                     }
+                    if(PIService.getStatusUSB() == PIService.CONNECTION_USB_INFO.CONNECTED)
+                        imageView.setImageResource(R.drawable.start_game);
+                    else
+                        imageView.setImageResource(R.drawable.lets);
                 }
             });
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showInfoConnection(PIService.CONNECTION_USB_INFO info){
-        Log.i(TAG, "info " + info);
-        if(info == PIService.CONNECTION_USB_INFO.CONNECTED)
-            imageView.setImageResource(R.drawable.start_game);
-        else
-            imageView.setImageResource(R.drawable.lets);
     }
 
     @Override
@@ -116,7 +106,6 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
