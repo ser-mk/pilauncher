@@ -89,7 +89,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
                     } else {
                         connectionStatus.setText("");
                     }
-                    if(PIService.getStatusUSB() == PIService.CONNECTION_USB_INFO.CONNECTED)
+                    if(PIService.getStatusUSB() == PIService.ATTACHMENT_USB_INFO.ATTACHED)
                         imageView.setImageResource(R.drawable.start_game);
                     else
                         imageView.setImageResource(R.drawable.lets);

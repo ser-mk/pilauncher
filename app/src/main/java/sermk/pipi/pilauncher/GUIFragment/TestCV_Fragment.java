@@ -32,7 +32,6 @@ import sermk.pipi.pilauncher.PIService;
 import sermk.pipi.pilauncher.R;
 import sermk.pipi.pilauncher.LauncherAct;
 import sermk.pipi.pilauncher.externalcooperation.PiSettings;
-import sermk.pipi.pilauncher.externalcooperation.SettingsReciever;
 import sermk.pipi.pilib.CommandCollection;
 
 
@@ -314,9 +313,9 @@ public class TestCV_Fragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showInfoConnection(PIService.CONNECTION_USB_INFO info){
+    public void showInfoConnection(PIService.ATTACHMENT_USB_INFO info){
         Log.i(TAG, "info " + info);
-        if(info == PIService.CONNECTION_USB_INFO.CONNECTED)
+        if(info == PIService.ATTACHMENT_USB_INFO.ATTACHED)
             mStartStopButton.setBackgroundColor(Color.GREEN);
         else
             mStartStopButton.setBackgroundColor(Color.WHITE);
