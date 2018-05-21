@@ -18,8 +18,8 @@ public class BehaviorSettings {
 
     final public long VIBRATE_TIME_MS = 2*1000;
 
-    public int MAX_PULSE_WIDTH = 500; //from 1000
-    public int MIN_PULSE_WIDTH = 50; // from 1000
+    public int MAX_PULSE_WIDTH = 200; //from width screen, default 640!
+    public int MIN_PULSE_WIDTH = 2; // from width screen, default 640!
     final public int GAP_DECREASE_MASK = 50; // 1%20 from 1000 //set gap between learn and curr capture for bound
 
     final public long TIMEOUT_MS_FAIL_CONNECTION = 1000*60*10;
