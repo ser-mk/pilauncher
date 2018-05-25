@@ -151,12 +151,17 @@ public class TestCV_Fragment extends Fragment {
             }
         });
 
-        ((Button)rootView.findViewById(R.id.not_start)).setOnClickListener(new View.OnClickListener() {
+        ((Button)rootView.findViewById(R.id.click_vib)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(CommandCollection.ACTION_RECIVER_DPC_NOT_START_COSU_ONE);
-                getActivity().sendBroadcast(intent);
+                PIService.external_trySignalVibration();
+            }
+        });
+
+        ((Button)rootView.findViewById(R.id.confirm)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PiSettings.getInstance().confirmSettings(getActivity());
             }
         });
 
