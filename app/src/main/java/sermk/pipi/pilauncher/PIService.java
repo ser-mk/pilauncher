@@ -67,12 +67,12 @@ public final class PIService extends Service {
 
     private void setPositionHandler(){
         final boolean res = mUVCReciver.setCallBackPositionInRun(mBinder);
-        Logger.v("set pos callback " + res);
+        Logger.i("set pos callback " + res);
     }
 
     private void releasePositionHandler(){//todo may be not use?
         final boolean res = mUVCReciver.setCallBackPositionInRun(null);
-        Logger.v("unset pos callback " + res);
+        Logger.i("unset pos callback " + res);
     }
 
     private final PInterface_Impl mBinder = new PInterface_Impl();
@@ -80,7 +80,7 @@ public final class PIService extends Service {
 
     @Override
     public IBinder onBind(final Intent intent) {
-        Log.d(TAG, "----onBind:" + intent);
+        Log.i(TAG, "----onBind:" + intent);
 
         setPositionHandler();
 
@@ -89,15 +89,15 @@ public final class PIService extends Service {
 
     @Override
     public void onRebind(final Intent intent) {
-        Log.d(TAG, "onRebind:" + intent);
+        Log.i(TAG, "onRebind:" + intent);
         setPositionHandler(); //todo may be not use?
     }
 
     @Override
     public boolean onUnbind(final Intent intent) {
-        Log.d(TAG, "onUnbind:" + intent);
+        Log.i(TAG, "onUnbind:" + intent);
         releasePositionHandler();
-        Log.d(TAG, "onUnbind:finished");
+        Log.i(TAG, "onUnbind:finished");
         return true;
     }
 
@@ -185,7 +185,7 @@ public final class PIService extends Service {
 
         @Override
         public void onDisconnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock) {
-            Logger.v("onDisconnect");
+            Logger.i("onDisconnect");
 
             final long refFrame = mUVCReciver.getRefCaptureFrameMat();
             if(refFrame == 0)
@@ -198,7 +198,7 @@ public final class PIService extends Service {
         }
         @Override
         public void onDettach(final UsbDevice device) {
-            Logger.v("onDettach");
+            Logger.i("onDettach");
             LauncherAct.lightOff();
             external_completeUVC();
             statusUSB = ATTACHMENT_USB_INFO.DETACHED;

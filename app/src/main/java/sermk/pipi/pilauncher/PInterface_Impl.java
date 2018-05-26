@@ -35,12 +35,12 @@ public class PInterface_Impl extends Pinterface.Stub implements CVResolver.ICall
     }
 
     public void clearPosition(){
-        Log.v(TAG, "clearPosition!");
+        Log.i(TAG, "clearPosition!");
         position = PiBind.POSITION_UNDEFINED;
     }
 
     public void sendingCloseCode(){
-        Log.v(TAG, "CLOSE GAME!");
+        Log.i(TAG, "CLOSE GAME!");
         position = PiBind.CLOSE_GAME;
     }
 }
