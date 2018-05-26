@@ -86,7 +86,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
 
     @Override
     protected void onResume() {
-        //standTo();
+        standTo();
         rest();
         super.onResume();
     }
