@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +43,8 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
     WatchConnectionMClient watcher;
     ImageView imageView;
 
+    private int passStartGame = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,6 +65,8 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
 
         watcher = getWatcherMC(getActivity());
 
+        passStartGame = 0;
+
         return rootView;
     }
 
@@ -75,24 +80,35 @@ public class StatusFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         mTimer = new Timer("connection status updating");
-        mTimer.schedule(new UpdateStatusTask(), 10L, 100L);
+        mTimer.schedule(new UpdateStatusTask(), 1000L, 100L);
     }
 
+    //todo: read connection status from Piservice and run try game after timeout
     private class UpdateStatusTask extends TimerTask {
         @Override
         public void run() {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    if(PIService.getStatusAttachedUSB() == PIService.ATTACHMENT_USB_INFO.ATTACHED)
+                        imageView.setImageResource(R.drawable.start_game);
+                    else {
+                        imageView.setImageResource(R.drawable.lets);
+                        passStartGame -= passStartGame > 0 ? 1 : 0;
+                    }
+
                     if(watcher.checkTimeout()){
                         connectionStatus.setText(CONNECTION_PROBLEM_TITLE);
                     } else {
                         connectionStatus.setText("");
+                        if(PIService.getStatusConnectedUSB() == PIService.CONNECTED_USB_INFO.CONNECTED
+                                && passStartGame == 0){
+                            Log.i(TAG, "try start game!");
+                            Toast.makeText(getActivity(), "Start Game...", Toast.LENGTH_LONG).show();
+                            passStartGame = PiSettings.getInstance().getCurrentSettings().behaviorSettings.TIMES_PASS_START_GAME;
+                            LauncherAct.tryStartGame();
+                        }
                     }
-                    if(PIService.getStatusUSB() == PIService.ATTACHMENT_USB_INFO.ATTACHED)
-                        imageView.setImageResource(R.drawable.start_game);
-                    else
-                        imageView.setImageResource(R.drawable.lets);
                 }
             });
         }
