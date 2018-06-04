@@ -181,6 +181,18 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         return true;
     }
 
+    public static void restartThisApp(){
+        EventBus.getDefault().post(RESTART_THIS_APP.RESTART);
+    }
+
+    private enum RESTART_THIS_APP { RESTART }
+
+    @Subscribe
+    public void tryRunGame(RESTART_THIS_APP restart){
+        Toast.makeText(this, "Loading ...", Toast.LENGTH_LONG).show();
+        this.finish();
+        System.exit(3);
+    }
 
 
     @Override
