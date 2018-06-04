@@ -163,9 +163,15 @@ public final class PIService extends Service {
 
     public enum ATTACHMENT_USB_INFO {ATTACHED, DETACHED}
 
-    private static ATTACHMENT_USB_INFO statusUSB = ATTACHMENT_USB_INFO.DETACHED;
+    public enum CONNECTED_USB_INFO {CONNECTED, DISCONNECTED}
 
-    public static ATTACHMENT_USB_INFO getStatusUSB(){return  statusUSB;}
+    private static ATTACHMENT_USB_INFO statusAttachedUSB = ATTACHMENT_USB_INFO.DETACHED;
+
+    private static CONNECTED_USB_INFO statusConnectedUSB = CONNECTED_USB_INFO.DISCONNECTED;
+
+    public static ATTACHMENT_USB_INFO getStatusAttachedUSB(){return statusAttachedUSB;}
+
+    public static CONNECTED_USB_INFO getStatusConnectedUSB(){return statusConnectedUSB;}
 
     private final USBMonitor.OnDeviceConnectListener mOnDeviceConnectListener = new USBMonitor.OnDeviceConnectListener() {
         @Override
@@ -173,19 +179,22 @@ public final class PIService extends Service {
             Logger.i("onAttach");
             startUVC(mBinder);
             LauncherAct.lightOn();
-            statusUSB = ATTACHMENT_USB_INFO.ATTACHED;
-            EventBus.getDefault().post(statusUSB);
+            statusAttachedUSB = ATTACHMENT_USB_INFO.ATTACHED;
+            EventBus.getDefault().post(statusAttachedUSB);
         }
 
         @Override
         public void onConnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock, final boolean createNew) {
             Logger.i("onConnect");
-            LauncherAct.tryStartGame();
+            //LauncherAct.tryStartGame();
+            statusConnectedUSB = CONNECTED_USB_INFO.CONNECTED;
         }
 
         @Override
         public void onDisconnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock) {
             Logger.i("onDisconnect");
+
+            statusConnectedUSB = CONNECTED_USB_INFO.DISCONNECTED;
 
             final long refFrame = mUVCReciver.getRefCaptureFrameMat();
             if(refFrame == 0)
@@ -201,8 +210,8 @@ public final class PIService extends Service {
             Logger.i("onDettach");
             LauncherAct.lightOff();
             external_completeUVC();
-            statusUSB = ATTACHMENT_USB_INFO.DETACHED;
-            EventBus.getDefault().post(statusUSB);
+            statusAttachedUSB = ATTACHMENT_USB_INFO.DETACHED;
+            EventBus.getDefault().post(statusAttachedUSB);
         }
 
         @Override
