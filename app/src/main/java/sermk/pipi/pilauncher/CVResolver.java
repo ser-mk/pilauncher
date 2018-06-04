@@ -34,7 +34,7 @@ public final class CVResolver {
     }
 
     private void plottCV(final int position, final int width){
-        Log.i(TAG,"width " + width);
+        //Log.i(TAG,"width " + width);
         if(this.mICallbackPosition == null){
             return;
         }
