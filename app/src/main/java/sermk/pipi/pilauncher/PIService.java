@@ -129,6 +129,8 @@ public final class PIService extends Service {
             if(!mUVCReciver.isAlive()) {
                 mUVCReciver.startCapture(callback);
             } else { //todo forse release if run!
+                Log.w(TAG, "thread UVC run!");
+                LauncherAct.restartThisApp();
             }
 
     }
