@@ -7,6 +7,7 @@ package sermk.pipi.pilauncher;
 public class BehaviorSettings {
 
     final public int TIMES_PASS_START_GAME = 5;
+    final public int TIMES_TRY_RESTART_UVC = 30;
 
     final public long TIMEOUT_BETWEEN_TRY_UVC_CONNECTION = 1000;
     final public int TRY_MAX_UVC_CONNECTION = 2;

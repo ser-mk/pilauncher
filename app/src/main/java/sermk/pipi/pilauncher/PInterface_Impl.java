@@ -18,6 +18,8 @@ public class PInterface_Impl extends Pinterface.Stub implements CVResolver.ICall
     @Override
     public int getPosition() throws RemoteException {
         //Log.v(TAG,"getPosition " + position);
+        if (PIService.getStatusAttachedUSB() == PIService.ATTACHMENT_USB_INFO.DETACHED)
+            return PiBind.CLOSE_GAME;
         return position;
     }
 

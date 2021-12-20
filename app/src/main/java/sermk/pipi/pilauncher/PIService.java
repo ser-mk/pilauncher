@@ -122,6 +122,26 @@ public final class PIService extends Service {
         EventBus.getDefault().post(callback);
     }
 
+    private enum RESTART_UVC { WAIT_RESTART }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void restartUVC(RESTART_UVC restart){
+        int try_restart = PiSettings.getInstance().getCurrentSettings()
+            .behaviorSettings.TIMES_TRY_RESTART_UVC;
+        while (mUVCReciver.isAlive() && try_restart != 0){
+            mUVCReciver.exitRun();
+            try_restart--;
+            Log.w(TAG, "try exit UVC Thread!");
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if(try_restart == 0)
+            LauncherAct.restartThisApp();
+    }
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void startUVC(CVResolver.ICallbackPosition callback){
         mBinder.clearPosition();
@@ -130,7 +150,7 @@ public final class PIService extends Service {
                 mUVCReciver.startCapture(callback);
             } else { //todo forse release if run!
                 Log.w(TAG, "thread UVC run!");
-                LauncherAct.restartThisApp();
+                EventBus.getDefault().post(RESTART_UVC.WAIT_RESTART);
             }
 
     }
@@ -185,6 +205,7 @@ public final class PIService extends Service {
             EventBus.getDefault().post(statusAttachedUSB);
         }
 
+        //todo: remove run game, set state connected
         @Override
         public void onConnect(final UsbDevice device, final USBMonitor.UsbControlBlock ctrlBlock, final boolean createNew) {
             Logger.i("onConnect");
