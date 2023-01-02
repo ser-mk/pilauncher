@@ -48,7 +48,7 @@ public class LauncherAct extends Activity implements Thread.UncaughtExceptionHan
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        final boolean test = this.getIntent().getBooleanExtra(TEST_INTENT_FIELD, false);
+        final boolean test = true; //this.getIntent().getBooleanExtra(TEST_INTENT_FIELD, false);
 
         if (test) {
             // do something for a debug build
